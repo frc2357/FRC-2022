@@ -16,20 +16,24 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private FalconTrajectoryDriveSubsystem m_driveSub;
+  private final InvertDriveControls m_driverControls;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    SubsystemFactory subsystemFactory = new SubsystemFactory();
+    m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     // Configure the button bindings
-    configureButtonBindings();
+    // Configure the button bindings
+    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(0), .1)
+        .withDriveSub(m_driveSub).build();
+
+    configureDriveSub();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
+  private void configureDriveSub() {
+    m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

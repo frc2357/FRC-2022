@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -12,4 +14,16 @@ package com.team2357.frc2022;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+    // CAN IDs
+    public static final int DRIVE_MOTOR_LEFT_1 = 11;
+    public static final int DRIVE_MOTOR_RIGHT_1 = 12;
+    public static final int DRIVE_MOTOR_LEFT_2 = 13;
+    public static final int DRIVE_MOTOR_RIGHT_2 = 14;
+    public static final int GYRO_ID = 5;
+
+    // Encoder Constants
+    public static final String ENCODER_DISTANCE_PER_PULSE = null;
+
+}
