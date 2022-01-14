@@ -4,7 +4,11 @@
 
 package com.team2357.frc2022;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import com.team2357.frc2022.subsystems.SubsystemFactory;
+import com.team2357.lib.commands.DriveProportionalCommand;
+import com.team2357.lib.controllers.InvertDriveControls;
+import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -21,17 +25,14 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    //Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
+ 
     // Configure the button bindings
-    // Configure the button bindings
-    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(0), .1)
+    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(Constants.DRIVE_CONTROLLER_PORT), Constants.DRIVE_CONTROLLER_DEADBAND)
         .withDriveSub(m_driveSub).build();
 
-    configureDriveSub();
-  }
-
-  private void configureDriveSub() {
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
   }
 
