@@ -1,5 +1,6 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team2357.frc2022.Constants;
@@ -22,5 +23,9 @@ public class SubsystemFactory {
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro, Constants.ENCODER_DISTANCE_PER_PULSE);
         subsystem.configure(config);
         return subsystem;
+    }
+
+    public IntakeSubsystem CreateIntakeSubsystem() {
+        return new IntakeSubsystem(new VictorSPX(Constants.INTAKE_MOTOR_ID));
     }
 }

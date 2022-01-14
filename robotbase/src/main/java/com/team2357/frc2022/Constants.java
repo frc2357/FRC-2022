@@ -15,15 +15,23 @@ package com.team2357.frc2022;
 public final class Constants {
 
     // CAN IDs
+
+    //Drive
     public static final int DRIVE_MOTOR_LEFT_1 = 11;
     public static final int DRIVE_MOTOR_RIGHT_1 = 12;
     public static final int DRIVE_MOTOR_LEFT_2 = 13;
     public static final int DRIVE_MOTOR_RIGHT_2 = 14;
     public static final int GYRO_ID = 5;
 
+    //Intake
+    public static final int INTAKE_MOTOR_ID = 21;
+
+
     //Controller Constants
     public static final int DRIVE_CONTROLLER_PORT = 0;
+    public static final int GUNNER_CONTROLLER_PORT = 1;
     public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
+
     // Encoder Constants
     public static final int ENCODER_DISTANCE_PER_PULSE = 256;
 
