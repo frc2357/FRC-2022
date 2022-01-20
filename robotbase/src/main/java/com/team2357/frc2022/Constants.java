@@ -14,17 +14,21 @@ package com.team2357.frc2022;
  */
 public final class Constants {
 
-    // CAN IDs
-    public static final int DRIVE_MOTOR_LEFT_1 = 11;
-    public static final int DRIVE_MOTOR_RIGHT_1 = 12;
-    public static final int DRIVE_MOTOR_LEFT_2 = 13;
-    public static final int DRIVE_MOTOR_RIGHT_2 = 14;
-    public static final int GYRO_ID = 5;
+    public final class CAN_ID {
+        public static final int DRIVE_MOTOR_LEFT_1 = 11;
+        public static final int DRIVE_MOTOR_RIGHT_1 = 12;
+        public static final int DRIVE_MOTOR_LEFT_2 = 13;
+        public static final int DRIVE_MOTOR_RIGHT_2 = 14;
+        public static final int GYRO_ID = 5;
+    }
 
-    //Controller Constants
-    public static final int DRIVE_CONTROLLER_PORT = 0;
-    public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
+    public final class CONTROLLER {
+        public static final int DRIVE_CONTROLLER_PORT = 0;
+        public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
+    }
+
     // Encoder Constants
-    public static final int ENCODER_DISTANCE_PER_PULSE = 256;
-
+    public final class DRIVE {
+        public static final int ENCODER_DISTANCE_PER_PULSE_METERS = 256;
+    }
 }
