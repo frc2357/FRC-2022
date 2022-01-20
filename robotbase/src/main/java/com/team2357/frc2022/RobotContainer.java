@@ -30,7 +30,7 @@ public class RobotContainer {
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
  
     // Configure the button bindings
-    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(Constants.DRIVE_CONTROLLER_PORT), Constants.DRIVE_CONTROLLER_DEADBAND)
+    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
         .withDriveSub(m_driveSub).build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
