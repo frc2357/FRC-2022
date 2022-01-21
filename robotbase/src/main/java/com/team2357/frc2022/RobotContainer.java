@@ -42,10 +42,10 @@ public class RobotContainer {
 
     // Configure the button bindings
     m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(
-        new XboxController(Constants.DRIVE_CONTROLLER_PORT), Constants.DRIVE_CONTROLLER_DEADBAND)
+        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
             .withDriveSub(m_driveSub).build();
 
-    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
+    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
         .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
