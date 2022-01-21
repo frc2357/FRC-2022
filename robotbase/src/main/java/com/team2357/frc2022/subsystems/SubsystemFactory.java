@@ -11,7 +11,8 @@ public class SubsystemFactory {
 
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
         FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
-        config.m_isRightInverted = true;
+        config.m_isRightInverted = Constants.DRIVE.INVERT_GYRO;
+        config.m_isGyroReversed = Constants.DRIVE.INVERT_RIGHT_SIDE;
 
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2) };
@@ -19,7 +20,12 @@ public class SubsystemFactory {
         WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2) };
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
-                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro, Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS);
+                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
+                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS, Constants.DRIVE.LEFT_ENCODER_CHANNEL_A,
+                Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
+                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
+                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
+                
         subsystem.configure(config);
         return subsystem;
     }
