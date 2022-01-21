@@ -5,6 +5,7 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.controls.GunnerControls;
+import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
@@ -41,9 +42,8 @@ public class RobotContainer {
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
 
     // Configure the button bindings
-    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(
-        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
-            .withDriveSub(m_driveSub).build();
+    m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
+        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND).withIntakeSub(m_intakeSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
         .build();
