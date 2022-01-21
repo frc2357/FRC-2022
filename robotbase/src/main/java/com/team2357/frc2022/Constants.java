@@ -28,6 +28,11 @@ public final class Constants {
         public static final int INTAKE_MOTOR_ID = 21;
     }
 
+    public final class PCM_ID {
+        public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
+        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
+    }
+
     public final class CONTROLLER {
         public static final int DRIVE_CONTROLLER_PORT = 0;
         // Controller Constants

@@ -1,23 +1,52 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.commands.IntakeRollerCommand;
+import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
+import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+/**
+ * These are the controls for the gunner.
+ * 
+ * @category Drive
+ */
 public class GunnerControls {
     XboxController m_controller;
 
     public AxisThresholdTrigger m_leftTrigger;
+
+    public Trigger m_xButton;
+    public Trigger m_xButtonAndLeftDPad;
+
+    public POVButton m_leftDPad;
 
     /**
      * @param builder The GunnerControlsBuilder object
      */
     public GunnerControls(GunnerControlsBuilder builder) {
         m_controller = builder.m_controller;
+
+        //Triggers
+        m_leftTrigger = new AxisThresholdTrigger(builder.m_controller, Axis.kLeftTrigger, .1);
+
+        //Buttons
+        m_xButton = new JoystickButton(builder.m_controller, XboxRaw.X.value);
+
+        //Dpad
+        m_leftDPad = new POVButton(builder.m_controller, 270);
+
+        //Chords
+        m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
+
     }
 
     /**
@@ -73,9 +102,13 @@ public class GunnerControls {
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                m_gunnerControls.m_leftTrigger.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub,
-                                m_gunnerControls.getControllerAxisValue(Axis.kLeftTrigger)));
+                if (m_intakeSub.getPivot() == Value.kForward) {
+                    m_gunnerControls.m_leftTrigger.whileActiveOnce(
+                            new IntakeRollerCommand(m_intakeSub,
+                                    m_gunnerControls.getControllerAxisValue(Axis.kLeftTrigger)));
+                }
+
+                m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand());
             }
 
             return m_gunnerControls;
