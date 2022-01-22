@@ -3,8 +3,10 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 /**
- * This command brings a cell into the intake from the ground.
+ * This command runs the intake roller from {@link IntakeSubsystem}.
  * 
  * @category Intake
  */
@@ -13,8 +15,7 @@ public class IntakeRollerCommand extends CommandLoggerBase {
     private double m_speed;
 
     /**
-     * @param intakeSub      The {@link IntakeSubsystem}.
-     * @param gunnerControls The {@link GunnerControls}.
+     * @param intakeSub The {@link IntakeSubsystem}.
      */
     public IntakeRollerCommand(IntakeSubsystem intakeSub, double speed) {
         m_intakeSub = intakeSub;
@@ -25,7 +26,9 @@ public class IntakeRollerCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         super.initialize();
-        m_intakeSub.triggerIntakeRoller(m_speed);
+        if (m_intakeSub.getPivot() == Value.kForward) {
+            m_intakeSub.triggerIntakeRoller(m_speed);
+        }
     }
 
     @Override

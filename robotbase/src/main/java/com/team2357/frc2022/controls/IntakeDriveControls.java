@@ -9,7 +9,6 @@ import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 
 /**
@@ -99,11 +98,10 @@ public class IntakeDriveControls extends InvertDriveControls{
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                if (m_intakeSub.getPivot() == Value.kForward) {
                     m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
                             new IntakeRollerCommand(m_intakeSub,
                                     m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)));
-                }
+
             }
 
             return m_IntakeDriverControls;

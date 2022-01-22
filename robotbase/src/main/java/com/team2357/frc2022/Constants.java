@@ -41,6 +41,11 @@ public final class Constants {
         public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
     }
 
+    public final class INTAKE {
+        public static final double FORWARD_SPEED = 0;
+        public static final double REVERSE_SPEED = 0;
+    }
+
     // Encoder Constants
     public final class DRIVE {
         public static final int ENCODER_DISTANCE_PER_PULSE_METERS = 256;
