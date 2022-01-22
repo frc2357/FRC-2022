@@ -121,6 +121,10 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_isRightClimberMotorValid = false;
     }
 
+    public void setPivot(DoubleSolenoid.Value value){
+        m_climberSolenoid.set(value);
+    }
+
     public State getState() {
         return m_currentState;
     }
