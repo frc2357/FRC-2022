@@ -12,21 +12,23 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  * @category Intake
  */
 public class IntakeTogglePivotCommand extends CommandLoggerBase {
+    private IntakeSubsystem m_intakeSub;
 
     /**
      * @param intakeSubsystem The {@link IntakeSubsystem}.
      */
-    public IntakeTogglePivotCommand() {
-
+    public IntakeTogglePivotCommand(IntakeSubsystem intakeSub) {
+        m_intakeSub = intakeSub;
+        addRequirements(m_intakeSub);
     }
-    
-    @Override 
+
+    @Override
     public void initialize() {
-        
+        m_intakeSub.setPivot(m_intakeSub.getPivot() == Value.kReverse ?Value.kForward: Value.kReverse);
     }
 
     @Override
     public boolean isFinished() {
         return true;
-    } 
+    }
 }
