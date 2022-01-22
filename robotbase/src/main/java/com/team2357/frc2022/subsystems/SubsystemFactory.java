@@ -3,6 +3,9 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
@@ -39,5 +42,27 @@ public class SubsystemFactory {
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
+    }
+
+    public ClimberSubsystem CreateClimberSubsystem() {
+        ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
+        config.m_climberMotorIdleMode = IdleMode.kBrake;
+        config.m_climbExtendSpeed = Constants.CLIMBER.CLIMB_EXTEND_SPEED;
+        config.m_climbReturnSpeed = Constants.CLIMBER.CLIMB_RETURN_SPEED;
+        config.m_transExtendSpeed = Constants.CLIMBER.TRANS_EXTEND_SPEED;
+        config.m_transReturnSpeed = Constants.CLIMBER.TRANS_RETURN_SPEED;
+        config.m_climberMotorStallLimitAmps = Constants.CLIMBER.MOTOR_STALL_LIMIT_AMPS;
+        config.m_climberMotorFreeLimitAmps = Constants.CLIMBER.MOTOR_FREE_LIMIT_AMPS;
+        config.m_isRightSideInverted = Constants.CLIMBER.IS_RIGHT_SIDE_INVERTED;
+
+        CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
+        CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
+        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+                Constants.PCM_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
+
+        ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid);
+        subsystem.configure(config);
+
+        return subsystem;
     }
 }

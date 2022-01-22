@@ -19,18 +19,27 @@ package com.team2357.frc2022;
 public final class Constants {
 
     public final class CAN_ID {
+
+        // Drive
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
         public static final int DRIVE_MOTOR_LEFT_2 = 13;
         public static final int DRIVE_MOTOR_RIGHT_2 = 14;
         public static final int GYRO_ID = 5;
+
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
+
+        // Climber
+        public static final int CLIMBER_MOTOR_LEFT_ID = 22;
+        public static final int CLIMBER_MOTOR_RIGHT_ID = 23;
     }
 
     public final class PCM_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
+        public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 0;
+        public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 0;
     }
 
     public final class CONTROLLER {
@@ -49,5 +58,15 @@ public final class Constants {
     // Encoder Constants
     public final class DRIVE {
         public static final int ENCODER_DISTANCE_PER_PULSE_METERS = 256;
+    }
+
+    public final class CLIMBER {
+        public static final double CLIMB_EXTEND_SPEED = 0;
+        public static final double CLIMB_RETURN_SPEED = 0;
+        public static final double TRANS_EXTEND_SPEED = 0;
+        public static final double TRANS_RETURN_SPEED = 0;
+        public static final int MOTOR_STALL_LIMIT_AMPS = 0;
+        public static final int MOTOR_FREE_LIMIT_AMPS = 0;
+        public static final boolean IS_RIGHT_SIDE_INVERTED = true;
     }
 }
