@@ -5,7 +5,6 @@ import com.team2357.lib.commands.CommandLoggerBase;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-//TODO: Make Noah write this one
 /**
  * Moves the intake by calling setPivot on the {@link IntakeSubsystem}.
  * 
