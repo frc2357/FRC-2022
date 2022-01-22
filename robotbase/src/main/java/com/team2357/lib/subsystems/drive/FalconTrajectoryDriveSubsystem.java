@@ -7,10 +7,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
-    private double m_leftLastValue;
-    private double m_rightLastValue;
     public double m_distancePerPulse;
 
     // The gyro sensor
@@ -20,11 +19,17 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     // Odometry class for tracking robot pose
     private final DifferentialDriveOdometry m_odometry;
 
+    // The left-side drive encoder
+    private final Encoder m_leftEncoder;
+
+    // The right-side drive encoder
+    private final Encoder m_rightEncoder;
+
     public static class Configuration extends SkidSteerDriveSubsystem.Configuration {
         /**
          * Whether or not the gyro is reversed Value: boolean
          */
-        public boolean m_isGyroReversed = true;
+        public boolean m_isGyroReversed = false;
     }
 
     /**
@@ -40,9 +45,20 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      */
     public FalconTrajectoryDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
             WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves, PigeonIMU gyro,
-            double encoderDistancePerPulse) {
+            double encoderDistancePerPulse, int rightEncoderChannelA, int rightEncoderChannelB, int leftEncoderChannelA,
+            int leftEncoderChannelB) {
         super(leftFalconMaster, leftFalconSlaves, rightFalconMaster, rightFalconSlaves);
         m_distancePerPulse = encoderDistancePerPulse;
+
+        m_leftEncoder = new Encoder(
+                leftEncoderChannelA,
+                leftEncoderChannelB);
+        m_rightEncoder = new Encoder(
+                rightEncoderChannelA,
+                rightEncoderChannelB);
+
+        m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
+        m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
 
         resetEncoders();
         m_gyro = gyro;
@@ -53,12 +69,14 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     @Override
     public void periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(), getRightDistance());
+        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(), -1*m_rightEncoder.getDistance());
     }
 
     public void configure(Configuration config) {
         super.configure(config);
         m_isGyroReversed = config.m_isGyroReversed;
+        m_leftEncoder.setReverseDirection(!config.m_isRightInverted);
+        m_rightEncoder.setReverseDirection(config.m_isRightInverted);
     }
 
     @Override
@@ -91,8 +109,7 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      * @return The current wheel speeds.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(super.m_leftFalconMaster.getSelectedSensorVelocity(),
-                super.m_rightFalconMaster.getSelectedSensorVelocity());
+        return new DifferentialDriveWheelSpeeds(getVelocityLeftEncoder(), getVelocityRightEncoder());
     }
 
     /**
@@ -103,16 +120,14 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      */
     public void setTankDriveVolts(double leftVolts, double rightVolts) {
         // negative if motors are inverted.
-        super.m_leftControllers.setVoltage(super.m_isLeftInverted ? -leftVolts : leftVolts);
-        super.m_rightControllers.setVoltage(super.m_isRightInverted ? -rightVolts : rightVolts);
+        super.m_leftControllers.setVoltage(leftVolts);
+        super.m_rightControllers.setVoltage(rightVolts);
     }
 
-    /**
-     * Resets the drive encoders to currently read a position of 0.
-     */
+    /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
-        getLeftDistance();
-        getRightDistance();
+        m_leftEncoder.reset();
+        m_rightEncoder.reset();
     }
 
     /**
@@ -121,21 +136,33 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      * @return the average of the two encoder readings
      */
     public double getAverageEncoderDistance() {
-        return (getLeftDistance() + getRightDistance()) / 2.0;
+        return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
     }
 
-    public double getLeftDistance() {
-        double encoderPositon = super.m_leftFalconMaster.getSelectedSensorPosition();
-        double difOfPostion = encoderPositon - m_leftLastValue;
-        m_leftLastValue = encoderPositon;
-        return difOfPostion * m_distancePerPulse;
+    public double getVelocityLeftEncoder() {
+        return m_leftEncoder.getRate();
     }
 
-    public double getRightDistance() {
-        double encoderPositon = super.m_rightFalconMaster.getSelectedSensorPosition();
-        double difOfPostion = encoderPositon - m_rightLastValue;
-        m_rightLastValue = encoderPositon;
-        return difOfPostion * m_distancePerPulse;
+    public double getVelocityRightEncoder() {
+        return m_rightEncoder.getRate();
+    }
+
+    /**
+     * Gets the left drive encoder.
+     *
+     * @return the left drive encoder
+     */
+    public Encoder getLeftEncoder() {
+        return m_leftEncoder;
+    }
+
+    /**
+     * Gets the right drive encoder.
+     *
+     * @return the right drive encoder
+     */
+    public Encoder getRightEncoder() {
+        return m_rightEncoder;
     }
 
     /**
