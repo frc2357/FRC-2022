@@ -100,7 +100,7 @@ public class IntakeDriveControls extends InvertDriveControls{
             if (m_intakeSub != null) {
                     m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
                             new IntakeRollerCommand(m_intakeSub,
-                                    m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)));
+                                    m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)),false);
 
             }
 
