@@ -58,7 +58,7 @@ public class SubsystemFactory {
         config.m_transReturnSpeed = Constants.CLIMBER.TRANS_RETURN_SPEED;
         config.m_climberMotorStallLimitAmps = Constants.CLIMBER.MOTOR_STALL_LIMIT_AMPS;
         config.m_climberMotorFreeLimitAmps = Constants.CLIMBER.MOTOR_FREE_LIMIT_AMPS;
-        config.m_isRightSideInverted = Constants.CLIMBER.IS_RIGHT_SIDE_INVERTED;
+        config.m_isRightSideInverted = Constants.CLIMBER.INVERT_RIGHT_SIDE;
 
         CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);

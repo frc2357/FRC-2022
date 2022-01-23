@@ -57,7 +57,6 @@ public final class Constants {
 
     // Encoder Constants
     public final class DRIVE {
-        public static final boolean IS_RIGHT_SIDE_INVERTED = true;
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
@@ -79,6 +78,6 @@ public final class Constants {
         public static final double TRANS_RETURN_SPEED = 0;
         public static final int MOTOR_STALL_LIMIT_AMPS = 0;
         public static final int MOTOR_FREE_LIMIT_AMPS = 0;
-        public static final boolean IS_RIGHT_SIDE_INVERTED = true;
+        public static final boolean INVERT_RIGHT_SIDE = true;
     }
 }

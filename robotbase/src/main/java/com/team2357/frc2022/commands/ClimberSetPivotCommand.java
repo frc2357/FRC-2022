@@ -7,6 +7,11 @@ import com.team2357.lib.commands.CommandLoggerBase;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
+/**
+ * Command to set the pivot of the pivoting arms
+ * 
+ * @category Climber
+ */
 public class ClimberSetPivotCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
     private DoubleSolenoid.Value m_value;
