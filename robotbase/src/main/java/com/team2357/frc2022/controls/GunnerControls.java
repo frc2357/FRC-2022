@@ -138,7 +138,7 @@ public class GunnerControls {
                 m_gunnerControls.m_yButtonAndLeftDPad.whileActiveOnce(
                         new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED));
 
-                m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand());
+                m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
             }
 
             return m_gunnerControls;

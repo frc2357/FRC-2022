@@ -3,26 +3,29 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-//TODO: Make Colsen write this one
 /**
  * Moves the intake by calling setPivot on the {@link IntakeSubsystem}.
  * 
  * @category Intake
  */
 public class IntakeSetPivotCommand extends CommandLoggerBase {
+    private IntakeSubsystem m_intakeSub;
+    private Value m_postion;
 
     /**
      * @param intakeSubsystem The {@link IntakeSubsystem}.
      */
-    public IntakeSetPivotCommand() {
-       
+    public IntakeSetPivotCommand(IntakeSubsystem intakeSub, Value postion) {
+        m_intakeSub = intakeSub;
+        m_postion = postion;
+        addRequirements(m_intakeSub);
     }
 
     @Override 
     public void initialize() {
-      
+        m_intakeSub.setPivot(m_postion);
     }
 
     @Override

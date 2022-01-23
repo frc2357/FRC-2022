@@ -57,7 +57,19 @@ public final class Constants {
 
     // Encoder Constants
     public final class DRIVE {
-        public static final int ENCODER_DISTANCE_PER_PULSE_METERS = 256;
+        public static final boolean IS_RIGHT_SIDE_INVERTED = true;
+        public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
+        public static final int ENCODER_PPR = 256;
+
+        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI) / (double) ENCODER_PPR;
+
+        public static final int LEFT_ENCODER_CHANNEL_A = 0;
+        public static final int LEFT_ENCODER_CHANNEL_B = 1;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 2;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 3;
+
+        public static final boolean INVERT_GYRO = true;
+        public static final boolean INVERT_RIGHT_SIDE = true;
     }
 
     public final class CLIMBER {
