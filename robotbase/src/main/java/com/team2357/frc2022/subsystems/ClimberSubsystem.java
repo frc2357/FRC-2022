@@ -1,5 +1,6 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.IFollower;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
@@ -34,16 +35,30 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public boolean m_isRightSideInverted = false;
     }
 
+    private enum State {
+        GROUND,
+        LOW_RUNG,
+        MID_RUNG,
+        HIGH_RUNG,
+        TRAVERSAL_RUNG
+    }
+
     private Configuration m_config;
     private CANSparkMax m_leftClimberMotor;
     private CANSparkMax m_rightClimberMotor;
     private DoubleSolenoid m_climberSolenoid;
+    private boolean m_isLeftClimberMotorValid;
+    private boolean m_isRightClimberMotorValid;
+    private State m_currentState;
 
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid) {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
         m_climberSolenoid = climberSolenoid;
         m_climberSolenoid.set(Value.kOff);
+        m_isLeftClimberMotorValid = false;
+        m_isRightClimberMotorValid = false;
+        m_currentState = State.GROUND;
     }
 
     public void configure(Configuration config) {
@@ -70,5 +85,51 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void returnReachable() {
         m_leftClimberMotor.set(m_config.m_climbReturnSpeed);
         m_rightClimberMotor.set(m_config.m_climbReturnSpeed);
+    }
+
+    //Method to stop the motors
+    public void StopClimberMotors() {
+        m_leftClimberMotor.set(0);
+        m_rightClimberMotor.set(0);
+    }
+
+    public void StopClimberMotorsAmps(int amps) {
+        if(checkLeftClimberMotorAmps(amps)) {
+            m_leftClimberMotor.set(0);
+            m_isRightClimberMotorValid = true;
+        }
+        if (checkRightClimberMotorAmps(amps)) {
+            m_leftClimberMotor.set(0);
+            m_isLeftClimberMotorValid = true;
+        }
+    }
+
+    public boolean checkLeftClimberMotorAmps(int amps) {
+        return m_leftClimberMotor.getOutputCurrent() >= amps;
+    }
+
+    public boolean checkRightClimberMotorAmps(int amps) {
+        return m_rightClimberMotor.getOutputCurrent() >= amps;
+    }
+
+    public boolean is() {
+        return m_isLeftClimberMotorValid && m_isRightClimberMotorValid;
+    }
+
+    public void resetValidation() {
+        m_isLeftClimberMotorValid = false;
+        m_isRightClimberMotorValid = false;
+    }
+
+    public void setPivot(DoubleSolenoid.Value value){
+        m_climberSolenoid.set(value);
+    }
+
+    public State getState() {
+        return m_currentState;
+    }
+
+    public void setState(State newState) {
+        m_currentState = newState;
     }
 }
