@@ -1,10 +1,19 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
+/**
+ * This class is a factory that creates subsystems.
+ * 
+ * @category Subsystems
+ */
 public class SubsystemFactory {
     public SubsystemFactory() {
     }
@@ -29,4 +38,12 @@ public class SubsystemFactory {
         subsystem.configure(config);
         return subsystem;
     }
+
+    public IntakeSubsystem CreateIntakeSubsystem() {
+        DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+                Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
+        VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
+        return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
+    }
+               
 }

@@ -4,6 +4,9 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.controls.GunnerControls;
+import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.controllers.InvertDriveControls;
@@ -13,25 +16,37 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
-  private final InvertDriveControls m_driverControls;
+  private IntakeSubsystem m_intakeSub;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private final InvertDriveControls m_driverControls;
+  private final GunnerControls m_gunnerControls;
+
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    //Create subsystems
+    // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
- 
+    m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
+
     // Configure the button bindings
-    m_driverControls = new InvertDriveControls.InvertDriveControlsBuilder(new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
-        .withDriveSub(m_driveSub).build();
+    m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
+        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND).withIntakeSub(m_intakeSub).build();
+
+    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
+        .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
   }
