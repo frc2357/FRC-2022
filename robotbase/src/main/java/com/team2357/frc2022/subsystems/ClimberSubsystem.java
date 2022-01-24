@@ -3,6 +3,7 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.IFollower;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
@@ -126,12 +127,21 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_isRightClimberMotorValid = false;
     }
 
+    public void resetEncoders() {
+        m_leftClimberMotor.getEncoder().setPosition(0);
+        m_rightClimberMotor.getEncoder().setPosition(0);
+    }
+
+    private double rotationsToInches(double rotations) {
+        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO * (Constants.CLIMBER.INCHES_PER_ROTATION_METERS * Math.PI);
+    }
+
     public double getLeftEncoderDistanceMeters() {
-        return 0;
+        return this.rotationsToInches(m_leftClimberMotor.getEncoder().getPosition());
     }
 
     public double getRightEncoderDistanceMeters() {
-        return 0;
+        return this.rotationsToInches(m_rightClimberMotor.getEncoder().getPosition());
     }
 
     public boolean validateExtensionDistance(double distance) {

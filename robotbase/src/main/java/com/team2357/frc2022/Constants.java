@@ -76,8 +76,10 @@ public final class Constants {
         public static final double CLIMB_RETURN_SPEED = 0;
         public static final double TRANS_EXTEND_SPEED = 0;
         public static final double TRANS_RETURN_SPEED = 0;
-        public static final int MOTOR_STALL_LIMIT_AMPS = 0;
-        public static final int MOTOR_FREE_LIMIT_AMPS = 0;
+        public static final int MOTOR_STALL_LIMIT_AMPS = 5; //Might need to be different
+        public static final int MOTOR_FREE_LIMIT_AMPS = 36;
         public static final boolean INVERT_RIGHT_SIDE = true;
+        public static final double INCHES_PER_ROTATION_METERS = 0.003175;
+        public static final double CLIMBER_GEAR_RATIO = 0;
     }
 }
