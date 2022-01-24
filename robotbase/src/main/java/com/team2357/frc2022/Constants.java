@@ -18,6 +18,13 @@ package com.team2357.frc2022;
  */
 public final class Constants {
 
+    /**
+     * When setting values on components, wait this long for a response before
+     * failing. milliseconds
+     */
+    public static final int TIMEOUT_MS = 30;
+    public static final int MINUTES_TO_100_MS = 600;
+
     public final class CAN_ID {
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
@@ -26,6 +33,11 @@ public final class Constants {
         public static final int GYRO_ID = 5;
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
+
+        // Shooter
+        public static final int SHOOTER_BOTTOM_LEFT = 22;
+        public static final int SHOOTER_BOTTOM_RIGHT = 23;
+        public static final int SHOOTER_TOP = 24;
     }
 
     public final class PCM_ID {
@@ -51,7 +63,8 @@ public final class Constants {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI) / (double) ENCODER_PPR;
+        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
+                / (double) ENCODER_PPR;
 
         public static final int LEFT_ENCODER_CHANNEL_A = 0;
         public static final int LEFT_ENCODER_CHANNEL_B = 1;
@@ -61,4 +74,17 @@ public final class Constants {
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
     }
+
+    public final class SHOOTER {
+        /** Clicks per rotation for the internal encoder in the Falcon 500 */
+        public static final int FALCON_ENCODER_CPR = 2048;
+        /** Shooter PIDF values */
+        public static final double SHOOTER_P = 0.09;
+        public static final double SHOOTER_I = 0;
+        public static final double SHOOTER_D = 0;
+        public static final double SHOOTER_F = 0.01;
+        public static final double SHOOTER_MOTOR_PEAK_OUTPUT = 1.0;
+
+    }
+
 }

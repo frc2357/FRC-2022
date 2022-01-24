@@ -34,7 +34,7 @@ public class SubsystemFactory {
                 Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
                 Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
                 Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
-                
+
         subsystem.configure(config);
         return subsystem;
     }
@@ -45,5 +45,11 @@ public class SubsystemFactory {
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
     }
-               
+
+    public ShooterSubsystem CreateShooterSubsystem() {
+        WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
+        WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
+        WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        return new ShooterSubsystem(leftBottom, rightBottom, top);
+    }
 }

@@ -7,6 +7,7 @@ package com.team2357.frc2022;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.controllers.InvertDriveControls;
@@ -28,6 +29,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
+  private ShooterSubsystem m_shooterSub;
 
   private final InvertDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
@@ -40,13 +42,17 @@ public class RobotContainer {
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
+    m_shooterSub = subsystemFactory.CreateShooterSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
-        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND).withIntakeSub(m_intakeSub).build();
+        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
+            .withIntakeSub(m_intakeSub).build();
 
-    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
-        .build();
+    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
+        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
+            .withShooterSub(m_shooterSub)
+            .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
   }
