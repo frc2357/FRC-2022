@@ -1,6 +1,5 @@
 package com.team2357.frc2022.subsystems;
 
-import com.ctre.phoenix.motorcontrol.IFollower;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.Constants;
@@ -9,40 +8,65 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.util.RobotMath;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**
  * Subsystem to control climbing
  * 
+ * Designed to rely on two validation checks to increase the progress of the
+ * climber's state
+ * The state of the climber helps regulate if a certain command along can be
+ * ran. The states should only be changed linearly.
+ * The validate method should only be used one command per climb
+ * sequence
+ * the method handleState increments the state, and handles reseting validation
+ * set during each sequence.
+ * 
+ * The climb process for a successful Traversal climb:
+ * 
+ * Initial State: GROUND
+ * Controller Input: Run ClimberExtendMidCommandGroup
+ * Run handleState at end of sequence
+ * New State: EXTEND_MID_RUNG
+ * Controller Input: Run ClimberClimbMidCommandGroup
+ * Run handleState at end of sequence
+ * New State: ON_MID_RUNG
+ * Controller Input: Run ClimberExtendHighCommandGroup
+ * Run handleState at end of sequence
+ * New State: EXTEND_HIGH_RUNG
+ * If ClimberExtendHighCommandGroup successful: run ClimberClimbHighCommandGroup
+ * Run handleState at end of sequence
+ * New State: ON_HIGH_RUNG
+ * Controller Input: Run ClimberExtendTraversalCommandGroup
+ * Run handleState at end of sequence
+ * New State: EXTEND_TRAVERSAL_RUNG
+ * If ClimberExtendTraversalCommandGroup successful: run
+ * ClimberClimbTraversalCommandGroup
+ * Run handleState at end of sequence
+ * New State: ON_TRAVERSAL_RUNG
+ * 
+ * 
  * @category climber
  */
+
 public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public static class Configuration {
         public IdleMode m_climberMotorIdleMode = IdleMode.kBrake;
-
-        // Speed of motors to extend to reachable bar (low, mid)
-        public double m_climbExtendSpeed = 0;
-
-        // Speed of motors to pull onto reachable bar (low, mid)
-        public double m_climbReturnSpeed = 0;
-
-        // Speed of motors to extend to unreachable bar (high, traversal)
-        public double m_transExtendSpeed = 0;
-
-        // Speed of motors to pull onto unreachable bar (high, traversal)
-        public double m_transReturnSpeed = 0;
 
         public int m_climberMotorStallLimitAmps = 0;
         public int m_climberMotorFreeLimitAmps = 0;
         public boolean m_isRightSideInverted = false;
     }
 
-    private enum State {
+    public enum State {
         GROUND,
-        LOW_RUNG,
-        MID_RUNG,
-        HIGH_RUNG,
+        EXTEND_LOW_RUNG,
+        ON_LOW_RUNG,
+        EXTEND_MID_RUNG,
+        ON_MID_RUNG,
+        EXTEND_HIGH_RUNG,
+        ON_HIGH_RUNG,
+        EXTEND_TRAVERSAL_RUNG,
         TRAVERSAL_RUNG
     }
 
@@ -64,7 +88,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
         m_climberSolenoid = climberSolenoid;
-        m_climberSolenoid.set(Value.kOff);
+        m_climberSolenoid.set(DoubleSolenoid.Value.kOff);
         m_isLeftClimberMotorValid = false;
         m_isRightClimberMotorValid = false;
         m_currentState = State.GROUND;
@@ -106,15 +130,71 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_rightClimberMotor.set(0);
     }
 
-    public void StopClimberMotorsAmps(int amps) {
+    public boolean areMotorsValid() {
+        return m_isLeftClimberMotorValid && m_isRightClimberMotorValid;
+    }
+
+    public boolean validate(double distance, int amps) {
+        boolean[] validMotorsExtension = validateExtensionDistanceMeters(distance);
+        boolean[] validMotorsAmps = validateClimberMotorsAmps(amps);
+
+        if (validMotorsExtension[0] && validMotorsAmps[0]) {
+            m_isLeftClimberMotorValid = true;
+        }
+        if (validMotorsExtension[1] && validMotorsAmps[1]) {
+            m_isRightClimberMotorValid = true;
+        }
+        return areMotorsValid();
+    }
+
+    public boolean validate(double distance) {
+        boolean[] validMotors = validateExtensionDistanceMeters(distance);
+
+        if (validMotors[0]) {
+            m_leftClimberMotor.set(0.0);
+            m_isLeftClimberMotorValid = true;
+        }
+        if (validMotors[1]) {
+            m_rightClimberMotor.set(0.0);
+            m_isRightClimberMotorValid = true;
+        }
+        return areMotorsValid();
+    }
+
+    public boolean[] validateClimberMotorsAmps(int amps) {
+        boolean[] isAtAmps = new boolean[2];
         if (checkLeftClimberMotorAmps(amps)) {
             m_leftClimberMotor.set(0);
-            m_isRightClimberMotorValid = true;
+            isAtAmps[0] = true;
         }
         if (checkRightClimberMotorAmps(amps)) {
             m_leftClimberMotor.set(0);
-            m_isLeftClimberMotorValid = true;
+            isAtAmps[1] = true;
         }
+        return isAtAmps;
+    }
+
+    public boolean[] validateExtensionDistanceMeters(double distance) {
+        boolean[] isAtDistance = new boolean[2];
+
+        if (Utility.isWithinTolerance(getRightClimberExtension(), distance,
+                Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
+            isAtDistance[0] = true;
+        }
+        if (Utility.isWithinTolerance(getRightClimberExtension(), distance,
+                Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
+            isAtDistance[1] = true;
+        }
+        return isAtDistance;
+    }
+
+    public boolean checkClimberMissedMeters(double distance, int amps) {
+      return false;
+    }
+
+    public void resetValidation() {
+        m_isLeftClimberMotorValid = false;
+        m_isRightClimberMotorValid = false;
     }
 
     public boolean checkLeftClimberMotorAmps(int amps) {
@@ -125,13 +205,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_rightClimberMotor.getOutputCurrent() >= amps;
     }
 
-    public boolean isValid() {
-        return m_isLeftClimberMotorValid && m_isRightClimberMotorValid;
-    }
-
-    public void resetValidation() {
-        m_isLeftClimberMotorValid = false;
-        m_isRightClimberMotorValid = false;
+    public boolean handleState(State newState) {
+        if (areMotorsValid() && (newState.ordinal() == (m_currentState.ordinal() + 1))) {
+            m_currentState = newState;
+            resetValidation();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void resetEncoders() {
@@ -140,7 +221,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     private double rotationsToMeters(double rotations) {
-        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO * (RobotMath.interpolateCurve(m_spoolCurveMeters, rotations) * Math.PI);
+        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO
+                * (RobotMath.interpolateCurve(m_spoolCurveMeters, rotations) * Math.PI);
     }
 
     public double getLeftClimberExtension() {
@@ -149,21 +231,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public double getRightClimberExtension() {
         return this.rotationsToMeters(m_rightClimberMotor.getEncoder().getPosition());
-    }
-
-    public boolean validateExtensionDistance(double distance) {
-        boolean isAtDistance = true;
-        if (Utility.isWithinTolerance(getRightClimberExtension(), distance, 0)) {
-            m_leftClimberMotor.set(0.0);
-        } else {
-            isAtDistance = false;
-        }
-        if (Utility.isWithinTolerance(getRightClimberExtension(), distance, 0)) {
-            m_rightClimberMotor.set(0.0);
-        } else {
-            isAtDistance = false;
-        }
-        return isAtDistance;
     }
 
     public void setPivot(DoubleSolenoid.Value value) {

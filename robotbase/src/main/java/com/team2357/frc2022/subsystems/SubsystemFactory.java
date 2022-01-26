@@ -52,10 +52,6 @@ public class SubsystemFactory {
     public ClimberSubsystem CreateClimberSubsystem() {
         ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
         config.m_climberMotorIdleMode = IdleMode.kBrake;
-        config.m_climbExtendSpeed = Constants.CLIMBER.CLIMB_EXTEND_SPEED;
-        config.m_climbReturnSpeed = Constants.CLIMBER.CLIMB_RETURN_SPEED;
-        config.m_transExtendSpeed = Constants.CLIMBER.TRANS_EXTEND_SPEED;
-        config.m_transReturnSpeed = Constants.CLIMBER.TRANS_RETURN_SPEED;
         config.m_climberMotorStallLimitAmps = Constants.CLIMBER.MOTOR_STALL_LIMIT_AMPS;
         config.m_climberMotorFreeLimitAmps = Constants.CLIMBER.MOTOR_FREE_LIMIT_AMPS;
         config.m_isRightSideInverted = Constants.CLIMBER.INVERT_RIGHT_SIDE;

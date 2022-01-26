@@ -10,14 +10,15 @@ import com.team2357.lib.commands.CommandLoggerBase;
  */
 public class ClimberExtendCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climberSub;
-  private double m_climberExtensionMeters;
+    private double m_climberExtensionMeters;
     private double m_speed;
     private boolean m_isFinished;
 
     /**
      * 
-     * @param climbSub The climber Subsystem (@link ClimberSubsystem)
-     * @param speed The speed for the climber motors between 0.0 and 1.0
+     * @param climbSub               The climber Subsystem (@link ClimberSubsystem)
+     * @param speed                  The speed for the climber motors between 0.0
+     *                               and 1.0
      * @param climberExtensionMeters How far the climber is extended
      */
     public ClimberExtendCommand(ClimberSubsystem climbSub, double speed, double climberExtensionMeters) {
@@ -30,12 +31,12 @@ public class ClimberExtendCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_climberSub.returnClimber(m_speed);
+        m_climberSub.extendClimber(m_speed);
     }
 
     @Override
     public void execute() {
-        m_isFinished = m_climberSub.validateExtensionDistance(m_climberExtensionMeters);
+        m_isFinished = m_climberSub.validate(m_climberExtensionMeters);
     }
 
     @Override

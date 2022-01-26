@@ -60,7 +60,8 @@ public final class Constants {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI) / (double) ENCODER_PPR;
+        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
+                / (double) ENCODER_PPR;
 
         public static final int LEFT_ENCODER_CHANNEL_A = 0;
         public static final int LEFT_ENCODER_CHANNEL_B = 1;
@@ -72,14 +73,30 @@ public final class Constants {
     }
 
     public final class CLIMBER {
-        public static final double CLIMB_EXTEND_SPEED = 0;
-        public static final double CLIMB_RETURN_SPEED = 0;
-        public static final double TRANS_EXTEND_SPEED = 0;
-        public static final double TRANS_RETURN_SPEED = 0;
-        public static final int MOTOR_STALL_LIMIT_AMPS = 5; //Might need to be different
+        public static final double CLIMB_EXTEND_SPEED = 0; // Climb extension speed for reachable rungs (low, mid)
+        public static final double CLIMB_RETURN_SPEED = 0; // Climb return speed for reachble rungs
+        public static final double TRANS_EXTEND_SPEED = 0; // Climb extend speed for unreachable rungs (high, traversal)
+        public static final double TRANS_RETURN_SPEED = 0; // Climb return speed for unreachable rungs
+        public static final int MOTOR_STALL_LIMIT_AMPS = 5; // Might need to be different
         public static final int MOTOR_FREE_LIMIT_AMPS = 36;
         public static final boolean INVERT_RIGHT_SIDE = true;
         public static final double INCHES_PER_ROTATION_METERS = 0.003175;
-        public static final double CLIMBER_GEAR_RATIO = 0;
+        public static final double CLIMBER_GEAR_RATIO = 10;
+        public static final int PIVOT_UPRIGHT_SECONDS = 0;
+
+        // Distances
+        public static final double LOW_RUNG_EXTENSION_METERS = 0;
+        public static final double LOW_RUNG_RETURN_METERS = 0;
+        public static final double MID_RUNG_EXTENSION_METERS = 0;
+        public static final double MID_RUNG_RETURN_METERS = 0;
+        public static final double HIGH_RUNG_EXTENSION_METERS = 0;
+        public static final double HIGH_RUNG_RETURN_METERS = 0;
+        public static final double TRAVERSAL_RUNG_EXTENSION_METERS = 0;
+        public static final double TRAVERSAL_RETURN_EXTENSION_METERS = 0;
+
+        // Tollerances
+        public static final double EXTENSION_TOLERANCE_METERS = 0;
+        public static final double MISS_TOLERANCE_METERS = 0;
+        public static final int ON_BAR_AMPS = 0;
     }
 }
