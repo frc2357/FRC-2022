@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.util.RobotMath;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -53,6 +54,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private boolean m_isRightClimberMotorValid;
     private State m_currentState;
 
+    // Curve of the diameter of the climber spool {rotations, diameter in meters}
+    // Currently plan on rotations being encoder rotations
+    private double m_spoolCurveMeters[][] = {
+            { 0, 0.019 }, // No line on spool
+            { 1, 0.0381 } }; // Max line on spool
+
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid) {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
@@ -79,12 +86,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     // Method to extend climber arms
     public void extendClimber(double speed) {
-       this.climberMotorSpeed(speed);
+        this.climberMotorSpeed(speed);
     }
 
     // Method to return climber arms
     public void returnClimber(double speed) {
-      this.climberMotorSpeed(-1*speed);
+        this.climberMotorSpeed(-1 * speed);
     }
 
     // Method to set climber speed
@@ -93,14 +100,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_rightClimberMotor.set(speed);
     }
 
-    //Method to stop the motors
+    // Method to stop the motors
     public void StopClimberMotors() {
         m_leftClimberMotor.set(0);
         m_rightClimberMotor.set(0);
     }
 
     public void StopClimberMotorsAmps(int amps) {
-        if(checkLeftClimberMotorAmps(amps)) {
+        if (checkLeftClimberMotorAmps(amps)) {
             m_leftClimberMotor.set(0);
             m_isRightClimberMotorValid = true;
         }
@@ -132,26 +139,26 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_rightClimberMotor.getEncoder().setPosition(0);
     }
 
-    private double rotationsToInches(double rotations) {
-        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO * (Constants.CLIMBER.INCHES_PER_ROTATION_METERS * Math.PI);
+    private double rotationsToMeters(double rotations) {
+        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO * (RobotMath.interpolateCurve(m_spoolCurveMeters, rotations) * Math.PI);
     }
 
-    public double getLeftEncoderDistanceMeters() {
-        return this.rotationsToInches(m_leftClimberMotor.getEncoder().getPosition());
+    public double getLeftClimberExtension() {
+        return this.rotationsToMeters(m_leftClimberMotor.getEncoder().getPosition());
     }
 
-    public double getRightEncoderDistanceMeters() {
-        return this.rotationsToInches(m_rightClimberMotor.getEncoder().getPosition());
+    public double getRightClimberExtension() {
+        return this.rotationsToMeters(m_rightClimberMotor.getEncoder().getPosition());
     }
 
     public boolean validateExtensionDistance(double distance) {
         boolean isAtDistance = true;
-        if (Utility.isWithinTolerance(getRightEncoderDistanceMeters(), distance, 0)) {
+        if (Utility.isWithinTolerance(getRightClimberExtension(), distance, 0)) {
             m_leftClimberMotor.set(0.0);
         } else {
             isAtDistance = false;
         }
-        if (Utility.isWithinTolerance(getRightEncoderDistanceMeters(), distance, 0)) {
+        if (Utility.isWithinTolerance(getRightClimberExtension(), distance, 0)) {
             m_rightClimberMotor.set(0.0);
         } else {
             isAtDistance = false;
@@ -159,7 +166,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return isAtDistance;
     }
 
-    public void setPivot(DoubleSolenoid.Value value){
+    public void setPivot(DoubleSolenoid.Value value) {
         m_climberSolenoid.set(value);
     }
 
