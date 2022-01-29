@@ -23,6 +23,9 @@ public final class Constants {
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
         public static final int DRIVE_MOTOR_LEFT_2 = 13;
         public static final int DRIVE_MOTOR_RIGHT_2 = 14;
+        public static final int DRIVE_MOTOR_LEFT_3 = 15;
+        public static final int DRIVE_MOTOR_RIGHT_3 = 16;
+
         public static final int GYRO_ID = 5;
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;

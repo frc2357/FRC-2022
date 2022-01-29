@@ -24,9 +24,9 @@ public class SubsystemFactory {
         config.m_isGyroReversed = Constants.DRIVE.INVERT_RIGHT_SIDE;
 
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
-        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2) };
+        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3) };
         WPI_TalonFX rightFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1);
-        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2) };
+        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
