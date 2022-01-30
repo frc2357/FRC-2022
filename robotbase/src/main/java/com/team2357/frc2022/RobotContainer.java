@@ -31,7 +31,7 @@ public class RobotContainer {
   private IntakeSubsystem m_intakeSub;
   private ShooterSubsystem m_shooterSub;
 
-  private final InvertDriveControls m_driverControls;
+  private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
   /**

@@ -26,7 +26,7 @@ public class InvertDriveControls extends DriverControls {
     public final JoystickButton m_changePipelineButton;
     private boolean m_isToggled = false;
 
-    private final BooleanTopic isInvertedTopic = new BooleanTopic("Are Controls Inverted");
+    //private final BooleanTopic isInvertedTopic = new BooleanTopic("Are Controls Inverted");
 
     public InvertDriveControls(InvertDriveControlsBuilder builder) {
         super(builder.m_controller, builder.m_deadband);
@@ -38,9 +38,9 @@ public class InvertDriveControls extends DriverControls {
      * Changes the value of m_isToggled from true to false or vice versa
      */
     public void invert() {
-        isInvertedTopic.log(m_isToggled);
+        //isInvertedTopic.log(m_isToggled);
         m_isToggled = !m_isToggled;
-        isInvertedTopic.log(m_isToggled);
+       // isInvertedTopic.log(m_isToggled);
     }
     
     @Override

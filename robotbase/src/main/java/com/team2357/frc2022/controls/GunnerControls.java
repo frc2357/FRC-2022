@@ -151,7 +151,7 @@ public class GunnerControls {
 
             if (m_shooterSub != null) {
                 m_gunnerControls.m_rightTrigger.whileActiveOnce(
-                        new ShooterSetRPMsCommand(m_shooterSub, 0, 0));
+                        new ShooterSetRPMsCommand(m_shooterSub, 2250, 2750));
             }
 
             return m_gunnerControls;

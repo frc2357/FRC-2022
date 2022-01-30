@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
  * @category Drive
  */
 public class IntakeDriveControls extends InvertDriveControls{
-    XboxController m_controller;
 
     public AxisThresholdTrigger m_leftTrigger;
 
@@ -28,7 +27,7 @@ public class IntakeDriveControls extends InvertDriveControls{
       super(builder.m_invertDriveBuilder);
 
         //Triggers
-        m_leftTrigger = new AxisThresholdTrigger(builder.m_controller, Axis.kLeftTrigger, .1);
+        m_leftTrigger = new AxisThresholdTrigger(super.m_controller, Axis.kLeftTrigger, .1);
 
     }
 
@@ -44,17 +43,17 @@ public class IntakeDriveControls extends InvertDriveControls{
         ControllerAxis controllerAxis = () -> {
             switch (axis) {
                 case kLeftX:
-                    return m_controller.getLeftX();
+                    return super.m_controller.getLeftX();
                 case kLeftY:
-                    return m_controller.getLeftY();
+                    return super.m_controller.getLeftY();
                 case kLeftTrigger:
-                    return m_controller.getLeftTriggerAxis();
+                    return super.m_controller.getLeftTriggerAxis();
                 case kRightTrigger:
-                    return m_controller.getRightTriggerAxis();
+                    return super.m_controller.getRightTriggerAxis();
                 case kRightX:
-                    return m_controller.getRightX();
+                    return super.m_controller.getRightX();
                 case kRightY:
-                    return m_controller.getRightY();
+                    return super.m_controller.getRightY();
             }
             return 0;
         };
@@ -65,7 +64,6 @@ public class IntakeDriveControls extends InvertDriveControls{
      * Class for building IntakeDriverControls
      */
     public static class IntakeDriveControlsBuilder {
-        private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
         private InvertDriveControlsBuilder m_invertDriveBuilder = null;
 
@@ -73,7 +71,6 @@ public class IntakeDriveControls extends InvertDriveControls{
          * @param controller the controller of the IntakeDriver controls
          */
         public IntakeDriveControlsBuilder(XboxController controller, double deadband) {
-            m_controller = controller;
             m_invertDriveBuilder = new InvertDriveControlsBuilder(controller, deadband);
         }
 
