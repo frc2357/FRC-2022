@@ -9,7 +9,7 @@ public class IntakeRollerStop extends CommandLoggerBase {
     /**
      * @param intakeSub The {@link IntakeSubsystem}.
      */
-    public IntakeRollerStop(IntakeSubsystem intakeSub, double speed) {
+    public IntakeRollerStop(IntakeSubsystem intakeSub) {
         m_intakeSub = intakeSub;
         addRequirements(m_intakeSub);
     }

@@ -16,11 +16,11 @@ public IntakeSequenceCommandGroup(IntakeSubsystem intakeSub){
     addRequirements(m_intakeSub);
 
 if (m_intakeSub.getPivot() == Value.kReverse){
-    addCommands(new IntakeSetPivotCommand(m_intakeSub, Value.kForward), new WaitCommand(0), new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
+    addCommands(new IntakeSetPivotCommand(m_intakeSub, Value.kForward), new WaitCommand(Constants.INTAKE.PIVOT_WAIT_SECONDS), new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
     }
 
 else {
-    addCommands(new IntakeRollerStop(m_intakeSub,0), new WaitCommand(Constants.INTAKE.ROLLER_STOP_SECONDS), new IntakeSetPivotCommand(m_intakeSub, Value.kReverse));
+    addCommands(new IntakeRollerStop(m_intakeSub), new WaitCommand(Constants.INTAKE.ROLLER_STOP_SECONDS), new IntakeSetPivotCommand(m_intakeSub, Value.kReverse));
     }
 }
 //overide
