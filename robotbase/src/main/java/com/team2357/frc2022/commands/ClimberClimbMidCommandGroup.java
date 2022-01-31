@@ -12,7 +12,7 @@ public class ClimberClimbMidCommandGroup extends SequentialCommandGroup {
         m_climbSub = climbSub;
 
         addCommands(new ClimberReturnCommand(m_climbSub, Constants.CLIMBER.CLIMB_RETURN_SPEED,
-                Constants.CLIMBER.MID_RUNG_RETURN_METERS, Constants.CLIMBER.ON_BAR_AMPS));
+                Constants.CLIMBER.MID_RUNG_RETURN_ROTATIONS, Constants.CLIMBER.ON_BAR_AMPS));
 
         addRequirements(m_climbSub);
     }

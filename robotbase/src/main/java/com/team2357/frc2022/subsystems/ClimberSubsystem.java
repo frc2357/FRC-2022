@@ -5,8 +5,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
-import com.team2357.lib.util.RobotMath;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
@@ -78,12 +76,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private boolean m_isRightClimberMotorValid;
     private State m_currentState;
 
-    // Curve of the diameter of the climber spool {rotations, diameter in meters}
-    // Currently plan on rotations being encoder rotations
-    private double m_spoolCurveMeters[][] = {
-            { 0, 0.019 }, // No line on spool
-            { 1, 0.0381 } }; // Max line on spool
-
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid) {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
@@ -134,8 +126,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_isLeftClimberMotorValid && m_isRightClimberMotorValid;
     }
 
-    public boolean validate(double distance, int amps) {
-        boolean[] validMotorsExtension = validateExtensionDistanceMeters(distance);
+    public boolean validate(double rotations, int amps) {
+        boolean[] validMotorsExtension = validateRotations(rotations);
         boolean[] validMotorsAmps = validateClimberMotorsAmps(amps);
 
         if (validMotorsExtension[0] && validMotorsAmps[0]) {
@@ -147,8 +139,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return areMotorsValid();
     }
 
-    public boolean validate(double distance) {
-        boolean[] validMotors = validateExtensionDistanceMeters(distance);
+    public boolean validate(double rotations) {
+        boolean[] validMotors = validateRotations(rotations);
 
         if (validMotors[0]) {
             m_leftClimberMotor.set(0.0);
@@ -174,14 +166,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return isAtAmps;
     }
 
-    public boolean[] validateExtensionDistanceMeters(double distance) {
+    public boolean[] validateRotations(double rotations) {
         boolean[] isAtDistance = new boolean[2];
 
-        if (Utility.isWithinTolerance(getRightClimberExtension(), distance,
+        if (Utility.isWithinTolerance(getLeftClimberRotations(), rotations,
                 Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
             isAtDistance[0] = true;
         }
-        if (Utility.isWithinTolerance(getRightClimberExtension(), distance,
+        if (Utility.isWithinTolerance(getRightClimberRotations(), rotations,
                 Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
             isAtDistance[1] = true;
         }
@@ -189,7 +181,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean checkClimberMissedMeters(double distance, int amps) {
-      return false;
+        return false;
     }
 
     public void resetValidation() {
@@ -220,17 +212,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_rightClimberMotor.getEncoder().setPosition(0);
     }
 
-    private double rotationsToMeters(double rotations) {
-        return rotations * Constants.CLIMBER.CLIMBER_GEAR_RATIO
-                * (RobotMath.interpolateCurve(m_spoolCurveMeters, rotations) * Math.PI);
+    public double getLeftClimberRotations() {
+        return this.m_leftClimberMotor.getEncoder().getPosition();
     }
 
-    public double getLeftClimberExtension() {
-        return this.rotationsToMeters(m_leftClimberMotor.getEncoder().getPosition());
-    }
-
-    public double getRightClimberExtension() {
-        return this.rotationsToMeters(m_rightClimberMotor.getEncoder().getPosition());
+    public double getRightClimberRotations() {
+        return this.m_rightClimberMotor.getEncoder().getPosition();
     }
 
     public void setPivot(DoubleSolenoid.Value value) {

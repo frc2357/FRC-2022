@@ -10,21 +10,21 @@ import com.team2357.lib.commands.CommandLoggerBase;
  */
 public class ClimberExtendCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climberSub;
-    private double m_climberExtensionMeters;
+    private double m_climberMotorRotations;
     private double m_speed;
     private boolean m_isFinished;
 
     /**
      * 
-     * @param climbSub               The climber Subsystem (@link ClimberSubsystem)
-     * @param speed                  The speed for the climber motors between 0.0
-     *                               and 1.0
-     * @param climberExtensionMeters How far the climber is extended
+     * @param climbSub              The climber Subsystem (@link ClimberSubsystem)
+     * @param speed                 The speed for the climber motors between 0.0
+     *                              and 1.0
+     * @param climberMotorRotations How many spindle rotaions the climber will make
      */
-    public ClimberExtendCommand(ClimberSubsystem climbSub, double speed, double climberExtensionMeters) {
+    public ClimberExtendCommand(ClimberSubsystem climbSub, double speed, double climberMotorRotations) {
         m_climberSub = climbSub;
         m_speed = speed;
-        m_climberExtensionMeters = climberExtensionMeters;
+        m_climberMotorRotations = climberMotorRotations;
         m_isFinished = false;
         addRequirements(climbSub);
     }
@@ -36,7 +36,7 @@ public class ClimberExtendCommand extends CommandLoggerBase {
 
     @Override
     public void execute() {
-        m_isFinished = m_climberSub.validate(m_climberExtensionMeters);
+        m_isFinished = m_climberSub.validate(m_climberMotorRotations);
     }
 
     @Override

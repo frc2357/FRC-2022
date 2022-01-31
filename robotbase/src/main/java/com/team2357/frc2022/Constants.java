@@ -85,14 +85,14 @@ public final class Constants {
         public static final int PIVOT_UPRIGHT_SECONDS = 0;
 
         // Distances
-        public static final double LOW_RUNG_EXTENSION_METERS = 0;
-        public static final double LOW_RUNG_RETURN_METERS = 0;
-        public static final double MID_RUNG_EXTENSION_METERS = 0;
-        public static final double MID_RUNG_RETURN_METERS = 0;
-        public static final double HIGH_RUNG_EXTENSION_METERS = 0;
-        public static final double HIGH_RUNG_RETURN_METERS = 0;
-        public static final double TRAVERSAL_RUNG_EXTENSION_METERS = 0;
-        public static final double TRAVERSAL_RETURN_EXTENSION_METERS = 0;
+        public static final double LOW_RUNG_EXTENSION_ROTATIONS = 0;
+        public static final double LOW_RUNG_RETURN_ROTATIONS = 0;
+        public static final double MID_RUNG_EXTENSION_ROTATIONS = 0;
+        public static final double MID_RUNG_RETURN_ROTATIONS = 0;
+        public static final double HIGH_RUNG_EXTENSION_ROTATIONS = 0;
+        public static final double HIGH_RUNG_RETURN_ROTATIONS = 0;
+        public static final double TRAVERSAL_RUNG_EXTENSION_ROTATIONS = 0;
+        public static final double TRAVERSAL_RETURN_EXTENSION_ROTATIONS = 0;
 
         // Tollerances
         public static final double EXTENSION_TOLERANCE_METERS = 0;

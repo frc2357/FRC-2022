@@ -16,7 +16,7 @@ public class ClimberExtendMidCommandGroup extends SequentialCommandGroup {
         addCommands(new ClimberSetPivotCommand(m_climbSub, DoubleSolenoid.Value.kForward));
         addCommands(new WaitCommand(Constants.CLIMBER.PIVOT_UPRIGHT_SECONDS));
         addCommands(new ClimberExtendCommand(m_climbSub, Constants.CLIMBER.CLIMB_EXTEND_SPEED,
-                Constants.CLIMBER.MID_RUNG_EXTENSION_METERS));
+                Constants.CLIMBER.MID_RUNG_EXTENSION_ROTATIONS));
 
         addRequirements(m_climbSub);
     }
