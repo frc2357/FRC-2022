@@ -29,7 +29,7 @@ public class RobotContainer {
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
 
-  private final InvertDriveControls m_driverControls;
+  private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
   /**
