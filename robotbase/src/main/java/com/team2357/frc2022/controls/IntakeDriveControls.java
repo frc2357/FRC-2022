@@ -1,12 +1,12 @@
 package com.team2357.frc2022.controls;
 
-import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.SingleSpeedFalconDriveSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
+import com.team2357.frc2022.commands.IntakeSequenceCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -99,8 +99,7 @@ public class IntakeDriveControls extends InvertDriveControls{
             // Intake Mode Bindings
             if (m_intakeSub != null) {
                     m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
-                            new IntakeRollerCommand(m_intakeSub,
-                                    m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)),false);
+                            new IntakeSequenceCommandGroup(m_intakeSub));
 
             }
 

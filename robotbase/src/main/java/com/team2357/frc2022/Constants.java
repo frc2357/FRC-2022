@@ -44,6 +44,8 @@ public final class Constants {
     public final class INTAKE {
         public static final double FORWARD_SPEED = 0;
         public static final double REVERSE_SPEED = 0;
+        public static final double PIVOT_WAIT_SECONDS = 0;
+        public static final double ROLLER_STOP_SECONDS = 0;
     }
 
     // Encoder Constants
