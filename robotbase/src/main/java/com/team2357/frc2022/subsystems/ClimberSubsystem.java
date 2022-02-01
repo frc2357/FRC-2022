@@ -213,11 +213,11 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public double getLeftClimberRotations() {
-        return this.m_leftClimberMotor.getEncoder().getPosition();
+        return m_leftClimberMotor.getEncoder().getPosition();
     }
 
     public double getRightClimberRotations() {
-        return this.m_rightClimberMotor.getEncoder().getPosition();
+        return m_rightClimberMotor.getEncoder().getPosition();
     }
 
     public void setPivot(DoubleSolenoid.Value value) {
