@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -50,11 +52,12 @@ public final class Constants {
     }
 
     // Encoder Constants
-    public final class DRIVE {
+    public final static class DRIVE {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI) / (double) ENCODER_PPR;
+        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
+                / (double) ENCODER_PPR;
 
         public static final int LEFT_ENCODER_CHANNEL_A = 0;
         public static final int LEFT_ENCODER_CHANNEL_B = 1;
@@ -63,5 +66,47 @@ public final class Constants {
 
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
+
+        /**
+         * Characterization Constants Zeroes are currently placeholder values
+         */
+
+        public static final double kS_VOLTS = 0.0;
+        public static final double KV_VOLTS_SECONDS_PER_METER = 0.0;
+        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.0;
+
+        /**
+         * Differential Drive Kinematics Zeroes as place holder values
+         */
+
+        public static final double TRACK_WIDTH_METERS = 0.0;
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
+                TRACK_WIDTH_METERS);
+
+        /**
+         * Max Trajectory acceleration and velocity Zeroes as place holder values
+         */
+
+        public static final double MAX_SPEED_METERS_PER_SECOND = 0;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+
+        /**
+         * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
+         * of meters and seconds
+         */
+
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
+        public static final double KS_VOLTS = 0;
+
+        /**
+         * Proportional velocity value for Ramsete PID
+         */
+        public static final double P_DRIVE_VEL = 8.5;
+
+        /**
+         * Controls if Ggyro is reversed or not.
+         */
+
     }
 }
