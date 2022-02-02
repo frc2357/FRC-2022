@@ -51,9 +51,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public static class Configuration {
         public IdleMode m_climberMotorIdleMode = IdleMode.kBrake;
 
+        public int m_climberMissedToleranceRotations = 0;
+
         public int m_climberMotorStallLimitAmps = 0;
         public int m_climberMotorFreeLimitAmps = 0;
         public boolean m_isRightSideInverted = false;
+
     }
 
     public enum State {
@@ -180,7 +183,17 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return isAtDistance;
     }
 
-    public boolean checkClimberMissedMeters(double distance, int amps) {
+    public boolean checkRightClimberMotorMissed(double targetRotations, int amps) {
+        if(getRightClimberRotations() < targetRotations-m_config.m_climberMissedToleranceRotations && !checkRightClimberMotorAmps(amps)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkLeftClimberMotorMissed(double targetRotations, int amps) {
+        if(getLeftClimberRotations() < targetRotations && !checkRightClimberMotorAmps(amps)){
+            return true;
+        }
         return false;
     }
 

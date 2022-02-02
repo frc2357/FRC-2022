@@ -40,7 +40,7 @@ public class ClimberReturnCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         m_isFinished = m_climbSub.validate(m_climberMotorRotations, m_amps)
-                || m_climbSub.checkClimberMissedMeters(m_climberMotorRotations, m_amps);
+                || m_climbSub.checkRightClimberMotorMissed(m_climberMotorRotations, m_amps);
     }
 
     @Override
