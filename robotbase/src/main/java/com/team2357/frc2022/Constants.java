@@ -26,6 +26,8 @@ public final class Constants {
         public static final int GYRO_ID = 5;
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
+        //Feeder
+        public static final int FEEDER_MOTOR_ID = 0;
     }
 
     public final class PCM_ID {
@@ -60,5 +62,9 @@ public final class Constants {
 
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
+    }
+
+    public final class ARDUINO {
+        public static final String FEEDER_IR_SENSOR_DEVICE_NAME = "";
     }
 }
