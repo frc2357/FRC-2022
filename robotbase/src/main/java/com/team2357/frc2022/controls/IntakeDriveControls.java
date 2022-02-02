@@ -4,12 +4,15 @@ import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.SingleSpeedFalconDriveSubsystem;
-import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
+
+import java.util.function.BooleanSupplier;
+
 import com.team2357.frc2022.commands.IntakeSequenceCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * These are the controls for the IntakeDriver.
@@ -19,7 +22,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 public class IntakeDriveControls extends InvertDriveControls{
     XboxController m_controller;
 
-    public AxisThresholdTrigger m_leftTrigger;
+    public Button m_leftTrigger;
 
     /**
      * @param builder The IntakeDriverControlsBuilder object
@@ -28,7 +31,8 @@ public class IntakeDriveControls extends InvertDriveControls{
       super(builder.m_invertDriveBuilder);
 
         //Triggers
-        m_leftTrigger = new AxisThresholdTrigger(builder.m_controller, Axis.kLeftTrigger, .1);
+        BooleanSupplier condition = () -> {return builder.m_controller.getLeftTriggerAxis()>.1;};
+        m_leftTrigger = new Button(condition);
 
     }
 
@@ -98,9 +102,8 @@ public class IntakeDriveControls extends InvertDriveControls{
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                    m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
-                            new IntakeSequenceCommandGroup(m_intakeSub));
-
+                    m_IntakeDriverControls.m_leftTrigger.whenPressed(
+                        new IntakeSequenceCommandGroup(m_intakeSub), false);
             }
 
             return m_IntakeDriverControls;
