@@ -22,6 +22,6 @@ public class IntakeRollerStop extends CommandLoggerBase {
 
     @Override
     public boolean isFinished(){
-        return false;
+        return true;
     }
 }
