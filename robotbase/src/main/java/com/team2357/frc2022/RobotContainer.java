@@ -10,7 +10,6 @@ import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
-import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -31,7 +30,7 @@ public class RobotContainer {
   private IntakeSubsystem m_intakeSub;
   private FeederSubsystem m_feederSub;
 
-  private final InvertDriveControls m_driverControls;
+  private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
   /**
