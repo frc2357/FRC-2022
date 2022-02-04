@@ -26,12 +26,17 @@ public void runFeedermotor(double speed) {
     m_feederMotor.set(ControlMode.PercentOutput,speed);
 }
 
+@Override
+public void periodic() {
+    System.out.println(isBallAtFeederWheel());
+}
+
 //Sensor state will return false when an object is too close. Function will flip that to true for reability
 public boolean isBallAtFeederWheel(){
     boolean isSensorBlocked = false;
     if(m_arduinoIRSensor.isConnected())
     {
-        isSensorBlocked = !m_arduinoIRSensor.getDeviceFieldBoolean(m_arduinoIRSensor.getName(), "state");
+        isSensorBlocked = !m_arduinoIRSensor.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_IR_SENSOR_DEVICE_NAME, "state");
     }
     return isSensorBlocked;
 }
