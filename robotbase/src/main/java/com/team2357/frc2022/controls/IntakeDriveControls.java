@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
  * @category Drive
  */
 public class IntakeDriveControls extends InvertDriveControls{
-    XboxController m_controller;
-
     public AxisThresholdTrigger m_leftTrigger;
 
     /**
@@ -91,7 +89,6 @@ public class IntakeDriveControls extends InvertDriveControls{
         }
 
         public IntakeDriveControls build() {
-            m_invertDriveBuilder.build();
             IntakeDriveControls m_IntakeDriverControls = new IntakeDriveControls(this);
 
             // Intake Mode Bindings

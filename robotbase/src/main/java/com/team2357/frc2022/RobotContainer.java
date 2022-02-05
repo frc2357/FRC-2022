@@ -9,10 +9,10 @@ import com.team2357.frc2022.commands.ExampleTrajectoryCommand;
 import com.team2357.frc2022.commands.RecordPath;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
-import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,8 +33,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
+  private FeederSubsystem m_feederSub;
 
-  private final InvertDriveControls m_driverControls;
+  private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
   /**
@@ -45,6 +46,7 @@ public class RobotContainer {
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
+    m_feederSub = subsystemFactory.CreateFeederSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(

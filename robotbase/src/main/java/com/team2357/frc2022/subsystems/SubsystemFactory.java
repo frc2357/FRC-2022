@@ -1,7 +1,9 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
@@ -44,6 +46,11 @@ public class SubsystemFactory {
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
+    }
+
+    public FeederSubsystem CreateFeederSubsystem() {
+        WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
+        return new FeederSubsystem(feederTalon);
     }
                
 }
