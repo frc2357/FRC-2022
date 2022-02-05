@@ -63,10 +63,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    int auto = 0;
+    int auto = 1;
     switch(auto) {
       case 1:
-      return new ParallelRaceGroup(new DriveRunMotorCommand(m_driveSub, 1), new WaitCommand(300));
+      return new ParallelRaceGroup(new DriveRunMotorCommand(m_driveSub, -1), new WaitCommand(300));
       case 2:
       return new RecordPath(m_driveSub);
       case 3:

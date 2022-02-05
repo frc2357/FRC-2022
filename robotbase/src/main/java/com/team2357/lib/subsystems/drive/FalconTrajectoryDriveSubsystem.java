@@ -52,10 +52,12 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
         m_leftEncoder = new Encoder(
                 leftEncoderChannelA,
-                leftEncoderChannelB);
+                leftEncoderChannelB,
+                false);
         m_rightEncoder = new Encoder(
                 rightEncoderChannelA,
-                rightEncoderChannelB);
+                rightEncoderChannelB,
+                true);
 
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
@@ -70,6 +72,9 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     public void periodic() {
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(), -1*m_rightEncoder.getDistance());
+        System.out.println("Right Encoder: "+m_rightEncoder.getDistance());
+        System.out.println("Right Encoder rate: "+m_rightEncoder.getRate());
+        //System.out.println("Left Encoder: "+m_leftEncoder.getDistance());
     }
 
     public void configure(Configuration config) {
