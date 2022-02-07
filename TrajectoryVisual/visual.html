@@ -2,30 +2,32 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="300" height="150" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 ctx.beginPath();
-var x1 = 0;  // in pixels
-var y1 = 0;
-var x2 = 100;
-var y2 = 100;
+var x1 = 100;  // in pixels
+var y1 = 100;
+var x2 = 300;
+var y2 = 150;
 var ang1 = 0;  // in radians
-var ang2 = 0;
+var ang2 = 3.4;
 
 
 var len =  Math.hypot(x2-x1,y2-y1);
 
 
-var ax1 = Math.cos(ang1) * len * (1.0/3.0);
-var ay1 = Math.sin(ang1) * len * (1.0/3.0);
+var ax1 = Math.cos(ang1) * len * 0.3;
+var ay1 = Math.sin(ang1) * len * 0.3;
 
-var ax2 = Math.cos(ang2) * len * (1.0/3.0);
-var ay2 = Math.sin(ang2) * len * (1.0/3.0);
+var ax2 = Math.cos(ang2) * len * 0.3;
+var ay2 = Math.sin(ang2) * len * 0.3;
 
+document.writeln()
+/*
 ctx.beginPath();
 ctx.moveTo(x1,y1);
 ctx.bezierCurveTo(
@@ -34,6 +36,12 @@ ctx.bezierCurveTo(
     x2, y2
 );
 ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(x1+ax1,y1+ay1);
+ctx.lineTo(x2-ax1,y2-ay2);
+ctx.lineTo(x2,y2);
+c
+ctx.stroke();*/
 </script> 
 
 </body>
