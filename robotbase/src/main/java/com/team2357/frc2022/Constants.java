@@ -65,7 +65,7 @@ public final class Constants {
     }
 
     public final class ARDUINO {
-        public static final String FEEDER_IR_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+        public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
         public static final String IR_SENSOR_JSON_NAME = "IRSensor";
     }
 }

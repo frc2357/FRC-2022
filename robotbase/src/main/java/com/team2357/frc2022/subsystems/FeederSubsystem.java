@@ -13,7 +13,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
     public FeederSubsystem(WPI_TalonSRX talonSRX) {
         m_feederMotor = talonSRX;
         m_feederMotor.setInverted(true); // Does this still need to be inverted?
-        m_arduinoIRSensor = new ArduinoUSBController(Constants.ARDUINO.FEEDER_IR_SENSOR_DEVICE_NAME);
+        m_arduinoIRSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
 
         m_arduinoIRSensor.start();
 
@@ -29,7 +29,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
     public boolean isBallAtFeederWheel() {
         boolean isSensorBlocked = false;
         if (m_arduinoIRSensor.isConnected()) {
-            isSensorBlocked = !m_arduinoIRSensor.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_IR_SENSOR_DEVICE_NAME,
+            isSensorBlocked = !m_arduinoIRSensor.getDeviceFieldBoolean(Constants.ARDUINO.IR_SENSOR_JSON_NAME,
                     "state");
         }
         return isSensorBlocked;
