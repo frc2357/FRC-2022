@@ -3,7 +3,9 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
+import com.team2357.frc2022.commands.TurretRotateCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
 import com.team2357.lib.util.XboxRaw;
@@ -113,6 +115,7 @@ public class GunnerControls {
     public static class GunnerControlsBuilder {
         private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
+        private TurretSubsystem m_turretSub = null;
 
         /**
          * @param controller the controller of the gunner controls
@@ -123,6 +126,11 @@ public class GunnerControls {
 
         public GunnerControlsBuilder withIntakeSub(IntakeSubsystem intakeSub) {
             m_intakeSub = intakeSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withTurretSub(TurretSubsystem turretSub) {
+            m_turretSub = turretSub;
             return this;
         }
 
@@ -139,6 +147,14 @@ public class GunnerControls {
                         new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED));
 
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
+            }
+
+            // Turret bindings
+            if (m_turretSub != null) {
+                m_gunnerControls.m_leftBumper.whileActiveOnce(
+                        new TurretRotateCommand(m_turretSub, -1 * Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
+                m_gunnerControls.m_rightBumper.whileActiveOnce(
+                        new TurretRotateCommand(m_turretSub, Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
             }
 
             return m_gunnerControls;
