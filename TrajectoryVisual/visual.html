@@ -1,48 +1,86 @@
 <!DOCTYPE html>
 <html>
-<body>
+  <body>
+    <canvas
+      id="myCanvas"
+      width="600"
+      height="600"
+      style="border: 1px solid #d3d3d3"
+    >
+      Your browser does not support the HTML5 canvas tag.</canvas
+    >
 
-<canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+    <script>
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.beginPath();
+      var x1 = 100; // in pixels
+      var y1 = 100;
+      var x2 = 300;
+      var y2 = 150;
+      var ang1 = 0; // in radians
+      var ang2 = 3.4;
 
-<script>
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
-ctx.beginPath();
-var x1 = 100;  // in pixels
-var y1 = 100;
-var x2 = 300;
-var y2 = 150;
-var ang1 = 0;  // in radians
-var ang2 = 3.4;
+      var len = Math.hypot(x2 - x1, y2 - y1);
 
+      var ax1 = Math.cos(ang1) * len * 0.3;
+      var ay1 = Math.sin(ang1) * len * 0.3;
 
-var len =  Math.hypot(x2-x1,y2-y1);
+      var ax2 = Math.cos(ang2) * len * 0.3;
+      var ay2 = Math.sin(ang2) * len * 0.3;
 
+      document.writeln();
 
-var ax1 = Math.cos(ang1) * len * 0.3;
-var ay1 = Math.sin(ang1) * len * 0.3;
+      var cx1 = x1 + ax1;
+      var cy1 = y1 + ay1;
+      var cx2 = x2 - ax1;
+      var cy2 = y2 - ay2;
+      var cx3 = x2;
+      var cy3 = y2;
 
-var ax2 = Math.cos(ang2) * len * 0.3;
-var ay2 = Math.sin(ang2) * len * 0.3;
+      /* ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.bezierCurveTo(x1 + ax1, y1 + ay1, x2 - ax1, y2 - ay2, x2, y2);
+      ctx.stroke();/*
 
-document.writeln()
-/*
-ctx.beginPath();
-ctx.moveTo(x1,y1);
-ctx.bezierCurveTo(
-    x1 + ax1, y1 + ay1,
-    x2 - ax1, y2 - ay2,
-    x2, y2
-);
-ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(x1+ax1,y1+ay1);
-ctx.lineTo(x2-ax1,y2-ay2);
-ctx.lineTo(x2,y2);
-c
-ctx.stroke();*/
-</script> 
+      /*ctx.beginPath();
+      ctx.moveTo(x1 + ax1, y1 + ay1);
+      ctx.lineTo(x2 - ax1, y2 - ay2);
+      ctx.lineTo(x2, y2);
+      c;
+      ctx.stroke();
+*/
+      var numOfPoints = 500;
+      var tIncrement = 1 / numOfPoints;
+      var t = 0;
 
-</body>
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+
+      for (var i = 0; i < numOfPoints; i++) {
+        var x = BezierCurveValue(t, cx1, cx2, cx3);
+        var y = BezierCurveValue(t, cy1, cy2, cy3);
+        document.writeln("x: " + x);
+        document.writeln("y: " + y);
+        ctx.lineTo(x, y);
+        t += tIncrement;
+      }
+      ctx.stroke();
+
+      /*ctx.beginPath();
+      ctx.moveTo(x1 + ax1, y1 + ay1);
+      ctx.lineTo(x2 - ax1, y2 - ay2);
+      ctx.lineTo(x2, y2);
+*/
+      ctx.stroke();
+
+      function BezierCurveValue(t, cp1, cp2, cp3) {
+        return (
+          Math.pow(1 - t, 2) * cp1 +
+          2 * (1 - t) * t * cp2 +
+          Math.pow(t, 2) * cp3
+        );
+      }
+    </script>
+  </body>
 </html>
