@@ -45,12 +45,24 @@ public class RobotContainer {
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
-        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND).withIntakeSub(m_intakeSub).build();
+        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
+            .withIntakeSub(m_intakeSub).build();
 
-    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
-        .build();
+    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
+        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
+            .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
+
+    configureShuffleboard();
+  }
+
+  /**
+   * This method should set up the shuffleboard
+   */
+  public void configureShuffleboard() {
+    // TODO: ShuffleBoard Implement
+
   }
 
   /**
