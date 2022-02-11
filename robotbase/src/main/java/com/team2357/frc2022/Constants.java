@@ -75,9 +75,23 @@ public final class Constants {
         public static final double MOTOR_ROTATIONS_ZERO_INCREMENT = 0;
     }
 
+    public final class LIMELIGHT {
+        /** Angle of the Limelight axis from horizontal (degrees) */
+        public static final double MOUNTING_ANGLE = 0;
+
+        /** Height of the Limelight lens center from the floor (inches) */
+        public static final double MOUNTING_HEIGHT = 0;
+
+        /** Target width in inches */
+        public static final double VISION_TARGET_WIDTH = 5;
+
+        /** Target height in inches */
+        public static final double VISION_TARGET_HEIGHT = 2;
+    }
+
     public final class ARDUINO {
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
-        public static final String FEEDER_IR_SENSOR_DEVICE_NAME = "";
         public static final String TURRET_HALL_SENSOR_NAME = "hallSensor";
+        public static final String IR_SENSOR_JSON_NAME = "IRSensor";
     }
 }
