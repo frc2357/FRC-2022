@@ -96,16 +96,24 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_currentAngle = m_config.m_StartAngle;
     }
 
-    public void m_setTurretPosition(double position) {
+    public double getTurretRotations() {
+        return m_turretMotor.getEncoder().getPosition();
+    }
+
+    public double getTurretVel() {
+        return m_turretMotor.getEncoder().getVelocity();
+    }
+
+    public void setTurretPosition(double position) {
         m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public boolean isOnZero() {
         boolean isMagnetDetected = false;
 
-        if (m_arduinoHallEffectSensor.isConnected())
-        {
-            isMagnetDetected = !m_arduinoHallEffectSensor.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
+        if (m_arduinoHallEffectSensor.isConnected()) {
+            isMagnetDetected = !m_arduinoHallEffectSensor
+                    .getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
         }
 
         return isMagnetDetected;
