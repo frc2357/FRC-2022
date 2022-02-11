@@ -6,10 +6,14 @@ package com.team2357.frc2022;
 
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
+import com.team2357.frc2022.shuffleboard.DriveTab;
+import com.team2357.frc2022.shuffleboard.FailsafeButtonWidget;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
+import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  public static final String SHUFFLEBOARD_TAB_ROBOT = "Robot";
+
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
@@ -37,6 +43,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
@@ -62,7 +70,10 @@ public class RobotContainer {
    */
   public void configureShuffleboard() {
     // TODO: ShuffleBoard Implement
+    DriveTab driveTab = new DriveTab();
 
+    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT,
+    new ClosedLoopSubsystem[] { m_intakeSub, m_driveSub}));
   }
 
   /**

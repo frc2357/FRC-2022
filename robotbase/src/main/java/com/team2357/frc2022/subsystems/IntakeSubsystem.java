@@ -44,5 +44,4 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
     public void setPivot(DoubleSolenoid.Value value) {
         m_intakeSolenoid.set(value);
     }
-
 }
