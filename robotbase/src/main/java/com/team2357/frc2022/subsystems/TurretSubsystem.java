@@ -3,11 +3,14 @@ package com.team2357.frc2022.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.Constants;
+import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
     private SparkMaxPIDController m_pidController;
+    private ArduinoUSBController m_arduinoHallEffectSensor;
     Configuration m_config;
 
     public double m_currentAngle;
@@ -38,6 +41,10 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
         m_config = new Configuration();
         configure(m_config);
+
+        m_arduinoHallEffectSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+
+        m_arduinoHallEffectSensor.start();
 
         resetHeading();
     }
@@ -93,8 +100,14 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
     }
 
-    // TODO: Implement arduino mag sensor
     public boolean isOnZero() {
-        return false;
+        boolean isMagnetDetected = false;
+
+        if (m_arduinoHallEffectSensor.isConnected())
+        {
+            isMagnetDetected = !m_arduinoHallEffectSensor.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
+        }
+
+        return isMagnetDetected;
     }
 }
