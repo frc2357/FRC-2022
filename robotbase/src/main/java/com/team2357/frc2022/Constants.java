@@ -26,7 +26,7 @@ public final class Constants {
         public static final int GYRO_ID = 5;
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
-        //Feeder
+        // Feeder
         public static final int FEEDER_MOTOR_ID = 0;
     }
 
@@ -53,7 +53,8 @@ public final class Constants {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI) / (double) ENCODER_PPR;
+        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
+                / (double) ENCODER_PPR;
 
         public static final int LEFT_ENCODER_CHANNEL_A = 0;
         public static final int LEFT_ENCODER_CHANNEL_B = 1;
@@ -64,7 +65,22 @@ public final class Constants {
         public static final boolean INVERT_RIGHT_SIDE = true;
     }
 
+    public final class LIMELIGHT {
+        /** Angle of the Limelight axis from horizontal (degrees) */
+        public static final double MOUNTING_ANGLE = 0;
+
+        /** Height of the Limelight lens center from the floor (inches) */
+        public static final double MOUNTING_HEIGHT = 0;
+
+        /** Target width in inches */
+        public static final double VISION_TARGET_WIDTH = 5;
+
+        /** Target height in inches */
+        public static final double VISION_TARGET_HEIGHT = 2;
+    }
+
     public final class ARDUINO {
-        public static final String FEEDER_IR_SENSOR_DEVICE_NAME = "";
+        public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+        public static final String IR_SENSOR_JSON_NAME = "IRSensor";
     }
 }

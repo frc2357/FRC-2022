@@ -14,6 +14,7 @@ import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,6 +36,7 @@ public class RobotContainer {
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
   private FeederSubsystem m_feederSub;
+  private TogglableLimelightSubsystem m_visionSub;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
@@ -50,11 +52,13 @@ public class RobotContainer {
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
     m_feederSub = subsystemFactory.CreateFeederSubsystem();
+    m_visionSub = subsystemFactory.CreateVisionSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
         new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
             .withIntakeSub(m_intakeSub).build();
+            .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
