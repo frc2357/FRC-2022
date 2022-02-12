@@ -41,6 +41,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_turretMotorMaxAcc = 0;
         public double m_turretMotorAllowedError = 0;
 
+        public double m_turretRotationsClockwiseSoftLimit = 0;
+        public double m_turretRotationsCounterClockwiseSoftLimit = 0;
         public double m_rotationsPerDegree = 0;
     }
 
@@ -107,11 +109,16 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public void setTurretPosition(double position) {
         m_setPoint = position;
-        m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+        m_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public boolean atSetPoint() {
         return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), m_setPoint,
+                m_config.m_turretMotorAllowedError);
+    }
+
+    public boolean atSetPoint(double setPoint) {
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), setPoint,
                 m_config.m_turretMotorAllowedError);
     }
 
@@ -189,11 +196,38 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     /**
      * Calculate setpoint based on target x value
+     * Assumes limelight is mounted centered on the turret
      * 
      * @param target The vision target.
      * @return desired setpoint
      */
     private double calculateSetPoint(VisionTarget target) {
-        return target.getX() * m_config.m_rotationsPerDegree;
+        double setPoint = (target.getX() * m_config.m_rotationsPerDegree) + getTurretRotations();
+
+        // Cases if target is out of reach
+        if (setPoint < m_config.m_turretRotationsClockwiseSoftLimit) {
+            setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
+        } else if (setPoint > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
+            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
+        }
+
+        return setPoint;
+    }
+
+    private double lookForTarget() {
+        double setPoint = 0;
+        // Check if turret is already moving, if start rotating clockwise
+        if (m_turretMotor.getEncoder().getVelocity() > 10) {
+            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
+        }
+
+        // Once soft limit reached - flig direction
+        if (atSetPoint(m_config.m_turretRotationsClockwiseSoftLimit)) {
+            setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
+        } else if (atSetPoint(m_config.m_turretRotationsCounterClockwiseSoftLimit)) {
+            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
+        }
+
+        return setPoint;
     }
 }
