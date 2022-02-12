@@ -8,6 +8,8 @@ import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
     private SparkMaxPIDController m_pidController;
@@ -17,6 +19,9 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private VisionTarget m_currentTarget;
 
     private double m_setPoint;
+
+    // Has the turret been zeroed
+    private boolean m_isZeroed;
 
     public static class Configuration {
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
@@ -36,19 +41,17 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_turretMotorMaxAcc = 0;
         public double m_turretMotorAllowedError = 0;
 
-        public double rotationsPerDegree = 0;
+        public double m_rotationsPerDegree = 0;
     }
 
     public TurretSubsystem(CANSparkMax turretMotor) {
         m_turretMotor = turretMotor;
 
-        m_config = new Configuration();
-        configure(m_config);
-
         m_arduinoHallEffectSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
 
         m_arduinoHallEffectSensor.start();
 
+        m_isZeroed = false;
         resetHeading();
     }
 
@@ -103,6 +106,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public void setTurretPosition(double position) {
+        m_setPoint = position;
         m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
     }
 
@@ -119,6 +123,10 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
                     .getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
         }
 
+        if (isMagnetDetected) {
+            m_isZeroed = true;
+        }
+
         return isMagnetDetected;
     }
 
@@ -127,6 +135,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         if (isClosedLoopEnabled()) {
             closedLoopPeriodic();
         }
+
+        // For tuning
+        SmartDashboard.putNumber("SetPoint", m_setPoint);
+        SmartDashboard.putNumber("Encoder Pos", getTurretRotations());
+        SmartDashboard.putNumber("Encoder Vel", m_turretMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Output", m_turretMotor.getAppliedOutput());
     }
 
     public boolean hasTarget() {
@@ -161,10 +175,15 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public void closedLoopPeriodic() {
 
-        if (m_currentTarget != null) {
+        if (m_currentTarget != null && m_isZeroed) {
 
-            m_setPoint = calculateSetPoint(m_currentTarget);
-            setTurretPosition(m_setPoint);
+            double setPoint = calculateSetPoint(m_currentTarget);
+            setTurretPosition(setPoint);
+        }
+
+        // Occasionally reset heading to reduce error overtime
+        if (isOnZero()) {
+            resetHeading();
         }
     }
 
@@ -175,6 +194,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
      * @return desired setpoint
      */
     private double calculateSetPoint(VisionTarget target) {
-        return target.getX() * m_config.rotationsPerDegree;
+        return target.getX() * m_config.m_rotationsPerDegree;
     }
 }

@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
@@ -66,6 +68,33 @@ public class SubsystemFactory {
         config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH_INCHES;
         config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT_INCHES;
         subsystem.setConfiguration(config);
+        return subsystem;
+    }
+
+    public TurretSubsystem creatTurretSubsystem() {
+        TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
+        config.m_turretMotorStallLimitAmps = Constants.TURRET.TURRET_MOTOR_STALL_LIMIT_AMPS;
+        config.m_turretMotorFreeLimitAmps = Constants.TURRET.TURRET_MOTOR_FREE_LIMIT_AMPS;
+
+        config.m_turretMotorP = Constants.TURRET.TURRET_MOTOR_P;
+        config.m_turretMotorI = Constants.TURRET.TURRET_MOTOR_I;
+        config.m_turretMotorD = Constants.TURRET.TURRET_MOTOR_D;
+        config.m_turretMotorIZone = Constants.TURRET.TURRET_MOTOR_I_ZONE;
+        config.m_turretMotorFF = Constants.TURRET.TURRET_MOTOR_FF;
+        config.m_turretMotorMaxOutput = Constants.TURRET.TURRET_MOTOR_MAX_OUTPUT;
+        config.m_turretMotorMinOutput = Constants.TURRET.TURRET_MOTOR_MIN_OUTPUT;
+        config.m_turretMotorMaxRPM = Constants.TURRET.TURRET_MOTOR_MAX_RPM;
+
+        config.m_turretMotorMaxVel = Constants.TURRET.TURRET_MOTOR_MAX_VEL;
+        config.m_turretMotorMinVel = Constants.TURRET.TURRET_MOTOR_MIN_VEL;
+        config.m_turretMotorMaxAcc = Constants.TURRET.TURRET_MOTOR_MAX_ACC;
+        config.m_turretMotorAllowedError = Constants.TURRET.TURRET_MOTOR_ALLOWEDERROR;
+
+        config.m_rotationsPerDegree = Constants.TURRET.ROTATIONS_PER_DEGREE;
+
+        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID, MotorType.kBrushless);
+        TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
+        subsystem.configure(config);
         return subsystem;
     }
 
