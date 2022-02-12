@@ -23,7 +23,7 @@ public class TurretZeroCommand extends CommandLoggerBase {
     public void execute() {
 
         m_isFinished = m_turretSub.isOnZero();
-        if (!m_isFinished && m_turretSub.getTurretVel() == 0) {
+        if (!m_isFinished && m_turretSub.atSetPoint()) {
 
             m_turretSub.setTurretPosition(m_toggleDirection ? position : -1 * position);
             m_toggleDirection = !m_toggleDirection;

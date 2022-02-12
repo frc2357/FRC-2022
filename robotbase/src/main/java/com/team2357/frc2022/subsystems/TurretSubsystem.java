@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
@@ -13,7 +14,9 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private ArduinoUSBController m_arduinoHallEffectSensor;
     Configuration m_config;
 
-    public double m_currentAngle;
+    private VisionTarget m_currentTarget;
+
+    private double m_setPoint;
 
     public static class Configuration {
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
@@ -33,7 +36,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_turretMotorMaxAcc = 0;
         public double m_turretMotorAllowedError = 0;
 
-        public double m_StartAngle = 0;
+        public double rotationsPerDegree = 0;
     }
 
     public TurretSubsystem(CANSparkMax turretMotor) {
@@ -93,19 +96,19 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public void resetHeading() {
         m_turretMotor.getEncoder().setPosition(0);
-        m_currentAngle = m_config.m_StartAngle;
     }
 
     public double getTurretRotations() {
         return m_turretMotor.getEncoder().getPosition();
     }
 
-    public double getTurretVel() {
-        return m_turretMotor.getEncoder().getVelocity();
-    }
-
     public void setTurretPosition(double position) {
         m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+    }
+
+    public boolean atSetPoint() {
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), m_setPoint,
+                m_config.m_turretMotorAllowedError);
     }
 
     public boolean isOnZero() {
@@ -117,5 +120,61 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         }
 
         return isMagnetDetected;
+    }
+
+    @Override
+    public void periodic() {
+        if (isClosedLoopEnabled()) {
+            closedLoopPeriodic();
+        }
+    }
+
+    public boolean hasTarget() {
+        return m_currentTarget != null;
+    }
+
+    public boolean isTargetLocked() {
+        if (!isClosedLoopEnabled()) {
+            return false;
+        }
+        return atSetPoint();
+    }
+
+    @Override
+    public void setClosedLoopEnabled(boolean enabled) {
+        if (enabled) {
+            return;
+        }
+        disableClosedLoop();
+    }
+
+    public void enableClosedLoop(VisionTarget targetSupplier) {
+        m_currentTarget = targetSupplier;
+        super.setClosedLoopEnabled(true);
+    }
+
+    public void disableClosedLoop() {
+        super.setClosedLoopEnabled(false);
+        m_currentTarget = null;
+        m_turretMotor.set(0);
+    }
+
+    public void closedLoopPeriodic() {
+
+        if (m_currentTarget != null) {
+
+            m_setPoint = calculateSetPoint(m_currentTarget);
+            setTurretPosition(m_setPoint);
+        }
+    }
+
+    /**
+     * Calculate setpoint based on target x value
+     * 
+     * @param target The vision target.
+     * @return desired setpoint
+     */
+    private double calculateSetPoint(VisionTarget target) {
+        return target.getX() * m_config.rotationsPerDegree;
     }
 }

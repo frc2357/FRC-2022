@@ -70,7 +70,6 @@ public final class Constants {
 
     // Turret
     public final class TURRET {
-        public static final double START_ANGLE = 0;
         public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
         public static final double MOTOR_ROTATIONS_ZERO_INCREMENT = 0;
     }
