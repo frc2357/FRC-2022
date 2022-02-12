@@ -91,6 +91,8 @@ public final class Constants {
         public static final double TURRET_MOTOR_MAX_ACC = 10;
         public static final double TURRET_MOTOR_ALLOWEDERROR = 5;
 
+        public static final double TURRET_ROTATIONS_CLOCKWISE_SOFT_LIMIT = 0;
+        public static final double TURRET_ROTATIONS_COUNTER_CLOCKWISE_SOFT_LIMIT = 0;
         public static final double ROTATIONS_PER_DEGREE = 1;
     }
 

@@ -56,7 +56,7 @@ public class RobotContainer {
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
-            .withTurretSub(m_turretSub)
+            .withTurretSub(m_turretSub).withVisionSub(m_visionSub)
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));

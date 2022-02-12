@@ -190,6 +190,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
                 double setPoint = calculateSetPoint(m_currentTarget);
                 setTurretPosition(setPoint);
+            } else {
+                lookForTarget();
             }
         }
 
@@ -219,20 +221,21 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         return setPoint;
     }
 
-    private double lookForTarget() {
+    // Looks for vision target by bouncing between soft limits
+    private void lookForTarget() {
         double setPoint = 0;
-        // Check if turret is already moving, if start rotating clockwise
-        if (m_turretMotor.getEncoder().getVelocity() > 10) {
+        // Check if turret is already moving, if not start rotating clockwise
+        if (m_turretMotor.getEncoder().getVelocity() < 10) {
             setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
         }
 
-        // Once soft limit reached - flig direction
+        // Once soft limit reached - flip direction
         if (atSetPoint(m_config.m_turretRotationsClockwiseSoftLimit)) {
             setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
         } else if (atSetPoint(m_config.m_turretRotationsCounterClockwiseSoftLimit)) {
             setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
         }
 
-        return setPoint;
+        setTurretPosition(setPoint);
     }
 }
