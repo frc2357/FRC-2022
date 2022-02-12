@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.util.VisionTargetSupplier;
 import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
@@ -16,6 +17,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private ArduinoUSBController m_arduinoHallEffectSensor;
     Configuration m_config;
 
+    private VisionTargetSupplier m_targetSupplier;
     private VisionTarget m_currentTarget;
 
     private double m_setPoint;
@@ -169,23 +171,26 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         disableClosedLoop();
     }
 
-    public void enableClosedLoop(VisionTarget targetSupplier) {
-        m_currentTarget = targetSupplier;
+    public void enableClosedLoop(VisionTargetSupplier targetSupplier) {
+        m_targetSupplier = targetSupplier;
         super.setClosedLoopEnabled(true);
     }
 
     public void disableClosedLoop() {
         super.setClosedLoopEnabled(false);
-        m_currentTarget = null;
+        m_targetSupplier = null;
         m_turretMotor.set(0);
     }
 
     public void closedLoopPeriodic() {
+        m_currentTarget = m_targetSupplier.getAsVisionTarget();
 
-        if (m_currentTarget != null && m_isZeroed) {
+        if (m_isZeroed) {
+            if (m_currentTarget != null) {
 
-            double setPoint = calculateSetPoint(m_currentTarget);
-            setTurretPosition(setPoint);
+                double setPoint = calculateSetPoint(m_currentTarget);
+                setTurretPosition(setPoint);
+            }
         }
 
         // Occasionally reset heading to reduce error overtime

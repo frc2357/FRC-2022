@@ -47,7 +47,7 @@ public class TrackTargetCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_turretSubsystem.enableClosedLoop(this.getTarget());
+        m_turretSubsystem.enableClosedLoop(this::getTarget);
     }
 
     @Override
