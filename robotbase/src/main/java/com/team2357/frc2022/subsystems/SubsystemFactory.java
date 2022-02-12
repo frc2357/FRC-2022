@@ -62,9 +62,9 @@ public class SubsystemFactory {
         subsystem.setStream(false);
         LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
         config.m_LimelightMountingAngle = Constants.LIMELIGHT.MOUNTING_ANGLE;
-        config.m_LimelightMountingHeightInches = Constants.LIMELIGHT.MOUNTING_HEIGHT;
-        config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH;
-        config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT;
+        config.m_LimelightMountingHeightInches = Constants.LIMELIGHT.MOUNTING_HEIGHT_INCHES;
+        config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH_INCHES;
+        config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT_INCHES;
         subsystem.setConfiguration(config);
         return subsystem;
     }

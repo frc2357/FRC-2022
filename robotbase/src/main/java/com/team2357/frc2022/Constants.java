@@ -79,13 +79,15 @@ public final class Constants {
         public static final double MOUNTING_ANGLE = 0;
 
         /** Height of the Limelight lens center from the floor (inches) */
-        public static final double MOUNTING_HEIGHT = 0;
+        public static final double MOUNTING_HEIGHT_INCHES = 0;
 
         /** Target width in inches */
-        public static final double VISION_TARGET_WIDTH = 5;
+        public static final double VISION_TARGET_WIDTH_INCHES = 5;
 
         /** Target height in inches */
-        public static final double VISION_TARGET_HEIGHT = 2;
+        public static final double VISION_TARGET_HEIGHT_INCHES = 2;
+
+        public static final double VISION_TARGET_HEIGHT_FROM_FLOOR_INCHES = 101.625;
     }
 
     public final class ARDUINO {
