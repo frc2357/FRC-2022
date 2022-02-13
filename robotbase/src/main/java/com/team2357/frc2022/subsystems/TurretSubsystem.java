@@ -20,7 +20,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private VisionTargetSupplier m_targetSupplier;
     private VisionTarget m_currentTarget;
 
-    private double m_setPoint;
+    private double m_targetDegrees;
 
     // Has the turret been zeroed
     private boolean m_isZeroed;
@@ -46,6 +46,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_turretRotationsClockwiseSoftLimit = 0;
         public double m_turretRotationsCounterClockwiseSoftLimit = 0;
         public double m_rotationsPerDegree = 0;
+        public double m_degreeOffset = 0;
     }
 
     public TurretSubsystem(CANSparkMax turretMotor) {
@@ -91,22 +92,26 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_turretMotor.getEncoder().setPosition(0);
     }
 
-    public double getTurretRotations() {
-        return m_turretMotor.getEncoder().getPosition();
+    public double getTurretDegrees() {
+        return m_turretMotor.getEncoder().getPosition() / m_config.m_rotationsPerDegree;
     }
 
-    public void setTurretPosition(double position) {
-        m_setPoint = position;
-        m_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kSmartMotion);
+    /**
+     * 
+     * @param targetDegrees Desired position of the turret in degrees
+     */
+    public void setTurretPosition(double targetDegrees) {
+        m_targetDegrees = targetDegrees;
+        double setPoint = (m_targetDegrees + m_config.m_degreeOffset) * m_config.m_rotationsPerDegree;
+        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
     }
 
-    public boolean atSetPoint() {
-        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), m_setPoint,
-                m_config.m_turretMotorAllowedError);
+    public boolean atDegrees() {
+        return atDegrees(m_targetDegrees);
     }
 
-    public boolean atSetPoint(double setPoint) {
-        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), setPoint,
+    public boolean atDegrees(double targetDegrees) {
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretDegrees(), targetDegrees,
                 m_config.m_turretMotorAllowedError);
     }
 
@@ -128,12 +133,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     @Override
     public void periodic() {
         if (isClosedLoopEnabled()) {
-            closedLoopPeriodic();
+            turretTrackingPeriodic();
         }
 
         // For tuning
-        SmartDashboard.putNumber("SetPoint", m_setPoint);
-        SmartDashboard.putNumber("Encoder Pos", getTurretRotations());
+        SmartDashboard.putNumber("SetPoint", m_targetDegrees);
+        SmartDashboard.putNumber("Encoder Pos", m_turretMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Encoder Vel", m_turretMotor.getEncoder().getVelocity());
         SmartDashboard.putNumber("Output", m_turretMotor.getAppliedOutput());
     }
@@ -146,7 +151,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         if (!isClosedLoopEnabled()) {
             return false;
         }
-        return atSetPoint();
+        return atDegrees();
     }
 
     @Override
@@ -154,28 +159,27 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         if (enabled) {
             return;
         }
-        disableClosedLoop();
-    }
-
-    public void enableClosedLoop(VisionTargetSupplier targetSupplier) {
-        m_targetSupplier = targetSupplier;
-        super.setClosedLoopEnabled(true);
-    }
-
-    public void disableClosedLoop() {
         super.setClosedLoopEnabled(false);
+        disableTrackingPeriodic();
+    }
+
+    public void initTrackingPeriodic(VisionTargetSupplier targetSupplier) {
+        m_targetSupplier = targetSupplier;
+    }
+
+    public void disableTrackingPeriodic() {
         m_targetSupplier = null;
         m_turretMotor.set(0);
     }
 
-    public void closedLoopPeriodic() {
+    public void turretTrackingPeriodic() {
         m_currentTarget = m_targetSupplier.getAsVisionTarget();
 
         if (m_isZeroed) {
             if (m_currentTarget != null) {
 
-                double setPoint = calculateSetPoint(m_currentTarget);
-                setTurretPosition(setPoint);
+                double degrees = calculateDegrees(m_currentTarget);
+                setTurretPosition(degrees);
             } else {
                 System.err.println("----- NO VISION TARGET -----");
             }
@@ -192,18 +196,18 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
      * Assumes limelight is mounted centered on the turret
      * 
      * @param target The vision target.
-     * @return desired setpoint
+     * @return desired degree on the turret
      */
-    private double calculateSetPoint(VisionTarget target) {
-        double setPoint = (target.getX() * m_config.m_rotationsPerDegree) + getTurretRotations();
+    private double calculateDegrees(VisionTarget target) {
+        double degrees = target.getX() + getTurretDegrees();
 
         // Cases if target is out of reach
-        if (setPoint < m_config.m_turretRotationsClockwiseSoftLimit) {
-            setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
-        } else if (setPoint > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
-            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
+        if (degrees < m_config.m_turretRotationsClockwiseSoftLimit) {
+            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit;
+        } else if (degrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
+            degrees = m_config.m_turretRotationsClockwiseSoftLimit;
         }
 
-        return setPoint;
+        return degrees;
     }
 }

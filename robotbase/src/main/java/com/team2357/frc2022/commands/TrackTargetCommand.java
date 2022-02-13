@@ -6,6 +6,8 @@ import com.team2357.lib.commands.CommandLoggerBase;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 public class TrackTargetCommand extends CommandLoggerBase {
     private TurretSubsystem m_turretSubsystem;
     private TogglableLimelightSubsystem m_limelightSubsystem;
@@ -30,6 +32,12 @@ public class TrackTargetCommand extends CommandLoggerBase {
         m_turretSubsystem = turretSubsystem;
         m_limelightSubsystem = limelightSubsystem;
         m_finishWhenLocked = finishWhenLocked;
+
+        if(!m_turretSubsystem.isClosedLoopEnabled() || !m_limelightSubsystem.isClosedLoopEnabled()){
+            System.err.println("----- TrackTargetCommand canceled, closed loop is DISABLED -----");
+            CommandScheduler.getInstance().cancel(this);
+        }
+
         addRequirements(m_turretSubsystem, m_limelightSubsystem);
     }
 
@@ -47,11 +55,11 @@ public class TrackTargetCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_turretSubsystem.enableClosedLoop(this::getTarget);
+        m_turretSubsystem.initTrackingPeriodic(this::getTarget);
     }
 
     @Override
     public void end(boolean cancelled) {
-        m_turretSubsystem.disableClosedLoop();
+        m_turretSubsystem.disableTrackingPeriodic();
     }
 }

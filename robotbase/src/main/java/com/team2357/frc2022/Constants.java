@@ -72,7 +72,7 @@ public final class Constants {
     // TODO: Tune Turret constants, currently values from rev's example
     public final class TURRET {
         public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
-        public static final double MOTOR_ROTATIONS_ZERO_INCREMENT = 0;
+        public static final double MOTOR_DEGREES_ZERO_INCREMENT = 0;
 
         public static final int TURRET_MOTOR_STALL_LIMIT_AMPS = 15;
         public static final int TURRET_MOTOR_FREE_LIMIT_AMPS = 3;
@@ -94,6 +94,7 @@ public final class Constants {
         public static final double TURRET_ROTATIONS_CLOCKWISE_SOFT_LIMIT = 0;
         public static final double TURRET_ROTATIONS_COUNTER_CLOCKWISE_SOFT_LIMIT = 0;
         public static final double ROTATIONS_PER_DEGREE = 1;
+        public static final double DEGREE_OFFSET = 0;
     }
 
     public final class LIMELIGHT {

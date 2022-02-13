@@ -93,6 +93,7 @@ public class SubsystemFactory {
         config.m_turretRotationsClockwiseSoftLimit = Constants.TURRET.TURRET_ROTATIONS_CLOCKWISE_SOFT_LIMIT;
         config.m_turretRotationsCounterClockwiseSoftLimit = Constants.TURRET.TURRET_ROTATIONS_COUNTER_CLOCKWISE_SOFT_LIMIT;
         config.m_rotationsPerDegree = Constants.TURRET.ROTATIONS_PER_DEGREE;
+        config.m_degreeOffset = Constants.TURRET.DEGREE_OFFSET;
 
         CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID, MotorType.kBrushless);
         TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
