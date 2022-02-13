@@ -47,7 +47,7 @@ public class RobotContainer {
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
     m_feederSub = subsystemFactory.CreateFeederSubsystem();
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
-    m_turretSub = subsystemFactory.creatTurretSubsystem();
+    m_turretSub = subsystemFactory.createTurretSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(

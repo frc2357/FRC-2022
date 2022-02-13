@@ -71,7 +71,7 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public TurretSubsystem creatTurretSubsystem() {
+    public TurretSubsystem createTurretSubsystem() {
         TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
         config.m_turretMotorStallLimitAmps = Constants.TURRET.TURRET_MOTOR_STALL_LIMIT_AMPS;
         config.m_turretMotorFreeLimitAmps = Constants.TURRET.TURRET_MOTOR_FREE_LIMIT_AMPS;

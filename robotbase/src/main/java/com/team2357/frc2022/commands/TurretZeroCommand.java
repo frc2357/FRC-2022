@@ -26,7 +26,6 @@ public class TurretZeroCommand extends CommandLoggerBase {
         if (!m_isFinished && m_turretSub.atSetPoint()) {
 
             m_turretSub.setTurretPosition(m_toggleDirection ? position : -1 * position);
-            m_toggleDirection = !m_toggleDirection;
 
             position += Constants.TURRET.MOTOR_ROTATIONS_ZERO_INCREMENT;
             m_toggleDirection = !m_toggleDirection;

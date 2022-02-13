@@ -67,20 +67,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
         m_pidController = m_turretMotor.getPIDController();
 
-        // PID coefficients
-        m_config.m_turretMotorP = 5e-5;
-        m_config.m_turretMotorI = 1e-6;
-        m_config.m_turretMotorD = 0;
-        m_config.m_turretMotorIZone = 0;
-        m_config.m_turretMotorFF = 0.000156;
-        m_config.m_turretMotorMinOutput = 1;
-        m_config.m_turretMotorMinOutput = -1;
-        m_config.m_turretMotorMaxRPM = 5700;
-
-        // Smart Motion Coefficients
-        m_config.m_turretMotorMaxVel = 2000; // rpm
-        m_config.m_turretMotorMaxAcc = 1500;
-
         // set PID coefficients
         m_pidController.setP(m_config.m_turretMotorP);
         m_pidController.setI(m_config.m_turretMotorI);
@@ -191,7 +177,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
                 double setPoint = calculateSetPoint(m_currentTarget);
                 setTurretPosition(setPoint);
             } else {
-                lookForTarget();
+                System.err.println("----- NO VISION TARGET -----");
             }
         }
 
@@ -219,23 +205,5 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         }
 
         return setPoint;
-    }
-
-    // Looks for vision target by bouncing between soft limits
-    private void lookForTarget() {
-        double setPoint = 0;
-        // Check if turret is already moving, if not start rotating clockwise
-        if (m_turretMotor.getEncoder().getVelocity() < 10) {
-            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
-        }
-
-        // Once soft limit reached - flip direction
-        if (atSetPoint(m_config.m_turretRotationsClockwiseSoftLimit)) {
-            setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
-        } else if (atSetPoint(m_config.m_turretRotationsCounterClockwiseSoftLimit)) {
-            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
-        }
-
-        setTurretPosition(setPoint);
     }
 }

@@ -77,8 +77,8 @@ public final class Constants {
         public static final int TURRET_MOTOR_STALL_LIMIT_AMPS = 15;
         public static final int TURRET_MOTOR_FREE_LIMIT_AMPS = 3;
 
-        public static final double TURRET_MOTOR_P = 5e-5;
-        public static final double TURRET_MOTOR_I = 1e-6;
+        public static final double TURRET_MOTOR_P = 0.00005;
+        public static final double TURRET_MOTOR_I = 0.000001;
         public static final double TURRET_MOTOR_D = 0;
         public static final double TURRET_MOTOR_I_ZONE = 0;
         public static final double TURRET_MOTOR_FF = 0.000156;
@@ -103,6 +103,7 @@ public final class Constants {
         /** Height of the Limelight lens center from the floor (inches) */
         public static final double MOUNTING_HEIGHT_INCHES = 0;
 
+        // TODO: Find out how big we want the vision target
         /** Target width in inches */
         public static final double VISION_TARGET_WIDTH_INCHES = 5;
 
