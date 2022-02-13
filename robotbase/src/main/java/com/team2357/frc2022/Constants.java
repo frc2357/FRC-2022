@@ -69,6 +69,9 @@ public final class Constants {
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
 
+        public static final double MAX_VOLTAGE = 10;
+
+        // TODO: Run characterization on all below constants
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
@@ -93,10 +96,10 @@ public final class Constants {
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
 
         /**
+         * Values from the ramsete example.
          * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
-         * of meters and seconds
+         * of meters and seconds.
          */
-
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
         public static final double KS_VOLTS = 0;
@@ -104,7 +107,7 @@ public final class Constants {
         /**
          * Proportional velocity value for Ramsete PID
          */
-        public static final double P_DRIVE_VEL = 8.5;
+        public static final double P_DRIVE_VEL = 0;
 
         /**
          * Controls if Ggyro is reversed or not.

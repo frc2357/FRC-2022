@@ -33,7 +33,7 @@ public class ExampleTrajectoryCommand extends CommandLoggerBase{
                 Constants.DRIVE.KV_VOLTS_SECONDS_PER_METER,
                 Constants.DRIVE.KA_VOLTS_SECONDS_SQUARED_PER_METER),
             Constants.DRIVE.DRIVE_KINEMATICS,
-            10);
+            Constants.DRIVE.MAX_VOLTAGE);
 
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
