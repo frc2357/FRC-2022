@@ -3,15 +3,19 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
+import com.team2357.frc2022.commands.TrackTargetCommand;
 import com.team2357.frc2022.commands.TurretRotateCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
+import com.team2357.lib.commands.VisionChangePipelineCommand;
+import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
 import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -116,6 +120,7 @@ public class GunnerControls {
         private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
         private TurretSubsystem m_turretSub = null;
+        private TogglableLimelightSubsystem m_visionSub = null;
 
         /**
          * @param controller the controller of the gunner controls
@@ -131,6 +136,11 @@ public class GunnerControls {
 
         public GunnerControlsBuilder withTurretSub(TurretSubsystem turretSub) {
             m_turretSub = turretSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withVisionSub(TogglableLimelightSubsystem visionSub) {
+            m_visionSub = visionSub;
             return this;
         }
 
@@ -155,6 +165,14 @@ public class GunnerControls {
                         new TurretRotateCommand(m_turretSub, -1 * Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
                 m_gunnerControls.m_rightBumper.whileActiveOnce(
                         new TurretRotateCommand(m_turretSub, Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
+            }
+
+            // Auto turret tracking
+            if (m_turretSub != null && m_visionSub != null) {
+                m_gunnerControls.m_backButton.whileActiveOnce(
+                        new ParallelCommandGroup(
+                                new VisionChangePipelineCommand(m_visionSub),
+                                new TrackTargetCommand(m_turretSub, m_visionSub)));
             }
 
             return m_gunnerControls;

@@ -69,28 +69,53 @@ public final class Constants {
     }
 
     // Turret
+    // TODO: Tune Turret constants, currently values from rev's example
     public final class TURRET {
-        public static final double START_ANGLE = 0;
         public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
         public static final double MOTOR_ROTATIONS_ZERO_INCREMENT = 0;
+
+        public static final int TURRET_MOTOR_STALL_LIMIT_AMPS = 15;
+        public static final int TURRET_MOTOR_FREE_LIMIT_AMPS = 3;
+
+        public static final double TURRET_MOTOR_P = 0.00005;
+        public static final double TURRET_MOTOR_I = 0.000001;
+        public static final double TURRET_MOTOR_D = 0;
+        public static final double TURRET_MOTOR_I_ZONE = 0;
+        public static final double TURRET_MOTOR_FF = 0.000156;
+        public static final double TURRET_MOTOR_MAX_OUTPUT = 0.2;
+        public static final double TURRET_MOTOR_MIN_OUTPUT = -0.2;
+        public static final double TURRET_MOTOR_MAX_RPM = 1000;
+
+        public static final double TURRET_MOTOR_MAX_VEL = 500;
+        public static final double TURRET_MOTOR_MIN_VEL = 0;
+        public static final double TURRET_MOTOR_MAX_ACC = 10;
+        public static final double TURRET_MOTOR_ALLOWEDERROR = 5;
+
+        public static final double TURRET_ROTATIONS_CLOCKWISE_SOFT_LIMIT = 0;
+        public static final double TURRET_ROTATIONS_COUNTER_CLOCKWISE_SOFT_LIMIT = 0;
+        public static final double ROTATIONS_PER_DEGREE = 1;
     }
-    
+
     public final class LIMELIGHT {
         /** Angle of the Limelight axis from horizontal (degrees) */
         public static final double MOUNTING_ANGLE = 0;
 
         /** Height of the Limelight lens center from the floor (inches) */
-        public static final double MOUNTING_HEIGHT = 0;
+        public static final double MOUNTING_HEIGHT_INCHES = 0;
 
+        // TODO: Find out how big we want the vision target
         /** Target width in inches */
-        public static final double VISION_TARGET_WIDTH = 5;
+        public static final double VISION_TARGET_WIDTH_INCHES = 5;
 
         /** Target height in inches */
-        public static final double VISION_TARGET_HEIGHT = 2;
+        public static final double VISION_TARGET_HEIGHT_INCHES = 2;
+
+        public static final double VISION_TARGET_HEIGHT_FROM_FLOOR_INCHES = 101.625;
     }
 
     public final class ARDUINO {
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+        public static final String TURRET_HALL_SENSOR_NAME = "hallSensor";
         public static final String IR_SENSOR_JSON_NAME = "IRSensor";
     }
 }

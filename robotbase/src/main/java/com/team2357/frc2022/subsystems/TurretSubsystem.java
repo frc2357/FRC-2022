@@ -3,14 +3,27 @@ package com.team2357.frc2022.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.util.VisionTargetSupplier;
+import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
     private SparkMaxPIDController m_pidController;
+    private ArduinoUSBController m_arduinoHallEffectSensor;
     Configuration m_config;
 
-    public double m_currentAngle;
+    private VisionTargetSupplier m_targetSupplier;
+    private VisionTarget m_currentTarget;
+
+    private double m_setPoint;
+
+    // Has the turret been zeroed
+    private boolean m_isZeroed;
 
     public static class Configuration {
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
@@ -30,15 +43,19 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_turretMotorMaxAcc = 0;
         public double m_turretMotorAllowedError = 0;
 
-        public double m_StartAngle = 0;
+        public double m_turretRotationsClockwiseSoftLimit = 0;
+        public double m_turretRotationsCounterClockwiseSoftLimit = 0;
+        public double m_rotationsPerDegree = 0;
     }
 
     public TurretSubsystem(CANSparkMax turretMotor) {
         m_turretMotor = turretMotor;
 
-        m_config = new Configuration();
-        configure(m_config);
+        m_arduinoHallEffectSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
 
+        m_arduinoHallEffectSensor.start();
+
+        m_isZeroed = false;
         resetHeading();
     }
 
@@ -49,20 +66,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_turretMotor.setSmartCurrentLimit(m_config.m_turretMotorStallLimitAmps, m_config.m_turretMotorFreeLimitAmps);
 
         m_pidController = m_turretMotor.getPIDController();
-
-        // PID coefficients
-        m_config.m_turretMotorP = 5e-5;
-        m_config.m_turretMotorI = 1e-6;
-        m_config.m_turretMotorD = 0;
-        m_config.m_turretMotorIZone = 0;
-        m_config.m_turretMotorFF = 0.000156;
-        m_config.m_turretMotorMinOutput = 1;
-        m_config.m_turretMotorMinOutput = -1;
-        m_config.m_turretMotorMaxRPM = 5700;
-
-        // Smart Motion Coefficients
-        m_config.m_turretMotorMaxVel = 2000; // rpm
-        m_config.m_turretMotorMaxAcc = 1500;
 
         // set PID coefficients
         m_pidController.setP(m_config.m_turretMotorP);
@@ -86,15 +89,121 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public void resetHeading() {
         m_turretMotor.getEncoder().setPosition(0);
-        m_currentAngle = m_config.m_StartAngle;
     }
 
-    public void m_setTurretPosition(double position) {
-        m_pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+    public double getTurretRotations() {
+        return m_turretMotor.getEncoder().getPosition();
     }
 
-    // TODO: Implement arduino mag sensor
+    public void setTurretPosition(double position) {
+        m_setPoint = position;
+        m_pidController.setReference(m_setPoint, CANSparkMax.ControlType.kSmartMotion);
+    }
+
+    public boolean atSetPoint() {
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), m_setPoint,
+                m_config.m_turretMotorAllowedError);
+    }
+
+    public boolean atSetPoint(double setPoint) {
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretRotations(), setPoint,
+                m_config.m_turretMotorAllowedError);
+    }
+
     public boolean isOnZero() {
-        return false;
+        boolean isMagnetDetected = false;
+
+        if (m_arduinoHallEffectSensor.isConnected()) {
+            isMagnetDetected = !m_arduinoHallEffectSensor
+                    .getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
+        }
+
+        if (isMagnetDetected) {
+            m_isZeroed = true;
+        }
+
+        return isMagnetDetected;
+    }
+
+    @Override
+    public void periodic() {
+        if (isClosedLoopEnabled()) {
+            closedLoopPeriodic();
+        }
+
+        // For tuning
+        SmartDashboard.putNumber("SetPoint", m_setPoint);
+        SmartDashboard.putNumber("Encoder Pos", getTurretRotations());
+        SmartDashboard.putNumber("Encoder Vel", m_turretMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Output", m_turretMotor.getAppliedOutput());
+    }
+
+    public boolean hasTarget() {
+        return m_currentTarget != null;
+    }
+
+    public boolean isTargetLocked() {
+        if (!isClosedLoopEnabled()) {
+            return false;
+        }
+        return atSetPoint();
+    }
+
+    @Override
+    public void setClosedLoopEnabled(boolean enabled) {
+        if (enabled) {
+            return;
+        }
+        disableClosedLoop();
+    }
+
+    public void enableClosedLoop(VisionTargetSupplier targetSupplier) {
+        m_targetSupplier = targetSupplier;
+        super.setClosedLoopEnabled(true);
+    }
+
+    public void disableClosedLoop() {
+        super.setClosedLoopEnabled(false);
+        m_targetSupplier = null;
+        m_turretMotor.set(0);
+    }
+
+    public void closedLoopPeriodic() {
+        m_currentTarget = m_targetSupplier.getAsVisionTarget();
+
+        if (m_isZeroed) {
+            if (m_currentTarget != null) {
+
+                double setPoint = calculateSetPoint(m_currentTarget);
+                setTurretPosition(setPoint);
+            } else {
+                System.err.println("----- NO VISION TARGET -----");
+            }
+        }
+
+        // Occasionally reset heading to reduce error overtime
+        if (isOnZero()) {
+            resetHeading();
+        }
+    }
+
+    /**
+     * Calculate setpoint based on target x value
+     * Assumes limelight is mounted centered on the turret
+     * 
+     * @param target The vision target.
+     * @return desired setpoint
+     */
+    private double calculateSetPoint(VisionTarget target) {
+        double setPoint = (target.getX() * m_config.m_rotationsPerDegree) + getTurretRotations();
+
+        // Cases if target is out of reach
+        if (setPoint < m_config.m_turretRotationsClockwiseSoftLimit) {
+            setPoint = m_config.m_turretRotationsCounterClockwiseSoftLimit;
+        } else if (setPoint > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
+            setPoint = m_config.m_turretRotationsClockwiseSoftLimit;
+        }
+
+        return setPoint;
     }
 }

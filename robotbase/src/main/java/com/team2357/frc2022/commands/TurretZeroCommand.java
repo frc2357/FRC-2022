@@ -6,7 +6,8 @@ import com.team2357.lib.commands.CommandLoggerBase;
 
 public class TurretZeroCommand extends CommandLoggerBase {
     private TurretSubsystem m_turretSub;
-    private double rotationsToMake = Constants.TURRET.MOTOR_ROTATIONS_ZERO_INCREMENT;
+    private double position = Constants.TURRET.MOTOR_ROTATIONS_ZERO_INCREMENT;
+    private boolean m_toggleDirection = true;
     private boolean m_isFinished = false;
 
     public TurretZeroCommand(TurretSubsystem turretSub) {
@@ -14,11 +15,21 @@ public class TurretZeroCommand extends CommandLoggerBase {
     }
 
     @Override
+    public void initialize() {
+        m_turretSub.resetHeading();
+    }
+
+    @Override
     public void execute() {
 
         m_isFinished = m_turretSub.isOnZero();
-        if (!m_isFinished) {
-            // TODO: Add code to move turret
+        if (!m_isFinished && m_turretSub.atSetPoint()) {
+
+            m_turretSub.setTurretPosition(m_toggleDirection ? position : -1 * position);
+
+            position += Constants.TURRET.MOTOR_ROTATIONS_ZERO_INCREMENT;
+            m_toggleDirection = !m_toggleDirection;
+
         }
     }
 
