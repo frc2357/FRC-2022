@@ -45,8 +45,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      */
     public FalconTrajectoryDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
             WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves, PigeonIMU gyro,
-            double encoderDistancePerPulse, int rightEncoderChannelA, int rightEncoderChannelB, int leftEncoderChannelA,
-            int leftEncoderChannelB) {
+            double encoderDistancePerPulse, int leftEncoderChannelA,
+            int leftEncoderChannelB, int rightEncoderChannelA, int rightEncoderChannelB) {
         super(leftFalconMaster, leftFalconSlaves, rightFalconMaster, rightFalconSlaves);
         m_distancePerPulse = encoderDistancePerPulse;
 
@@ -71,6 +71,9 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 -1 * m_rightEncoder.getDistance());
+        //System.out.println("Left encoder distance: " + m_leftEncoder.getDistance());
+        System.out.println("Right encoder distance: " + m_rightEncoder.getDistance());
+        //System.out.println(getHeading());
 
     }
 
