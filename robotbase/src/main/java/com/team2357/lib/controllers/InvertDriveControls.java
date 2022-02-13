@@ -16,7 +16,8 @@ import com.team2357.log.topics.BooleanTopic;
 import com.team2357.lib.commands.VisionChangePipelineCommand;
 
 /**
- * These extend {@link DriverControls} so these are the Driver's controls, adapted to support the
+ * These extend {@link DriverControls} so these are the Driver's controls,
+ * adapted to support the
  * {@link InvertDriveCommand}.
  * 
  * @category Drive
@@ -26,7 +27,7 @@ public class InvertDriveControls extends DriverControls {
     public final JoystickButton m_changePipelineButton;
     private boolean m_isToggled = false;
 
-    //private final BooleanTopic isInvertedTopic = new BooleanTopic("Are Controls Inverted");
+    private final BooleanTopic isInvertedTopic = new BooleanTopic("Are Controls Inverted");
 
     public InvertDriveControls(InvertDriveControlsBuilder builder) {
         super(builder.m_controller, builder.m_deadband);
@@ -38,11 +39,11 @@ public class InvertDriveControls extends DriverControls {
      * Changes the value of m_isToggled from true to false or vice versa
      */
     public void invert() {
-      //  isInvertedTopic.log(m_isToggled);
+        isInvertedTopic.log(m_isToggled);
         m_isToggled = !m_isToggled;
-       // isInvertedTopic.log(m_isToggled);
+        isInvertedTopic.log(m_isToggled);
     }
-    
+
     @Override
     public double getSpeed() {
         double speed = super.getSpeed();
@@ -57,7 +58,8 @@ public class InvertDriveControls extends DriverControls {
         return Utility.clamp(turn, -.7, .7);
     }
 
-    //I would put a javadoc here, but I really don't understand it. If you do, please delete this and put a javadoc here.
+    // I would put a javadoc here, but I really don't understand it. If you do,
+    // please delete this and put a javadoc here.
     public double inputCurve(double input, int curveFactor) {
         return Math.signum(input) * Math.abs(Math.pow(input, curveFactor));
     }
@@ -73,14 +75,14 @@ public class InvertDriveControls extends DriverControls {
 
         /**
          * @param controller The driver's {@link XboxController}.
-         * @param deadband The deadband for the driver's controller.
+         * @param deadband   The deadband for the driver's controller.
          */
         public InvertDriveControlsBuilder(XboxController controller, double deadband) {
             this.m_controller = controller;
             this.m_deadband = deadband;
         }
 
-        public InvertDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem){
+        public InvertDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem) {
             this.m_driveSubsystem = driveSubsystem;
             return this;
         }
@@ -96,7 +98,8 @@ public class InvertDriveControls extends DriverControls {
                 m_driverControls.m_changePipelineButton.whileHeld(new VisionChangePipelineCommand(m_visionSubsystem));
             }
             if (m_driveSubsystem != null && m_visionSubsystem != null) {
-                m_driverControls.m_invertButton.whenPressed(new InvertDriveCommand(m_visionSubsystem, m_driverControls));
+                m_driverControls.m_invertButton
+                        .whenPressed(new InvertDriveCommand(m_visionSubsystem, m_driverControls));
             }
             return m_driverControls;
         }
