@@ -3,12 +3,9 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 public class TurretRotateCommand extends CommandLoggerBase {
     private TurretSubsystem m_turretSub;
     private double m_speed;
-    private boolean m_rotatePositive;
 
     /**
      * 

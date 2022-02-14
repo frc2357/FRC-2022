@@ -24,6 +24,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     // Has the turret been zeroed
     private boolean m_isZeroed;
+    private boolean m_isFlipping;
 
     public static class Configuration {
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
@@ -51,6 +52,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public TurretSubsystem(CANSparkMax turretMotor) {
         m_turretMotor = turretMotor;
+
+        m_isFlipping = false;
 
         m_arduinoHallEffectSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
 
@@ -180,8 +183,15 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
                 double degrees = calculateDegrees(m_currentTarget);
                 setTurretPosition(degrees);
+                
             } else {
-                System.err.println("----- NO VISION TARGET -----");
+                if(m_isFlipping) {
+                    if(atDegrees()) {
+                        m_isFlipping = false;
+                    }
+                } else {
+                    System.err.println("----- NO VISION TARGET -----");
+                }
             }
         }
 
@@ -203,9 +213,11 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
         // Cases if target is out of reach
         if (degrees < m_config.m_turretRotationsClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit;
+            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit + (degrees - m_config.m_turretRotationsClockwiseSoftLimit);
+            m_isFlipping = true;
         } else if (degrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsClockwiseSoftLimit;
+            degrees = m_config.m_turretRotationsClockwiseSoftLimit + (degrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);
+            m_isFlipping = true;
         }
 
         return degrees;
