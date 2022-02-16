@@ -12,16 +12,16 @@ public class FailsafeButtonWidget extends ShuffleboardWidget {
     private final NetworkTableEntry m_failsafeButton;
     private ToggleTrigger failsafeTrigger;
 
-    public FailsafeButtonWidget(String tabTitle, ClosedLoopSubsystem[] subsystems) {
+    public FailsafeButtonWidget(String tabTitle, String subName, ClosedLoopSubsystem subsystem) {
         super(tabTitle);
         m_failsafeButton = Shuffleboard.getTab(tabTitle)
-            .add("FAILSAFE", false)
+            .add(subName, false)
             .withWidget(BuiltInWidgets.kToggleButton)
             .getEntry();
         
         failsafeTrigger = new ToggleTrigger(m_failsafeButton);
-        failsafeTrigger.whenActive(new FailsafeCommand(true, subsystems));
-        failsafeTrigger.whenInactive(new FailsafeCommand(false, subsystems));
+        failsafeTrigger.whenActive(new FailsafeCommand(true, subsystem));
+        failsafeTrigger.whenInactive(new FailsafeCommand(false, subsystem));
 
     }
 }
