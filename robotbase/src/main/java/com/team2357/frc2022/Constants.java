@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.subsystems.TurretSubsystem;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -70,31 +72,39 @@ public final class Constants {
 
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
-    public final class TURRET {
+    public static final class TURRET {
         public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
         public static final double MOTOR_DEGREES_ZERO_INCREMENT = 0;
 
-        public static final int TURRET_MOTOR_STALL_LIMIT_AMPS = 15;
-        public static final int TURRET_MOTOR_FREE_LIMIT_AMPS = 3;
+        public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-        public static final double TURRET_MOTOR_P = 0.00005;
-        public static final double TURRET_MOTOR_I = 0.000001;
-        public static final double TURRET_MOTOR_D = 0;
-        public static final double TURRET_MOTOR_I_ZONE = 0;
-        public static final double TURRET_MOTOR_FF = 0.000156;
-        public static final double TURRET_MOTOR_MAX_OUTPUT = 0.2;
-        public static final double TURRET_MOTOR_MIN_OUTPUT = -0.2;
-        public static final double TURRET_MOTOR_MAX_RPM = 1000;
+        public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
+            TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-        public static final double TURRET_MOTOR_MAX_VEL = 500;
-        public static final double TURRET_MOTOR_MIN_VEL = 0;
-        public static final double TURRET_MOTOR_MAX_ACC = 10;
-        public static final double TURRET_MOTOR_ALLOWEDERROR = 5;
+            config.m_turretMotorStallLimitAmps = 15;
+            config.m_turretMotorFreeLimitAmps = 3;
 
-        public static final double TURRET_ROTATIONS_CLOCKWISE_SOFT_LIMIT = 0;
-        public static final double TURRET_ROTATIONS_COUNTER_CLOCKWISE_SOFT_LIMIT = 0;
-        public static final double ROTATIONS_PER_DEGREE = 1;
-        public static final double DEGREE_OFFSET = 0;
+            config.m_turretMotorP = 0.00005;
+            config.m_turretMotorI = 0.000001;
+            config.m_turretMotorD = 0;
+            config.m_turretMotorIZone = 0;
+            config.m_turretMotorFF = 0.000156;
+            config.m_turretMotorMaxOutput = 0.2;
+            config.m_turretMotorMinOutput = -0.2;
+            config.m_turretMotorMaxRPM = 1000;
+
+            config.m_turretMotorMaxVel = 500;
+            config.m_turretMotorMinVel = 0;
+            config.m_turretMotorMaxAcc = 5;
+            config.m_turretMotorAllowedError = 5;
+
+            config.m_turretRotationsClockwiseSoftLimit = 0;
+            config.m_turretRotationsCounterClockwiseSoftLimit = 0;
+            config.m_rotationsPerDegree = 1;
+            config.m_degreeOffset = 0;
+            return config;
+        }
+
     }
 
     public final class LIMELIGHT {

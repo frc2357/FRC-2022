@@ -183,10 +183,10 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
                 double degrees = calculateDegrees(m_currentTarget);
                 setTurretPosition(degrees);
-                
+
             } else {
-                if(m_isFlipping) {
-                    if(atDegrees()) {
+                if (m_isFlipping) {
+                    if (atDegrees()) {
                         m_isFlipping = false;
                     }
                 } else {
@@ -213,10 +213,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
         // Cases if target is out of reach
         if (degrees < m_config.m_turretRotationsClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit + (degrees - m_config.m_turretRotationsClockwiseSoftLimit);
+            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit
+                    + (degrees - m_config.m_turretRotationsClockwiseSoftLimit);
             m_isFlipping = true;
         } else if (degrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsClockwiseSoftLimit + (degrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);
+            degrees = m_config.m_turretRotationsClockwiseSoftLimit
+                    + (degrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);
             m_isFlipping = true;
         }
 
