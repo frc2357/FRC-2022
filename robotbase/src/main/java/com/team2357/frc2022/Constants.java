@@ -38,6 +38,9 @@ public final class Constants {
         public static final int SHOOTER_BOTTOM_LEFT = 22;
         public static final int SHOOTER_BOTTOM_RIGHT = 23;
         public static final int SHOOTER_TOP = 24;
+
+        // Feeder
+        public static final int FEEDER_MOTOR_ID = 0;
     }
 
     public final class PCM_ID {
@@ -87,4 +90,22 @@ public final class Constants {
 
     }
 
+    public final class LIMELIGHT {
+        /** Angle of the Limelight axis from horizontal (degrees) */
+        public static final double MOUNTING_ANGLE = 0;
+
+        /** Height of the Limelight lens center from the floor (inches) */
+        public static final double MOUNTING_HEIGHT = 0;
+
+        /** Target width in inches */
+        public static final double VISION_TARGET_WIDTH = 5;
+
+        /** Target height in inches */
+        public static final double VISION_TARGET_HEIGHT = 2;
+    }
+
+    public final class ARDUINO {
+        public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+        public static final String IR_SENSOR_JSON_NAME = "IRSensor";
+    }
 }
