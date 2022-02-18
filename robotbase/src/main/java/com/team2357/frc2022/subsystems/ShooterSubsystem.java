@@ -4,12 +4,27 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.subsystems.util.VisionTargetSupplier;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
+import com.team2357.lib.util.RobotMath;
 
 public class ShooterSubsystem extends ClosedLoopSubsystem {
+
+    // {degrees, bottom motor rpm, top motor rpm}
+    private static final double[][] degreesToRPMsCurve = {
+            { 0, 0, 0 }, // Closest
+            { 0, 0, 0 }, // Furthest
+    };
+
     private WPI_TalonFX m_leftBottomMotor;
     private WPI_TalonFX m_rightBottomMotor;
     private WPI_TalonFX m_topMotor;
+
+    private VisionTargetSupplier m_targetSupplier;
+    private VisionTarget m_currentTarget;
+
+    private double m_lastVisionRPMs;
 
     /**
      * 
@@ -88,6 +103,85 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void setClosedLoopRPMTop(double rpm) {
         double nativeSpeed = rpm * Constants.SHOOTER.FALCON_ENCODER_CPR / Constants.MINUTES_TO_100_MS;
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
+    }
+
+    public boolean hasTarget() {
+        return m_currentTarget != null;
+    }
+
+    @Override
+    public void periodic() {
+        if (m_targetSupplier != null && isClosedLoopEnabled()) {
+            visionTargetPeriodic();
+        }
+    }
+
+    private void visionTargetPeriodic() {
+        m_currentTarget = m_targetSupplier.getAsVisionTarget();
+
+        if (m_currentTarget != null) {
+            setClosedLoopRPMs();
+
+        }
+    }
+
+    private void setClosedLoopRPMs() {
+        int curveSegmentIndex = RobotMath.getCurveSegmentIndex(degreesToRPMsCurve, m_currentTarget.getY());
+        if (curveSegmentIndex == -1) {
+            return;
+        }
+
+        double[] pointA = degreesToRPMsCurve[curveSegmentIndex];
+        double[] pointB = degreesToRPMsCurve[curveSegmentIndex + 1];
+
+        double highAngle = pointA[0];
+        double lowAngle = pointB[0];
+        double highBottomRPMs = pointB[1];
+        double lowBottomRPMs = pointB[1];
+        double highTopRPMs = pointA[1];
+        double lowTopRPMs = pointB[1];
+
+        double bottomRpms = RobotMath.lineralyInterpolate(highAngle, lowAngle, highBottomRPMs, lowBottomRPMs,
+                m_currentTarget.getY());
+
+        double topRpms = RobotMath.lineralyInterpolate(highAngle, lowAngle, highTopRPMs, lowTopRPMs,
+                m_currentTarget.getY());
+
+        if (bottomRpms == Double.NaN) {
+            bottomRpms = m_lastVisionRPMs;
+        }
+
+        setClosedLoopRPMBottom(bottomRpms);
+        setClosedLoopRPMTop(topRpms);
+    }
+
+    /**
+     * Set the motor to a percent output. This bypasses closed-loop control.
+     * 
+     * @param output
+     */
+    public void runMotorOpenLoop(double output) {
+        m_currentTarget = null;
+        m_leftBottomMotor.set(ControlMode.PercentOutput, output);
+    }
+
+    public void setVisionTarget(VisionTargetSupplier targetSupplier) {
+        m_targetSupplier = targetSupplier;
+    }
+
+    /**
+     * @return current motor velocity in rpm
+     */
+    public double getMotorSpeed(WPI_TalonFX motor) {
+        return motor.getSelectedSensorVelocity() * Constants.MINUTES_TO_100_MS / Constants.SHOOTER.FALCON_ENCODER_CPR;
+    }
+
+    public double getMotorSpeed() {
+        return getMotorSpeed(m_leftBottomMotor);
+    }
+
+    public double getShooterRPMs() {
+        return getMotorSpeed() * Constants.SHOOTER.SHOOTER_GEARING_RATIO;
     }
 
 }

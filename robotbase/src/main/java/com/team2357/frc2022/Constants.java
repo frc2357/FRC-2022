@@ -87,6 +87,7 @@ public final class Constants {
         public static final double SHOOTER_D = 0;
         public static final double SHOOTER_F = 0.01;
         public static final double SHOOTER_MOTOR_PEAK_OUTPUT = 1.0;
+        public static final double SHOOTER_GEARING_RATIO = 0;
 
     }
 
