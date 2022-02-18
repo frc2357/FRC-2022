@@ -3,9 +3,7 @@ package com.team2357.frc2022.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.util.VisionTargetSupplier;
-import com.team2357.lib.arduino.ArduinoUSBController;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 
@@ -14,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
     private SparkMaxPIDController m_pidController;
-    private ArduinoUSBController m_arduinoHallEffectSensor;
     Configuration m_config;
 
     private VisionTargetSupplier m_targetSupplier;
@@ -54,10 +51,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_turretMotor = turretMotor;
 
         m_isFlipping = false;
-
-        m_arduinoHallEffectSensor = new ArduinoUSBController(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
-
-        m_arduinoHallEffectSensor.start();
 
         m_isZeroed = false;
         resetHeading();
@@ -103,10 +96,14 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
      * 
      * @param targetDegrees Desired position of the turret in degrees
      */
-    public void setTurretPosition(double targetDegrees) {
-        m_targetDegrees = targetDegrees;
-        double setPoint = (m_targetDegrees + m_config.m_degreeOffset) * m_config.m_rotationsPerDegree;
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+    public boolean setTurretPosition(double targetDegrees) {
+        if (super.isClosedLoopEnabled()) {
+            m_targetDegrees = targetDegrees;
+            double setPoint = (m_targetDegrees + m_config.m_degreeOffset) * m_config.m_rotationsPerDegree;
+            m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+            return true;
+        }
+        return false;
     }
 
     public boolean atDegrees() {
@@ -119,23 +116,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isOnZero() {
-        boolean isMagnetDetected = false;
-
-        if (m_arduinoHallEffectSensor.isConnected()) {
-            isMagnetDetected = !m_arduinoHallEffectSensor
-                    .getDeviceFieldBoolean(Constants.ARDUINO.TURRET_HALL_SENSOR_NAME, "state");
-        }
-
-        if (isMagnetDetected) {
-            m_isZeroed = true;
-        }
-
-        return isMagnetDetected;
+        return false;
     }
 
     @Override
     public void periodic() {
-        if (isClosedLoopEnabled()) {
+        if (super.isClosedLoopEnabled()) {
             turretTrackingPeriodic();
         }
 
@@ -151,7 +137,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isTargetLocked() {
-        if (!isClosedLoopEnabled()) {
+        if (!super.isClosedLoopEnabled()) {
             return false;
         }
         return atDegrees();
@@ -159,8 +145,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     @Override
     public void setClosedLoopEnabled(boolean enabled) {
-        if (enabled) {
+        if (enabled && m_isZeroed) {
+            super.setClosedLoopEnabled(true);
             return;
+        }
+        if (!m_isZeroed) {
+            System.out.println("Unable to go closed loop, robot not zeroed");
         }
         super.setClosedLoopEnabled(false);
         disableTrackingPeriodic();
@@ -184,6 +174,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
                 double degrees = calculateDegrees(m_currentTarget);
                 setTurretPosition(degrees);
 
+                m_isFlipping = false;
             } else {
                 if (m_isFlipping) {
                     if (atDegrees()) {
@@ -216,6 +207,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
             degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit
                     + (degrees - m_config.m_turretRotationsClockwiseSoftLimit);
             m_isFlipping = true;
+
         } else if (degrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
             degrees = m_config.m_turretRotationsClockwiseSoftLimit
                     + (degrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);

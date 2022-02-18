@@ -76,6 +76,13 @@ public final class Constants {
         public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
         public static final double MOTOR_DEGREES_ZERO_INCREMENT = 0;
 
+        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
+        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
+                * 2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
+                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
+
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
