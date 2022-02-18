@@ -4,9 +4,6 @@
 
 package com.team2357.frc2022;
 
-import com.team2357.frc2022.commands.DriveRunMotorCommand;
-import com.team2357.frc2022.commands.ExampleTrajectoryCommand;
-import com.team2357.frc2022.commands.RecordPath;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
@@ -18,8 +15,6 @@ import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -69,17 +64,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    int auto = 1;
-    switch(auto) {
-      case 1:
-      return new ParallelRaceGroup(new DriveRunMotorCommand(m_driveSub, -1), new WaitCommand(300));
-      case 2:
-      return new RecordPath(m_driveSub);
-      case 3:
-      return new ExampleTrajectoryCommand(m_driveSub).getRamsete();
-      default:
-      return null;
-    }
+    return null;
   }
 }
