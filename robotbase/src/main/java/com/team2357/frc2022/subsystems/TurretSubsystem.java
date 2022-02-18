@@ -107,15 +107,12 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean atDegrees() {
-        return atDegrees(m_targetDegrees);
-    }
-
-    public boolean atDegrees(double targetDegrees) {
-        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretDegrees(), targetDegrees,
+        return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretDegrees(), m_targetDegrees,
                 m_config.m_turretMotorAllowedError);
     }
 
     public boolean isOnZero() {
+        m_isZeroed = false;
         return false;
     }
 
@@ -165,24 +162,22 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_turretMotor.set(0);
     }
 
-    public void turretTrackingPeriodic() {
+    private void turretTrackingPeriodic() {
         m_currentTarget = m_targetSupplier.getAsVisionTarget();
 
-        if (m_isZeroed) {
-            if (m_currentTarget != null) {
+        if (m_currentTarget != null) {
 
-                double degrees = calculateDegrees(m_currentTarget);
-                setTurretPosition(degrees);
+            double degrees = calculateDegrees(m_currentTarget);
+            setTurretPosition(degrees);
 
-                m_isFlipping = false;
-            } else {
-                if (m_isFlipping) {
-                    if (atDegrees()) {
-                        m_isFlipping = false;
-                    }
-                } else {
-                    System.err.println("----- NO VISION TARGET -----");
+            m_isFlipping = false;
+        } else {
+            if (m_isFlipping) {
+                if (atDegrees()) {
+                    m_isFlipping = false;
                 }
+            } else {
+                System.err.println("----- NO VISION TARGET -----");
             }
         }
 
