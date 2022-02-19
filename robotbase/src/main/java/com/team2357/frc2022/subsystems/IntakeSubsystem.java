@@ -2,6 +2,7 @@ package com.team2357.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.team2357.frc2022.arduino.ArduinoSensorState;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -16,13 +17,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class IntakeSubsystem extends ClosedLoopSubsystem {
     public DoubleSolenoid m_intakeSolenoid;
     private VictorSPX m_intakeVictor;
+    private ArduinoSensorState m_isCargoInIntake;
 
     /**
      * @param intakeVictor Victor SPX to use to control intake
      */
-    public IntakeSubsystem(VictorSPX intakeVictor, DoubleSolenoid intakeSolenoid) {
+    public IntakeSubsystem(VictorSPX intakeVictor, DoubleSolenoid intakeSolenoid, ArduinoSensorState isCargoInIntake) {
         m_intakeSolenoid = intakeSolenoid;
         m_intakeSolenoid.set(Value.kOff);
+        m_isCargoInIntake = isCargoInIntake;
 
         m_intakeVictor = intakeVictor;
     }
@@ -45,4 +48,7 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
         m_intakeSolenoid.set(value);
     }
 
+    public boolean isCargoInIntake() {
+        return m_isCargoInIntake.getState();
+    }
 }
