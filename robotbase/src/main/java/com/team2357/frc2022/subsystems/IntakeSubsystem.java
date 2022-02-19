@@ -3,7 +3,6 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.team2357.frc2022.Constants;
-import com.team2357.lib.arduino.ArduinoSensor;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 public class IntakeSubsystem extends ClosedLoopSubsystem {
     public DoubleSolenoid m_intakeSolenoid;
     private VictorSPX m_intakeVictor;
-    private ArduinoSensor m_inputIRSensor;
 
     /**
      * @param intakeVictor Victor SPX to use to control intake
@@ -26,7 +24,6 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
     public IntakeSubsystem(VictorSPX intakeVictor, DoubleSolenoid intakeSolenoid) {
         m_intakeSolenoid = intakeSolenoid;
         m_intakeSolenoid.set(Value.kOff);
-        m_inputIRSensor = new ArduinoSensor(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME, Constants.ARDUINO.IR_SENSOR_JSON_NAME);
 
         m_intakeVictor = intakeVictor;
     }
@@ -51,7 +48,6 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
 
     public boolean isBallAtSensor() {
         boolean isSensorBlocked = false;
-        isSensorBlocked = m_inputIRSensor.getIntakeValue();
         return isSensorBlocked;
     }
 }

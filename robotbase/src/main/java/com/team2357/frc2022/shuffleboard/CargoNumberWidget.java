@@ -13,7 +13,7 @@ public class CargoNumberWidget extends ShuffleboardWidget {
     public CargoNumberWidget(String tabTitle) {
         super(tabTitle);
 
-        NetworkTableEntry cellNumWidget = Shuffleboard.getTab(tabTitle)
+        NetworkTableEntry cargoNumWidget = Shuffleboard.getTab(tabTitle)
             .add("Num of Cargo Cells", 0)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
