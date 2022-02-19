@@ -100,6 +100,7 @@ public final class Constants {
         public static final double EXTENSION_TOLERANCE_METERS = 0;
         public static final double MISS_TOLERANCE_METERS = 0;
         public static final int ON_BAR_AMPS = 0;
+    }
     public final class LIMELIGHT {
         /** Angle of the Limelight axis from horizontal (degrees) */
         public static final double MOUNTING_ANGLE = 0;
