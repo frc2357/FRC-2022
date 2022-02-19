@@ -1,12 +1,17 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
+import com.team2357.lib.subsystems.LimelightSubsystem;
+import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
+import com.team2357.lib.subsystems.TogglableLimelightSubsystem.PipelineIndex;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -37,7 +42,7 @@ public class SubsystemFactory {
                 Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
                 Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
                 Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
-                
+
         subsystem.configure(config);
         return subsystem;
     }
@@ -66,4 +71,22 @@ public class SubsystemFactory {
 
         return subsystem;
     }
+    public FeederSubsystem CreateFeederSubsystem() {
+        WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
+        return new FeederSubsystem(feederTalon);
+    }
+
+    public TogglableLimelightSubsystem CreateVisionSubsystem() {
+        TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
+        subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);
+        subsystem.setStream(false);
+        LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
+        config.m_LimelightMountingAngle = Constants.LIMELIGHT.MOUNTING_ANGLE;
+        config.m_LimelightMountingHeightInches = Constants.LIMELIGHT.MOUNTING_HEIGHT;
+        config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH;
+        config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT;
+        subsystem.setConfiguration(config);
+        return subsystem;
+    }
+
 }

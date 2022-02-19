@@ -33,6 +33,8 @@ public final class Constants {
         // Climber
         public static final int CLIMBER_MOTOR_LEFT_ID = 22;
         public static final int CLIMBER_MOTOR_RIGHT_ID = 23;
+        // Feeder
+        public static final int FEEDER_MOTOR_ID = 0;
     }
 
     public final class PCM_ID {
@@ -98,5 +100,22 @@ public final class Constants {
         public static final double EXTENSION_TOLERANCE_METERS = 0;
         public static final double MISS_TOLERANCE_METERS = 0;
         public static final int ON_BAR_AMPS = 0;
+    public final class LIMELIGHT {
+        /** Angle of the Limelight axis from horizontal (degrees) */
+        public static final double MOUNTING_ANGLE = 0;
+
+        /** Height of the Limelight lens center from the floor (inches) */
+        public static final double MOUNTING_HEIGHT = 0;
+
+        /** Target width in inches */
+        public static final double VISION_TARGET_WIDTH = 5;
+
+        /** Target height in inches */
+        public static final double VISION_TARGET_HEIGHT = 2;
+    }
+
+    public final class ARDUINO {
+        public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+        public static final String IR_SENSOR_JSON_NAME = "IRSensor";
     }
 }
