@@ -35,9 +35,8 @@ public class TrackTargetCommand extends CommandLoggerBase {
 
         if(!m_turretSubsystem.isClosedLoopEnabled() || !m_limelightSubsystem.isClosedLoopEnabled()){
             System.err.println("----- TrackTargetCommand canceled, closed loop is DISABLED -----");
-            CommandScheduler.getInstance().cancel(this);
+            super.cancel();
         }
-
         addRequirements(m_turretSubsystem, m_limelightSubsystem);
     }
 
