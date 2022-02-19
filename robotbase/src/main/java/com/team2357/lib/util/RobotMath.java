@@ -77,7 +77,6 @@ public class RobotMath {
 	}
 
 	/**
-	 * Primarily a helper function for the InterpolateCurve function
 	 * Finds the index of the lower side of the given x value
 	 * 
 	 * @param curve The 2D array of values to interpolate on. The first element of

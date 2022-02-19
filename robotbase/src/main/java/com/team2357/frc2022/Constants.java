@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -23,7 +25,6 @@ public final class Constants {
      * failing. milliseconds
      */
     public static final int TIMEOUT_MS = 30;
-    public static final int MINUTES_TO_100_MS = 600;
 
     public final class CAN_ID {
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
@@ -78,16 +79,30 @@ public final class Constants {
         public static final boolean INVERT_RIGHT_SIDE = true;
     }
 
-    public final class SHOOTER {
-        /** Clicks per rotation for the internal encoder in the Falcon 500 */
-        public static final int FALCON_ENCODER_CPR = 2048;
-        /** Shooter PIDF values */
-        public static final double SHOOTER_P = 0.09;
-        public static final double SHOOTER_I = 0;
-        public static final double SHOOTER_D = 0;
-        public static final double SHOOTER_F = 0.01;
-        public static final double SHOOTER_MOTOR_PEAK_OUTPUT = 1.0;
-        public static final double SHOOTER_GEARING_RATIO = 0;
+    public static final class SHOOTER {
+        public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+            /** Clicks per rotation for the internal encoder in the Falcon 500 */
+            config.m_encoder_cpr = 2048;
+
+            config.m_shooterGearingRatio = 0;
+            config.m_timeoutMS = TIMEOUT_MS;
+            config.m_shooterMotorPeakOutput = 1.0;
+
+            // Bottom
+            config.m_bottomShooterP = 0.09;
+            config.m_bottomShooterI = 0;
+            config.m_bottomShooterD = 0;
+            config.m_bottomShooterF = 0.01;
+
+            // Top
+            config.m_topShooterP = 0.09;
+            config.m_topShooterI = 0;
+            config.m_topShooterD = 0;
+            config.m_topShooterF = 0.01;
+
+            return config;
+        }
 
     }
 

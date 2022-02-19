@@ -55,7 +55,9 @@ public class SubsystemFactory {
         WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
         WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
         WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
-        return new ShooterSubsystem(leftBottom, rightBottom, top);
+        ShooterSubsystem subsystem = new ShooterSubsystem(leftBottom, rightBottom, top);
+        subsystem.configure(Constants.SHOOTER.CONFIG_SHOOTER());
+        return subsystem;
     }
 
     public FeederSubsystem CreateFeederSubsystem() {

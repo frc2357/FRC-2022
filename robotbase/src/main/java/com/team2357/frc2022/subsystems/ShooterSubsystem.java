@@ -3,7 +3,6 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.subsystems.util.VisionTargetSupplier;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
@@ -25,6 +24,29 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private VisionTarget m_currentTarget;
 
     private double m_lastVisionRPMs;
+    private double m_minutesTo100MS = 600;
+
+    private Configuration m_config;
+
+    public static class Configuration {
+        public int m_encoder_cpr = 0;
+
+        public double m_shooterMotorPeakOutput = 1.0;
+        public double m_shooterGearingRatio = 0;
+        public int m_timeoutMS = 0;
+
+        // bottom shooter motors
+        public double m_bottomShooterP = 0;
+        public double m_bottomShooterI = 0;
+        public double m_bottomShooterD = 0;
+        public double m_bottomShooterF = 0;
+
+        // top shooter motor
+        public double m_topShooterP = 0;
+        public double m_topShooterI = 0;
+        public double m_topShooterD = 0;
+        public double m_topShooterF = 0;
+    }
 
     /**
      * 
@@ -37,52 +59,60 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_rightBottomMotor = rightBottomShooter;
         m_topMotor = topRoller;
 
-        // reset motor configs to known state
-        m_leftBottomMotor.configFactoryDefault(Constants.TIMEOUT_MS);
-        m_rightBottomMotor.configFactoryDefault(Constants.TIMEOUT_MS);
-        m_topMotor.configFactoryDefault(Constants.TIMEOUT_MS);
+    }
 
+    public void configure(Configuration config) {
+
+        m_config = config;
+
+        // reset motor configs to known state
+        m_leftBottomMotor.configFactoryDefault(m_config.m_timeoutMS);
+        m_rightBottomMotor.configFactoryDefault(m_config.m_timeoutMS);
+        m_topMotor.configFactoryDefault(m_config.m_timeoutMS);
+
+        // Bottom motor config
         m_rightBottomMotor.setInverted(true);
         m_rightBottomMotor.follow(m_leftBottomMotor);
 
         m_leftBottomMotor.configClosedloopRamp(1.0);
 
         m_leftBottomMotor
-                .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, Constants.TIMEOUT_MS);
+                .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, m_config.m_timeoutMS);
 
         // >>> Change this if positive motor output gives negative encoder feedback <<<
         m_leftBottomMotor.setSensorPhase(true);
 
         // Configure output range
-        m_leftBottomMotor.configNominalOutputForward(0, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.configNominalOutputReverse(0, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.configPeakOutputForward(Constants.SHOOTER.SHOOTER_MOTOR_PEAK_OUTPUT, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.configPeakOutputReverse(0, Constants.TIMEOUT_MS); // don't run the motors in reverse
+        m_leftBottomMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
+        m_leftBottomMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
+        m_leftBottomMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
+        m_leftBottomMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
 
-        m_leftBottomMotor.config_kP(0, Constants.SHOOTER.SHOOTER_P, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.config_kI(0, Constants.SHOOTER.SHOOTER_I, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.config_kD(0, Constants.SHOOTER.SHOOTER_D, Constants.TIMEOUT_MS);
-        m_leftBottomMotor.config_kF(0, Constants.SHOOTER.SHOOTER_F, Constants.TIMEOUT_MS);
+        m_leftBottomMotor.config_kP(0, m_config.m_bottomShooterP, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kI(0, m_config.m_bottomShooterI, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kD(0, m_config.m_bottomShooterD, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kF(0, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
+        // Top motor config
         m_topMotor.setInverted(true);
         m_topMotor.configClosedloopRamp(1.0);
 
         m_topMotor
-                .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, Constants.TIMEOUT_MS);
+                .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, m_config.m_timeoutMS);
 
         // >>> Change this if positive motor output gives negative encoder feedback <<<
         m_topMotor.setSensorPhase(true);
 
         // Configure output range
-        m_topMotor.configNominalOutputForward(0, Constants.TIMEOUT_MS);
-        m_topMotor.configNominalOutputReverse(0, Constants.TIMEOUT_MS);
-        m_topMotor.configPeakOutputForward(Constants.SHOOTER.SHOOTER_MOTOR_PEAK_OUTPUT, Constants.TIMEOUT_MS);
-        m_topMotor.configPeakOutputReverse(0, Constants.TIMEOUT_MS); // don't run the motors in reverse
+        m_topMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
+        m_topMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
+        m_topMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
+        m_topMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
 
-        m_topMotor.config_kP(0, Constants.SHOOTER.SHOOTER_P, Constants.TIMEOUT_MS);
-        m_topMotor.config_kI(0, Constants.SHOOTER.SHOOTER_I, Constants.TIMEOUT_MS);
-        m_topMotor.config_kD(0, Constants.SHOOTER.SHOOTER_D, Constants.TIMEOUT_MS);
-        m_topMotor.config_kF(0, Constants.SHOOTER.SHOOTER_F, Constants.TIMEOUT_MS);
+        m_topMotor.config_kP(0, m_config.m_topShooterP, m_config.m_timeoutMS);
+        m_topMotor.config_kI(0, m_config.m_topShooterI, m_config.m_timeoutMS);
+        m_topMotor.config_kD(0, m_config.m_topShooterD, m_config.m_timeoutMS);
+        m_topMotor.config_kF(0, m_config.m_topShooterF, m_config.m_timeoutMS);
     }
 
     /**
@@ -91,7 +121,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @param rpm rotations per minute
      */
     public void setClosedLoopRPMBottom(double rpm) {
-        double nativeSpeed = rpm * Constants.SHOOTER.FALCON_ENCODER_CPR / Constants.MINUTES_TO_100_MS;
+        double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_leftBottomMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -101,7 +131,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @param rpm rotations per minute
      */
     public void setClosedLoopRPMTop(double rpm) {
-        double nativeSpeed = rpm * Constants.SHOOTER.FALCON_ENCODER_CPR / Constants.MINUTES_TO_100_MS;
+        double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -169,19 +199,19 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_targetSupplier = targetSupplier;
     }
 
-    /**
-     * @return current motor velocity in rpm
-     */
-    public double getMotorSpeed(WPI_TalonFX motor) {
-        return motor.getSelectedSensorVelocity() * Constants.MINUTES_TO_100_MS / Constants.SHOOTER.FALCON_ENCODER_CPR;
-    }
-
     public double getMotorSpeed() {
         return getMotorSpeed(m_leftBottomMotor);
     }
 
+    /**
+     * @return current motor velocity in rpm
+     */
+    public double getMotorSpeed(WPI_TalonFX motor) {
+        return motor.getSelectedSensorVelocity() * m_minutesTo100MS / m_config.m_encoder_cpr;
+    }
+
     public double getShooterRPMs() {
-        return getMotorSpeed() * Constants.SHOOTER.SHOOTER_GEARING_RATIO;
+        return getMotorSpeed() * m_config.m_shooterGearingRatio;
     }
 
 }
