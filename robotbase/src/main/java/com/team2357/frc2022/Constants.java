@@ -80,9 +80,9 @@ public final class Constants {
     }
 
     public final class ARDUINO {
-        public static final String FEEDER_SENSOR_JSON_NAME = "FeederIRSensor";
-        public static final String INTAKE_SENSOR_JSON_NAME = "IntakeIRSensor";
-        public static final String TURRET_SENSOR_JSON_NAME = "TurretHALSensor";
+        public static final String FEEDER_SENSOR_JSON_NAME = "feederIRSensor";
+        public static final String INTAKE_SENSOR_JSON_NAME = "intakeIRSensor";
+        public static final String TURRET_SENSOR_JSON_NAME = "turretHALSensor";
 
         public static final String FEEDER_SENSOR_STATE_FIELD = "state";
         public static final String INTAKE_SENSOR_STATE_FIELD = "state";

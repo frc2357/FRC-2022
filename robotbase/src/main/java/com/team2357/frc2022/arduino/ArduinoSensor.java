@@ -8,12 +8,15 @@ public class ArduinoSensor extends ArduinoUSBController{
 
     public ArduinoSensor(String ttyDevice) {
         super(ttyDevice);
+        super.start();
     }
 
     public boolean getIntakeValue() {
         boolean value = false;
-        if (this.isConnected()){
-            value = !this.getDeviceFieldBoolean(Constants.ARDUINO.INTAKE_SENSOR_JSON_NAME, Constants.ARDUINO.INTAKE_SENSOR_STATE_FIELD);
+        System.out.println(super.isConnected());
+
+        if (super.isConnected()){
+            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.INTAKE_SENSOR_JSON_NAME, Constants.ARDUINO.INTAKE_SENSOR_STATE_FIELD);
         }
         
         return value;
@@ -21,8 +24,8 @@ public class ArduinoSensor extends ArduinoUSBController{
 
     public boolean getFeederValue() {
         boolean value = false;
-        if (this.isConnected()){
-            value = !this.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_SENSOR_JSON_NAME, Constants.ARDUINO.FEEDER_SENSOR_STATE_FIELD);
+        if (super.isConnected()){
+            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_SENSOR_JSON_NAME, Constants.ARDUINO.FEEDER_SENSOR_STATE_FIELD);
         }
         
         return value;
@@ -30,8 +33,8 @@ public class ArduinoSensor extends ArduinoUSBController{
 
     public boolean getTurretValue() {
         boolean value = false;
-        if (this.isConnected()){
-            value = !this.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_SENSOR_JSON_NAME, Constants.ARDUINO.TURRET_SENSOR_STATE_FIELD);
+        if (super.isConnected()){
+            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_SENSOR_JSON_NAME, Constants.ARDUINO.TURRET_SENSOR_STATE_FIELD);
         }
         return value;
     }

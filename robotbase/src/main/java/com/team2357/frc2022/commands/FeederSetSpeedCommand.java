@@ -16,7 +16,7 @@ public class FeederSetSpeedCommand extends CommandLoggerBase{
     @Override
     public void initialize(){
         super.initialize();
-        if (m_feederSub.isBallAtFeederWheel()) {
+        if (m_feederSub.isCargoAtFeederWheel()) {
             m_feederSub.runFeedermotor(m_speed);
         }
     }
