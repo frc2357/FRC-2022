@@ -3,10 +3,10 @@ package com.team2357.frc2022.arduino;
 import com.team2357.frc2022.Constants;
 import com.team2357.lib.arduino.ArduinoUSBController;
 
-public class ArduinoSensor extends ArduinoUSBController{
+public class RobotArduino extends ArduinoUSBController{
 
 
-    public ArduinoSensor(String ttyDevice) {
+    public RobotArduino(String ttyDevice) {
         super(ttyDevice);
         super.start();
     }
