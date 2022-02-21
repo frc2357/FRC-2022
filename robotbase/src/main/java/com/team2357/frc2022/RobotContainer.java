@@ -39,7 +39,6 @@ public class RobotContainer {
 
   private final RobotArduino m_arduinoSensor;
 
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -55,7 +54,6 @@ public class RobotContainer {
       return m_arduinoSensor.getTurretValue();
     };
 
-    
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();

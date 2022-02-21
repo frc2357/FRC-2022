@@ -5,7 +5,6 @@ import com.team2357.lib.arduino.ArduinoUSBController;
 
 public class RobotArduino extends ArduinoUSBController{
 
-
     public RobotArduino(String ttyDevice) {
         super(ttyDevice);
         super.start();
@@ -13,7 +12,6 @@ public class RobotArduino extends ArduinoUSBController{
 
     public boolean getIntakeValue() {
         boolean value = false;
-        System.out.println(super.isConnected());
 
         if (super.isConnected()){
             value = !super.getDeviceFieldBoolean(Constants.ARDUINO.INTAKE_SENSOR_JSON_NAME, Constants.ARDUINO.INTAKE_SENSOR_STATE_FIELD);

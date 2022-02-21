@@ -46,7 +46,7 @@ public class ArduinoUSBController implements Runnable {
 			m_serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT, 0);
 		} catch (Exception e) {
 			m_serialPort = null;
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 
