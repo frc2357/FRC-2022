@@ -4,11 +4,13 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
 import com.team2357.frc2022.shuffleboard.DriveTab;
 import com.team2357.frc2022.shuffleboard.FailsafeButtonWidget;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
@@ -41,17 +43,29 @@ public class RobotContainer {
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
+  private final RobotArduino m_arduinoSensor;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     
+    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    SensorBooleanState intakeIRSensor = () -> {
+      return m_arduinoSensor.getIntakeValue();
+    };
+    SensorBooleanState feederIRSensor = () -> {
+      return m_arduinoSensor.getFeederValue();
+    };
+    SensorBooleanState turretIRSensor = () -> {
+      return m_arduinoSensor.getTurretValue();
+    };
 
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
-    m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
-    m_feederSub = subsystemFactory.CreateFeederSubsystem();
+    m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
+    m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
 
     // Configure the button bindings
