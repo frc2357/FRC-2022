@@ -11,7 +11,7 @@ public class FailsafeCommand extends CommandLoggerBase{
     
     public FailsafeCommand(boolean failsafeActive, ClosedLoopSubsystem subsystem) {
         m_failsafeActive = failsafeActive;
-        m_subsystems = subsystems;
+        m_subsystem = subsystem;
     }
 
     @Override

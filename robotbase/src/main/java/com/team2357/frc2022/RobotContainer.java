@@ -90,8 +90,8 @@ public class RobotContainer {
     DriveTab driveTab = new DriveTab();
 
     driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Drive Failsafe", m_driveSub));
-    driveTad.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Intake Failsafe", m_intakeSub));
-    driveTad.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Feeder Failsafe", m_feederSub));
+    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Intake Failsafe", m_intakeSub));
+    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Feeder Failsafe", m_feederSub));
   }
 
   /**
