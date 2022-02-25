@@ -289,7 +289,7 @@ public class ArduinoUSBController implements Runnable {
 	@Override
 	public void run() {
 		
-		if (this.isPortOpen()) {
+		if (m_serialPort.isOpen()) {
 			this.start();
 		}
 
@@ -375,9 +375,5 @@ public class ArduinoUSBController implements Runnable {
 			return null;
 		}
 		return devices.get(deviceName);
-	}
-
-	public boolean isPortOpen() {
-		return m_serialPort.isOpen();
 	}
 }
