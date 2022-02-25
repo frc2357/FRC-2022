@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class FailsafeCommand extends CommandLoggerBase{
     private boolean m_failsafeActive;
-    private ClosedLoopSubsystem[] m_subsystems;
+    private ClosedLoopSubsystem m_subsystem;
     
-    public FailsafeCommand(boolean failsafeActive, ClosedLoopSubsystem[] subsystems) {
+    public FailsafeCommand(boolean failsafeActive, ClosedLoopSubsystem subsystem) {
         m_failsafeActive = failsafeActive;
         m_subsystems = subsystems;
     }
@@ -18,9 +18,7 @@ public class FailsafeCommand extends CommandLoggerBase{
     public void initialize() {
         super.initialize();
 
-        for (ClosedLoopSubsystem subsystem : m_subsystems) {
-            subsystem.setClosedLoopEnabled(m_failsafeActive);
-        }
+        m_subsystem.setClosedLoopEnabled(m_failsafeActive);
 
         CommandScheduler.getInstance().cancelAll();
     }
