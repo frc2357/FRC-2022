@@ -12,8 +12,8 @@ public class CargoCountWidget extends ShuffleboardWidget {
     private final IntakeSubsystem m_intakeSub;
     private static NetworkTableEntry m_cargoCountWidget;
 
-    private boolean readyToSub = false;
-    private boolean readyToAdd = false;
+    private boolean m_readyToSub = false;
+    private boolean m_readyToAdd = false;
     private int m_numOfCargo;
 
     public CargoCountWidget(String tabTitle, FeederSubsystem feederSub, IntakeSubsystem intakeSub) {
@@ -21,40 +21,38 @@ public class CargoCountWidget extends ShuffleboardWidget {
         m_feederSub = feederSub;
         m_intakeSub = intakeSub;
 
-        NetworkTableEntry cargoCountWidget = Shuffleboard.getTab(tabTitle)
+        NetworkTableEntry m_cargoCountWidget = Shuffleboard.getTab(tabTitle)
             .add("Num of Cargo Balls", 0)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
-
-        m_cargoCountWidget = cargoCountWidget;
     }
 
     public void addCargo() {
         int numOfCargo = getNumOfCargo();
         setNumOfCargo(++numOfCargo);
         m_cargoCountWidget.setNumber(numOfCargo);
-        readyToAdd = false;
+        m_readyToAdd = false;
     }
 
     public void subCargo() {
         int numOfCargo = getNumOfCargo();
         setNumOfCargo(++numOfCargo);
         m_cargoCountWidget.setNumber(numOfCargo);
-        readyToSub = false;
+        m_readyToSub = false;
     }
 
 
 
     public void periodic() {
-        if (readyToSub && !m_feederSub.isCargoAtFeederWheel()) {
+        if (m_readyToSub && !m_feederSub.isCargoAtFeederWheel()) {
             subCargo();
-        } else if (!readyToSub && m_feederSub.isCargoAtFeederWheel()) {
-            readyToSub = true;
+        } else if (!m_readyToSub && m_feederSub.isCargoAtFeederWheel()) {
+            m_readyToSub = true;
         }
-        if (readyToAdd && !m_intakeSub.isCargoInIntake()) {
+        if (m_readyToAdd && !m_intakeSub.isCargoInIntake()) {
             addCargo();
-        } else if (!readyToAdd && m_intakeSub.isCargoInIntake()) {
-            readyToAdd = true;
+        } else if (!m_readyToAdd && m_intakeSub.isCargoInIntake()) {
+            m_readyToAdd = true;
         }
     } 
 

@@ -9,14 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-// TODO: ShuffleBoard Implement
-/**
- * This class should control a chooser to select up to three actions with a wait
- * command between them
- * Do not worry about making the actual auto commands, just the chooser widget
- * that can select different
- * things is enough for now
- */
 public class AutoModeCommandChooser {
     public enum AutomodeActions {
         NONE,
@@ -81,11 +73,11 @@ public class AutoModeCommandChooser {
         choosers[0].getWaitCommand(),
         choosers[0].getActionCommand(),
 
-        choosers[0].getWaitCommand(),
-        choosers[0].getActionCommand(),
+        choosers[1].getWaitCommand(),
+        choosers[1].getActionCommand(),
 
-        choosers[0].getWaitCommand(),
-        choosers[0].getActionCommand()
+        choosers[2].getWaitCommand(),
+        choosers[2].getActionCommand()
 
         );
 

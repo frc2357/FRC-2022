@@ -2,7 +2,6 @@ package com.team2357.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
