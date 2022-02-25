@@ -26,9 +26,6 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     // Sensor state will return false when an object is too close. Function will
     // flip that to true for reability
-    public boolean isBallAtFeederWheel() {
-        boolean isSensorBlocked = false;
-        return isSensorBlocked;
     public boolean isCargoAtFeederWheel() {
         return m_feederSensor.getState();
     }

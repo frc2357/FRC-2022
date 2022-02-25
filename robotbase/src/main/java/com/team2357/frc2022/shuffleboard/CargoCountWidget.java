@@ -46,14 +46,14 @@ public class CargoCountWidget extends ShuffleboardWidget {
 
 
     public void periodic() {
-        if (readyToSub && !m_feederSub.isBallAtFeederWheel()) {
+        if (readyToSub && !m_feederSub.isCargoAtFeederWheel()) {
             subCargo();
-        } else if (!readyToSub && m_feederSub.isBallAtFeederWheel()) {
+        } else if (!readyToSub && m_feederSub.isCargoAtFeederWheel()) {
             readyToSub = true;
         }
-        if (readyToAdd && !m_intakeSub.isBallAtSensor()) {
+        if (readyToAdd && !m_intakeSub.isCargoInIntake()) {
             addCargo();
-        } else if (!readyToAdd && m_intakeSub.isBallAtSensor()) {
+        } else if (!readyToAdd && m_intakeSub.isCargoInIntake()) {
             readyToAdd = true;
         }
     } 
