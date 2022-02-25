@@ -7,6 +7,7 @@ public class RobotArduino extends ArduinoUSBController{
 
     public RobotArduino(String ttyDevice) {
         super(ttyDevice);
+
         super.start();
     }
 
@@ -14,7 +15,7 @@ public class RobotArduino extends ArduinoUSBController{
         boolean value = false;
 
         if (super.isConnected()){
-            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.INTAKE_SENSOR_JSON_NAME, Constants.ARDUINO.INTAKE_SENSOR_STATE_FIELD);
+            value = super.getDeviceFieldBoolean(Constants.ARDUINO.INTAKE_SENSOR_JSON_NAME, Constants.ARDUINO.INTAKE_SENSOR_STATE_FIELD);
         }
         
         return value;
@@ -23,7 +24,7 @@ public class RobotArduino extends ArduinoUSBController{
     public boolean getFeederValue() {
         boolean value = false;
         if (super.isConnected()){
-            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_SENSOR_JSON_NAME, Constants.ARDUINO.FEEDER_SENSOR_STATE_FIELD);
+            value = super.getDeviceFieldBoolean(Constants.ARDUINO.FEEDER_SENSOR_JSON_NAME, Constants.ARDUINO.FEEDER_SENSOR_STATE_FIELD);
         }
         
         return value;
@@ -32,7 +33,7 @@ public class RobotArduino extends ArduinoUSBController{
     public boolean getTurretValue() {
         boolean value = false;
         if (super.isConnected()){
-            value = !super.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_SENSOR_JSON_NAME, Constants.ARDUINO.TURRET_SENSOR_STATE_FIELD);
+            value = super.getDeviceFieldBoolean(Constants.ARDUINO.TURRET_SENSOR_JSON_NAME, Constants.ARDUINO.TURRET_SENSOR_STATE_FIELD);
         }
         return value;
     }

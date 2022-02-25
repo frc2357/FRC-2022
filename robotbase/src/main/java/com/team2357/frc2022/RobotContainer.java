@@ -5,9 +5,9 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.arduino.RobotArduino;
-import com.team2357.frc2022.arduino.ArduinoSensorState;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
@@ -44,13 +44,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
-    ArduinoSensorState intakeIRSensor = () -> {
+    SensorBooleanState intakeIRSensor = () -> {
       return m_arduinoSensor.getIntakeValue();
     };
-    ArduinoSensorState feederIRSensor = () -> {
+    SensorBooleanState feederIRSensor = () -> {
       return m_arduinoSensor.getFeederValue();
     };
-    ArduinoSensorState turretIRSensor = () -> {
+    SensorBooleanState turretIRSensor = () -> {
       return m_arduinoSensor.getTurretValue();
     };
 

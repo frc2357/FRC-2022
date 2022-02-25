@@ -257,6 +257,7 @@ public class ArduinoUSBController implements Runnable {
 		// TODO: Use logging for this.
 		System.out.println("Opening serial port '" + m_serialPort.getSystemPortName() + "'");
 		boolean success = m_serialPort.openPort();
+
 		if (!success) {
 			// TODO: Use logging for this.
 			System.err.println("Error opening serial port '" + m_serialPort.getSystemPortName() + "'");
@@ -287,6 +288,11 @@ public class ArduinoUSBController implements Runnable {
 	 */
 	@Override
 	public void run() {
+		
+		if (this.isPortOpen()) {
+			this.start();
+		}
+
 		while (m_thread != null) {
 			try {
 				read();
@@ -369,5 +375,9 @@ public class ArduinoUSBController implements Runnable {
 			return null;
 		}
 		return devices.get(deviceName);
+	}
+
+	public boolean isPortOpen() {
+		return m_serialPort.isOpen();
 	}
 }
