@@ -86,7 +86,6 @@ public class RobotContainer {
    * This method should set up the shuffleboard
    */
   public void configureShuffleboard() {
-    // TODO: ShuffleBoard Implement
     DriveTab driveTab = new DriveTab();
 
     driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Drive Failsafe", m_driveSub));

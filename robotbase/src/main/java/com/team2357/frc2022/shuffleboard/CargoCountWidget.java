@@ -1,27 +1,26 @@
 package com.team2357.frc2022.shuffleboard;
 
-import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 public class CargoCountWidget extends ShuffleboardWidget {
-    private final FeederSubsystem m_feederSub;
-    private final IntakeSubsystem m_intakeSub;
+    private final SensorBooleanState m_feederSensor;
+    private final SensorBooleanState m_intakeSensor;
     private static NetworkTableEntry m_cargoCountWidget;
 
     private boolean m_readyToSub = false;
     private boolean m_readyToAdd = false;
     private int m_numOfCargo;
 
-    public CargoCountWidget(String tabTitle, FeederSubsystem feederSub, IntakeSubsystem intakeSub) {
+    public CargoCountWidget(String tabTitle, SensorBooleanState feederSensor, SensorBooleanState intakeSensor) {
         super(tabTitle);
-        m_feederSub = feederSub;
-        m_intakeSub = intakeSub;
+        m_feederSensor = feederSensor;
+        m_intakeSensor = intakeSensor;
 
-        NetworkTableEntry m_cargoCountWidget = Shuffleboard.getTab(tabTitle)
+        m_cargoCountWidget = Shuffleboard.getTab(tabTitle)
             .add("Num of Cargo Balls", 0)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
@@ -44,14 +43,14 @@ public class CargoCountWidget extends ShuffleboardWidget {
 
 
     public void periodic() {
-        if (m_readyToSub && !m_feederSub.isCargoAtFeederWheel()) {
+        if (m_readyToSub && !m_feederSensor.getState()) {
             subCargo();
-        } else if (!m_readyToSub && m_feederSub.isCargoAtFeederWheel()) {
+        } else if (!m_readyToSub && m_feederSensor.getState()) {
             m_readyToSub = true;
         }
-        if (m_readyToAdd && !m_intakeSub.isCargoInIntake()) {
+        if (m_readyToAdd && !m_intakeSensor.getState()) {
             addCargo();
-        } else if (!m_readyToAdd && m_intakeSub.isCargoInIntake()) {
+        } else if (!m_readyToAdd && m_intakeSensor.getState()) {
             m_readyToAdd = true;
         }
     } 

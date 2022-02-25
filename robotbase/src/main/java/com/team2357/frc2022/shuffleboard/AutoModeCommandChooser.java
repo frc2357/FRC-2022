@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class AutoModeCommandChooser {
     public enum AutomodeActions {
         NONE,
-        MOVE_OFF_LINE,
-        SHOOT,
     }
 
     private class AutoActionChooser {
@@ -25,8 +23,6 @@ public class AutoModeCommandChooser {
             m_chooser = new SendableChooser<>();
 
             m_chooser.setDefaultOption("None", AutomodeActions.NONE);
-            m_chooser.addOption("Shoot", AutomodeActions.SHOOT);
-            m_chooser.addOption("Move Off Line", AutomodeActions.MOVE_OFF_LINE);
             tab.add("Auto Action " + index, m_chooser);
 
             NetworkTableEntry waitWidget = Shuffleboard.getTab(m_tabTitle)
