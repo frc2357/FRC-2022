@@ -28,6 +28,8 @@ public final class Constants {
         public static final int INTAKE_MOTOR_ID = 21;
         // Feeder
         public static final int FEEDER_MOTOR_ID = 0;
+        // Compressor
+        public static final int PNEUMATICS_HUB_ID = 30;
     }
 
     public final class PCM_ID {
@@ -89,5 +91,10 @@ public final class Constants {
         public static final String TURRET_SENSOR_STATE_FIELD = "state";
 
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+    }
+
+    public final class COMPRESSOR {
+        public static final int MIN_PRESSURE_PSI = 70;
+        public static final int MAX_PRESSURE_PSI = 120;
     }
 }
