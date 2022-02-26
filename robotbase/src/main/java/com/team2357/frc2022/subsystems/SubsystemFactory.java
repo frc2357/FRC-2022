@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem.PipelineIndex;
@@ -44,16 +45,16 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public IntakeSubsystem CreateIntakeSubsystem() {
+    public IntakeSubsystem CreateIntakeSubsystem(SensorBooleanState intakeSensorState) {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
-        return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
+        return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }
 
-    public FeederSubsystem CreateFeederSubsystem() {
+    public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
         WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
-        return new FeederSubsystem(feederTalon);
+        return new FeederSubsystem(feederTalon, feederSensorState);
     }
 
     public TogglableLimelightSubsystem CreateVisionSubsystem() {
