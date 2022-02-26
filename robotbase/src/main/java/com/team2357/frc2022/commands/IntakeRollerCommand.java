@@ -3,8 +3,6 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
 /**
  * This command runs the intake roller from {@link IntakeSubsystem}.
  * 
@@ -26,10 +24,8 @@ public class IntakeRollerCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         super.initialize();
-        if (m_intakeSub.getPivot() == Value.kForward) {
             m_intakeSub.triggerIntakeRoller(m_speed);
         }
-    }
 
     @Override
     public void end(boolean interrupted) {

@@ -23,13 +23,18 @@ public class IntakeSetPivotCommand extends CommandLoggerBase {
         addRequirements(m_intakeSub);
     }
 
-    @Override 
+    @Override
     public void initialize() {
         m_intakeSub.setPivot(m_postion);
     }
 
     @Override
+    public void end(boolean interrupted) {
+        m_intakeSub.setPivot(Value.kOff);
+    }
+
+    @Override
     public boolean isFinished() {
         return true;
-    } 
+    }
 }
