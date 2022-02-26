@@ -30,7 +30,6 @@ public class RecordPath extends CommandBase {
   private ArrayList<Translation2d> m_path;
   private Rotation2d m_beginRotation;
   private Rotation2d m_endRotation;
-  private PrintWriter m_file;
 
   public RecordPath(final FalconTrajectoryDriveSubsystem drive) {
     this(drive, true);
@@ -65,7 +64,7 @@ public class RecordPath extends CommandBase {
     if (currentTime < m_timestamp + TIME_STEP) {
       return;
     }
-   if (Utility.isWithinTolerance(m_drive.getVelocityLeftEncoder(), 0, 0.1)
+    if (Utility.isWithinTolerance(m_drive.getVelocityLeftEncoder(), 0, 0.1)
         && Utility.isWithinTolerance(m_drive.getVelocityRightEncoder(), 0, 0.1)) {
       return;
     }
@@ -84,16 +83,16 @@ public class RecordPath extends CommandBase {
     lines += "new Pose2d(" + begin.getX() + ", " + begin.getY() + ", Rotation2d.fromDegrees("
         + m_beginRotation.getDegrees() + ")),\n";
     lines += "List.of(\n";
-    for(Translation2d t : m_path) {
-      lines+= "  new Translation2d(" + t.getX() + ", " + t.getY() + "),\n";
+    for (Translation2d t : m_path) {
+      lines += "  new Translation2d(" + t.getX() + ", " + t.getY() + "),\n";
     }
-    lines+="),\n";
-    lines+="new Pose2d(" + end.getX() + ", " + end.getY() + ", Rotation2d.fromDegrees("
+    lines += "),\n";
+    lines += "new Pose2d(" + end.getX() + ", " + end.getY() + ", Rotation2d.fromDegrees("
         + m_endRotation.getDegrees() + ")),\n";
-    createFile();
-    m_file.println(lines);
+    PrintWriter fileWriter = createFile();
+    fileWriter.println(lines);
     System.out.print(lines);
-    m_file.close();
+    fileWriter.close();
   }
 
   // Returns true when the command should end.
@@ -108,22 +107,22 @@ public class RecordPath extends CommandBase {
   }
 
   public PrintWriter createFile() {
-   
-		try {
-			File file = new File(FILE_PATH);
-			if (!file.exists()) {
-				if (file.mkdir()) {
-					System.out.println("Log Directory is created!");
-				} else {
-					System.out.println("Failed to create Log directory!");
-				}
-			}
 
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");       
-			m_file= new PrintWriter(FILE_PATH + dtf.format(LocalDateTime.now()) + "-Log.txt", "UTF-8");
-			m_file.flush();
-      return m_file;
-		} catch (Exception e) {
+    try {
+      File file = new File(FILE_PATH);
+      if (!file.exists()) {
+        if (file.mkdir()) {
+          System.out.println("Log Directory is created!");
+        } else {
+          System.out.println("Failed to create Log directory!");
+        }
+      }
+
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+      PrintWriter fileWriter = new PrintWriter(FILE_PATH + dtf.format(LocalDateTime.now()) + "-Log.txt", "UTF-8");
+      fileWriter.flush();
+      return fileWriter;
+    } catch (Exception e) {
       System.err.println("Done messed up the file for the trajectory record");
     }
     return null;
