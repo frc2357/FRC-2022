@@ -10,6 +10,8 @@ public class ClimberSimpleRunMotorsCommand extends CommandLoggerBase {
     public ClimberSimpleRunMotorsCommand (ClimberSubsystem climbSub, double speed) {
         m_climbSub = climbSub;
         m_speed = speed;
+        System.out.println("Constructing command");
+        addRequirements(climbSub);
     }
 
     @Override

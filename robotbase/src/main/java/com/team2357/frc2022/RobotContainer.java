@@ -6,6 +6,7 @@ package com.team2357.frc2022;
 
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
@@ -30,6 +31,7 @@ public class RobotContainer {
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
   private FeederSubsystem m_feederSub;
+  private ClimberSubsystem m_climbSub;
   private TogglableLimelightSubsystem m_visionSub;
 
   private final IntakeDriveControls m_driverControls;
@@ -45,6 +47,7 @@ public class RobotContainer {
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
     m_feederSub = subsystemFactory.CreateFeederSubsystem();
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
+    m_climbSub = subsystemFactory.CreateClimberSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
@@ -52,7 +55,7 @@ public class RobotContainer {
             .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
-        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
+        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub).withClimbSub(m_climbSub)
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));

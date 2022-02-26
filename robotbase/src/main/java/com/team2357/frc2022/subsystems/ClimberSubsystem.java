@@ -244,4 +244,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void setState(State newState) {
         m_currentState = newState;
     }
+
+    public DoubleSolenoid.Value getPivot() {
+        return m_climberSolenoid.get();
+    }
 }

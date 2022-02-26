@@ -2,6 +2,7 @@ package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
+import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
@@ -47,8 +48,10 @@ public class GunnerControls {
     // Chords
     public Trigger m_xButtonAndLeftDPad;
     public Trigger m_yButtonAndLeftDPad;
-    public Trigger m_xButtonAndRightDPad;
+
+    public Trigger m_bButtonAndRightDPad;
     public Trigger m_yButtonAndRightDPad;
+    public Trigger m_aButtonAndRightDPad;
 
     /**
      * @param builder The GunnerControlsBuilder object
@@ -79,8 +82,9 @@ public class GunnerControls {
         // Chords
         m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
         m_yButtonAndLeftDPad = m_yButton.and(m_leftDPad);
-        m_xButtonAndRightDPad = m_xButton.and(m_rightDPad);
+        m_bButtonAndRightDPad = m_bButton.and(m_rightDPad);
         m_yButtonAndRightDPad = m_yButton.and(m_rightDPad);
+        m_aButtonAndRightDPad = m_aButton.and(m_rightDPad);
     }
 
     /**
@@ -119,6 +123,7 @@ public class GunnerControls {
         private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
         private ClimberSubsystem m_climbSub = null;
+
         /**
          * @param controller the controller of the gunner controls
          */
@@ -136,7 +141,6 @@ public class GunnerControls {
             return this;
         }
 
-
         public GunnerControls build() {
             GunnerControls m_gunnerControls = new GunnerControls(this);
 
@@ -152,11 +156,12 @@ public class GunnerControls {
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
             }
 
-            if(m_climbSub != null) {
+            if (m_climbSub != null) {
                 m_gunnerControls.m_yButtonAndRightDPad.whileActiveOnce(
-                    new ClimberSimpleRunMotorsCommand(m_climbSub, 0));
-                m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(
-                    new ClimberSimpleRunMotorsCommand(m_climbSub, 0));
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, 0.4));
+                m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, -0.2));
+                m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
             }
 
             return m_gunnerControls;

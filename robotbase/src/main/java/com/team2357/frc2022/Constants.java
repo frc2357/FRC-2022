@@ -39,9 +39,9 @@ public final class Constants {
 
     public final class PCM_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
-        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
-        public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 0;
-        public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 0;
+        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 1;
+        public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 2;
+        public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 3;
     }
 
     public final class CONTROLLER {
@@ -79,8 +79,8 @@ public final class Constants {
         public static final double CLIMB_RETURN_SPEED = 0; // Climb return speed for reachble rungs
         public static final double TRANS_EXTEND_SPEED = 0; // Climb extend speed for unreachable rungs (high, traversal)
         public static final double TRANS_RETURN_SPEED = 0; // Climb return speed for unreachable rungs
-        public static final int MOTOR_STALL_LIMIT_AMPS = 5; // Might need to be different
-        public static final int MOTOR_FREE_LIMIT_AMPS = 36;
+        public static final int MOTOR_STALL_LIMIT_AMPS = 35; // Might need to be different
+        public static final int MOTOR_FREE_LIMIT_AMPS = 35;
         public static final boolean INVERT_RIGHT_SIDE = true;
         public static final double INCHES_PER_ROTATION_METERS = 0.003175;
         public static final double CLIMBER_GEAR_RATIO = 10;
