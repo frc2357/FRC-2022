@@ -61,10 +61,10 @@ public final class Constants {
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
 
-        public static final int LEFT_ENCODER_CHANNEL_A = 0;
-        public static final int LEFT_ENCODER_CHANNEL_B = 1;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 2;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 3;
+        public static final int LEFT_ENCODER_CHANNEL_A = 6;
+        public static final int LEFT_ENCODER_CHANNEL_B = 7;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
 
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
