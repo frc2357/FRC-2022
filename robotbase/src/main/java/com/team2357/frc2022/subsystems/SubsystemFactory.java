@@ -32,9 +32,9 @@ public class SubsystemFactory {
         config.m_isGyroReversed = Constants.DRIVE.INVERT_RIGHT_SIDE;
 
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
-        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2) };
+        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3) };
         WPI_TalonFX rightFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1);
-        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2) };
+        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
@@ -48,7 +48,7 @@ public class SubsystemFactory {
     }
 
     public IntakeSubsystem CreateIntakeSubsystem() {
-        DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+        DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid);
@@ -63,7 +63,7 @@ public class SubsystemFactory {
 
         CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
-        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
 
         ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid);

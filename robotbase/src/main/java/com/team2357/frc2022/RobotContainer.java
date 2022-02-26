@@ -14,6 +14,9 @@ import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -36,6 +39,8 @@ public class RobotContainer {
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
+  private final Compressor m_compressor;
+  private final PneumaticHub m_PneumaticHub;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -59,6 +64,10 @@ public class RobotContainer {
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
+
+    m_PneumaticHub = new PneumaticHub(30);
+   m_compressor = m_PneumaticHub.makeCompressor();
+   m_compressor.enableAnalog(70, 120);
   }
 
   /**
@@ -69,5 +78,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return null;
+  }
+
+  public void periodic() {
+    System.out.println("Pressure: " + m_compressor.getPressure());
   }
 }
