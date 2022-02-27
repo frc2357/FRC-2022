@@ -2,7 +2,9 @@ package com.team2357.frc2022.controls;
 
 import java.util.function.BooleanSupplier;
 
-import com.team2357.frc2022.commands.DeployIntakeCommandGroup;
+import com.team2357.frc2022.commands.IntakeDeactivateCommandGroup;
+import com.team2357.frc2022.commands.IntakeDeployAndDeactivateCommandGroup;
+import com.team2357.frc2022.commands.IntakeDeployCommandGroup;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
@@ -11,6 +13,7 @@ import com.team2357.lib.util.ControllerAxis;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
@@ -96,8 +99,9 @@ public class IntakeDriveControls extends InvertDriveControls{
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                    m_IntakeDriverControls.m_leftTrigger.toggleWhenPressed(
-                        new DeployIntakeCommandGroup(m_intakeSub), false);
+                    m_IntakeDriverControls.m_leftTrigger.whenPressed(
+                       new IntakeDeployCommandGroup(m_intakeSub), false);
+                    m_IntakeDriverControls.m_leftTrigger.whenReleased(new IntakeDeactivateCommandGroup(m_intakeSub), false);
             }
 
             return m_IntakeDriverControls;

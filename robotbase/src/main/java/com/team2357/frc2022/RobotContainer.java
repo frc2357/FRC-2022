@@ -37,21 +37,24 @@ public class RobotContainer {
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
-  private final RobotArduino m_arduinoSensor;
+  //private final RobotArduino m_arduinoSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    //m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
     SensorBooleanState intakeIRSensor = () -> {
-      return m_arduinoSensor.getIntakeValue();
+      //return m_arduinoSensor.getIntakeValue();
+      return false;
     };
     SensorBooleanState feederIRSensor = () -> {
-      return m_arduinoSensor.getFeederValue();
+     // return m_arduinoSensor.getFeederValue();
+     return false;
     };
     SensorBooleanState turretIRSensor = () -> {
-      return m_arduinoSensor.getTurretValue();
+     // return m_arduinoSensor.getTurretValue();
+     return false;
     };
 
     // Create subsystems
