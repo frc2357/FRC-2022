@@ -52,7 +52,7 @@ public class RobotContainer {
     SensorBooleanState feederIRSensor = () -> {
       return m_arduinoSensor.getFeederValue();
     };
-    SensorBooleanState turretIRSensor = () -> {
+    SensorBooleanState turretHallSensor = () -> {
       return m_arduinoSensor.getTurretValue();
     };
 
@@ -62,7 +62,7 @@ public class RobotContainer {
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
-    m_turretSub = subsystemFactory.createTurretSubsystem();
+    m_turretSub = subsystemFactory.createTurretSubsystem(turretHallSensor);
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(

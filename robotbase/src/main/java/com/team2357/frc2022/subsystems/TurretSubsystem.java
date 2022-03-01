@@ -3,6 +3,7 @@ package com.team2357.frc2022.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.util.VisionTargetSupplier;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
@@ -11,16 +12,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
     CANSparkMax m_turretMotor;
+
     private SparkMaxPIDController m_pidController;
-    Configuration m_config;
+
+    private Configuration m_config;
 
     private VisionTargetSupplier m_targetSupplier;
     private VisionTarget m_currentTarget;
 
     private double m_targetDegrees;
 
-    // Has the turret been zeroed
-    private boolean m_isZeroed;
+    private SensorBooleanState m_turretSensor;
+    private boolean m_isZeroed; // Has the turret been zeroed
     private boolean m_isFlipping;
 
     public static class Configuration {
@@ -47,8 +50,9 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_degreeOffset = 0;
     }
 
-    public TurretSubsystem(CANSparkMax turretMotor) {
+    public TurretSubsystem(CANSparkMax turretMotor, SensorBooleanState turretSensor) {
         m_turretMotor = turretMotor;
+        m_turretSensor = turretSensor;
 
         m_isFlipping = false;
 
@@ -112,8 +116,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isOnZero() {
-        m_isZeroed = false;
-        return false;
+        m_isZeroed = m_turretSensor.getState();
+        return m_isZeroed;
     }
 
     @Override

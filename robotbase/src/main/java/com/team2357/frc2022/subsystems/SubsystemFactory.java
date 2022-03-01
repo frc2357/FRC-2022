@@ -72,9 +72,9 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public TurretSubsystem createTurretSubsystem() {
+    public TurretSubsystem createTurretSubsystem(SensorBooleanState turretHallSensorState) {
         CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID, MotorType.kBrushless);
-        TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
+        TurretSubsystem subsystem = new TurretSubsystem(turretMotor, turretHallSensorState);
         subsystem.configure(Constants.TURRET.GET_TURRET_CONFIG());
         return subsystem;
     }
