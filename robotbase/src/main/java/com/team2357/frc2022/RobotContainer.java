@@ -15,6 +15,8 @@ import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -33,6 +35,7 @@ public class RobotContainer {
   private IntakeSubsystem m_intakeSub;
   private FeederSubsystem m_feederSub;
   private TogglableLimelightSubsystem m_visionSub;
+  private Compressor m_compressor;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
@@ -71,6 +74,10 @@ public class RobotContainer {
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
+
+    // Setup compressor
+    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
+    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
   }
 
   /**
