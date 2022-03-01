@@ -42,6 +42,7 @@ public class TurretZeroCommandGroup extends SequentialCommandGroup {
     public void end(boolean interrupted) {
         super.end(interrupted);
         m_turretSub.setClosedLoopEnabled(m_isZeroed);
+        m_turretSub.resetHeading();
     }
 
 }

@@ -26,6 +26,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private boolean m_isZeroed; // Has the turret been zeroed
     private boolean m_isFlipping;
 
+    private boolean m_isTracking;
+
     public static class Configuration {
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
         public int m_turretMotorStallLimitAmps = 0;
@@ -55,6 +57,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_turretSensor = turretSensor;
 
         m_isFlipping = false;
+        m_isTracking = false;
 
         m_isZeroed = false;
         resetHeading();
@@ -84,6 +87,19 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         m_pidController.setSmartMotionAllowedClosedLoopError(m_config.m_turretMotorAllowedError, smartMotionSlot);
     }
 
+    /**
+     * Handles if the turret is stalling
+     * Probably happening because we are on the mechanical stop
+     */
+    private void handleMotorStall() {
+        if (m_turretMotor.getOutputCurrent() >= m_config.m_turretMotorStallLimitAmps) {
+            setTurretSpeed(0);
+            super.setClosedLoopEnabled(false);
+            m_isZeroed = false;
+            m_isFlipping = false;
+        }
+    }
+
     public void setTurretSpeed(double speed) {
         m_turretMotor.set(speed);
     }
@@ -103,6 +119,17 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     public boolean setTurretPosition(double targetDegrees) {
         if (super.isClosedLoopEnabled()) {
             m_targetDegrees = targetDegrees;
+            // Cases if target is out of reach
+            if (m_targetDegrees < m_config.m_turretRotationsClockwiseSoftLimit) {
+                m_targetDegrees = m_config.m_turretRotationsCounterClockwiseSoftLimit
+                        + (m_targetDegrees - m_config.m_turretRotationsClockwiseSoftLimit);
+                m_isFlipping = true;
+
+            } else if (m_targetDegrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
+                m_targetDegrees = m_config.m_turretRotationsClockwiseSoftLimit
+                        + (m_targetDegrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);
+                m_isFlipping = true;
+            }
             double setPoint = (m_targetDegrees + m_config.m_degreeOffset) * m_config.m_rotationsPerDegree;
             m_pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
             return true;
@@ -110,19 +137,25 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         return false;
     }
 
-    public boolean atDegrees() {
+    private boolean atDegrees() {
         return com.team2357.frc2022.util.Utility.isWithinTolerance(getTurretDegrees(), m_targetDegrees,
                 m_config.m_turretMotorAllowedError);
     }
 
     public boolean isOnZero() {
-        m_isZeroed = m_turretSensor.getState();
-        return m_isZeroed;
+        if (m_turretSensor.getState()) {
+            m_isZeroed = true;
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void periodic() {
-        if (super.isClosedLoopEnabled()) {
+
+        handleMotorStall();
+
+        if (m_isTracking) {
             turretTrackingPeriodic();
         }
 
@@ -159,20 +192,20 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public void initTrackingPeriodic(VisionTargetSupplier targetSupplier) {
         m_targetSupplier = targetSupplier;
+        m_isTracking = true;
     }
 
     public void disableTrackingPeriodic() {
         m_targetSupplier = null;
         m_turretMotor.set(0);
+        m_isTracking = false;
     }
 
     private void turretTrackingPeriodic() {
         m_currentTarget = m_targetSupplier.getAsVisionTarget();
 
         if (m_currentTarget != null) {
-
-            double degrees = calculateDegrees(m_currentTarget);
-            setTurretPosition(degrees);
+            setTurretPosition(m_currentTarget.getX() + getTurretDegrees());
 
             m_isFlipping = false;
         } else {
@@ -189,30 +222,5 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         if (isOnZero()) {
             resetHeading();
         }
-    }
-
-    /**
-     * Calculate setpoint based on target x value
-     * Assumes limelight is mounted centered on the turret
-     * 
-     * @param target The vision target.
-     * @return desired degree on the turret
-     */
-    private double calculateDegrees(VisionTarget target) {
-        double degrees = target.getX() + getTurretDegrees();
-
-        // Cases if target is out of reach
-        if (degrees < m_config.m_turretRotationsClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsCounterClockwiseSoftLimit
-                    + (degrees - m_config.m_turretRotationsClockwiseSoftLimit);
-            m_isFlipping = true;
-
-        } else if (degrees > m_config.m_turretRotationsCounterClockwiseSoftLimit) {
-            degrees = m_config.m_turretRotationsClockwiseSoftLimit
-                    + (degrees - m_config.m_turretRotationsCounterClockwiseSoftLimit);
-            m_isFlipping = true;
-        }
-
-        return degrees;
     }
 }
