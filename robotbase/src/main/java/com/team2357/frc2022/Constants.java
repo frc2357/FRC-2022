@@ -28,11 +28,11 @@ public final class Constants {
         public static final int INTAKE_MOTOR_ID = 21;
         // Feeder
         public static final int FEEDER_MOTOR_ID = 0;
-        // Compressor
+        // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 30;
     }
 
-    public final class PCM_ID {
+    public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
     }

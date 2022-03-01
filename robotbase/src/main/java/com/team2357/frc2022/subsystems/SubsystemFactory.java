@@ -48,7 +48,7 @@ public class SubsystemFactory {
     public IntakeSubsystem CreateIntakeSubsystem(SensorBooleanState intakeSensorState) {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(Constants.CAN_ID.PNEUMATICS_HUB_ID,
                 PneumaticsModuleType.REVPH,
-                Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
+                Constants.PH_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PH_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }
