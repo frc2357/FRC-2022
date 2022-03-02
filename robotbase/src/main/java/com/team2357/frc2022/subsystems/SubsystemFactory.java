@@ -1,5 +1,6 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -25,13 +26,38 @@ public class SubsystemFactory {
 
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
         FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
-        config.m_isRightInverted = Constants.DRIVE.INVERT_GYRO;
-        config.m_isGyroReversed = Constants.DRIVE.INVERT_RIGHT_SIDE;
+        config.m_isRightInverted = Constants.DRIVE.INVERT_RIGHT_SIDE;
+        config.m_isGyroReversed = Constants.DRIVE.INVERT_GYRO;
 
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
-        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3) };
+       WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3)};
         WPI_TalonFX rightFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1);
-        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
+       WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
+
+      // WPI_TalonFX leftTalon1 = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
+       //WPI_TalonFX leftTalon2 = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3);
+       //WPI_TalonFX rightTalon1 = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2);
+       //WPI_TalonFX rightTalon2 = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3);
+
+       leftFalconMaster.setNeutralMode(NeutralMode.Coast);
+       rightFalconMaster.setNeutralMode(NeutralMode.Coast);
+       leftFalconSlaves[0].setNeutralMode(NeutralMode.Coast);
+       leftFalconSlaves[1].setNeutralMode(NeutralMode.Coast);
+       rightFalconSlaves[0].setNeutralMode(NeutralMode.Coast);
+       rightFalconSlaves[1].setNeutralMode(NeutralMode.Coast);
+       leftFalconMaster.configOpenloopRamp(0.75);
+       rightFalconMaster.configOpenloopRamp(0.75);
+       leftFalconSlaves[0].configOpenloopRamp(0.75);
+       leftFalconSlaves[1].configOpenloopRamp(0.75);
+       rightFalconSlaves[0].configOpenloopRamp(0.75);
+       rightFalconSlaves[1].configOpenloopRamp(0.75);
+
+
+       //leftTalon1.setNeutralMode(NeutralMode.Coast);
+       //leftTalon2.setNeutralMode(NeutralMode.Coast);
+       //rightTalon1.setNeutralMode(NeutralMode.Coast);
+       //rightTalon2.setNeutralMode(NeutralMode.Coast);
+
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
