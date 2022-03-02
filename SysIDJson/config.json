@@ -12,11 +12,11 @@
     "TalonFX",
     "TalonFX"
   ],
-  "number of samples per average": 10,
+  "number of samples per average": 8,
   "primary encoder inverted": false,
   "primary encoder ports": [
-    0,
-    1
+    6,
+    7
   ],
   "primary motor ports": [
     11,
@@ -30,8 +30,8 @@
   ],
   "secondary encoder inverted": true,
   "secondary encoder ports": [
-    2,
-    3
+    8,
+    9
   ],
   "secondary motor ports": [
     12,
