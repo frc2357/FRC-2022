@@ -16,6 +16,7 @@ import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -58,6 +59,10 @@ public class RobotContainer {
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
+
+    SmartDashboard.putData("Record Path", new RecordPath(m_driveSub));
+    SmartDashboard.putData("Record Keep Odometry Path", new RecordPath(m_driveSub, true));
+    
   }
 
   /**
@@ -68,8 +73,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     int auto = 3;
     switch(auto) {
-      case 2:
-      return new RecordPath(m_driveSub);
       case 3:
       return new ExampleTrajectoryCommand(m_driveSub).getRamsete();
       default:

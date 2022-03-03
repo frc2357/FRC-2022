@@ -42,7 +42,7 @@ public class ExampleTrajectoryCommand extends CommandLoggerBase{
                 // Add kinematics to ensure max speed is actually obeyed
                 .setKinematics(Constants.DRIVE.DRIVE_KINEMATICS)
                 // Apply the voltage constraint
-                .addConstraint(autoVoltageConstraint);
+                .addConstraint(autoVoltageConstraint).setReversed(false);
 
         // An example trajectory to follow. All units in meters.
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(

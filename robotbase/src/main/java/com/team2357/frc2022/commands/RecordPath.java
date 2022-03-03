@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RecordPath extends CommandBase {
 
-  private static final double TIME_STEP = 0.5;
+  private static final double TIME_STEP = 1.0;
   private static final String FILE_PATH = "/home/lvuser/RecordPaths";
 
   private final FalconTrajectoryDriveSubsystem m_drive;
@@ -89,10 +89,10 @@ public class RecordPath extends CommandBase {
     lines += "),\n";
     lines += "new Pose2d(" + end.getX() + ", " + end.getY() + ", Rotation2d.fromDegrees("
         + m_endRotation.getDegrees() + ")),\n";
-    PrintWriter fileWriter = createFile();
-    fileWriter.println(lines);
+   // PrintWriter fileWriter = createFile();
+    //fileWriter.println(lines);
     System.out.print(lines);
-    fileWriter.close();
+    //fileWriter.close();
   }
 
   // Returns true when the command should end.
