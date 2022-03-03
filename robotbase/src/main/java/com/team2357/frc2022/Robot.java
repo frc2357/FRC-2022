@@ -8,6 +8,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.team2357.log.LogSession;
+import com.team2357.log.outputs.LogOutput;
+import com.team2357.log.outputs.PrintStreamOutput;
+import com.team2357.log.outputs.ZipFileOutput;
+import com.team2357.log.topics.StringTopic;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -15,9 +24,50 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  private static StringTopic log = new StringTopic("robot");
+  private static StringTopic logError = new StringTopic("robot-error");
+
+  private static LogOutput stdout = new PrintStreamOutput("", System.out);
+  private static LogOutput stderr = new PrintStreamOutput("ERROR", System.out);
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private LogSession m_logSession;
+
+  private Map<String, LogOutput> createLogOutputs(String sessionType) {
+    Map<String, Object> usbFileHeader = Map.of();
+
+    return Map.of(
+      "stdout", stdout,
+      "stderr", stderr,
+      "usb", new ZipFileOutput("/U", sessionType, usbFileHeader, 0.01)
+    );
+  }
+
+  private void startLogSession(String sessionType) {
+    if (m_logSession != null) {
+      stopLogSession();
+    }
+
+    long before = System.currentTimeMillis();
+    m_logSession = new LogSession(createLogOutputs(sessionType));
+    long after = System.currentTimeMillis();
+    System.out.println("log init time: " + ((double)(after - before) / 1000));
+
+    m_logSession.subscribeTopic("robot", "stdout");
+    m_logSession.subscribeTopic("robot-error", "stderr");
+    m_logSession.subscribeTopic("robot", "usb");
+    m_logSession.subscribeTopic("robot-error", "usb");
+  }
+
+  private void stopLogSession() {
+    if (m_logSession != null) {
+      m_logSession.stop();
+      m_logSession = null;
+    }
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,7 +77,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    //m_robotContainer = new RobotContainer();
+    System.out.println("--robot init--");
   }
 
   /**
@@ -48,7 +99,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    System.out.println("--disabled init--");
+    stopLogSession();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -56,12 +110,14 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    System.out.println("--auto init--");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    stopLogSession();
   }
 
   /** This function is called periodically during autonomous. */
@@ -77,6 +133,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    startLogSession("teleop");
+
+    /*
+    try {
+      log.log("Teleop Initialized");
+    } catch (Throwable t) {
+      logError.log("Uncaught throwable: " + t);
+    }
+    */
   }
 
   /** This function is called periodically during operator control. */
@@ -87,6 +153,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    System.out.println("--test init--");
+    stopLogSession();
   }
 
   /** This function is called periodically during test mode. */
