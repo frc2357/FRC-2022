@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RecordPath extends CommandBase {
+public class RecordPathCommand extends CommandBase {
 
   private static final double TIME_STEP = 1.0;
   private static final String FILE_PATH = "/home/lvuser/RecordPaths";
@@ -31,12 +31,12 @@ public class RecordPath extends CommandBase {
   private Rotation2d m_beginRotation;
   private Rotation2d m_endRotation;
 
-  public RecordPath(final FalconTrajectoryDriveSubsystem drive) {
+  public RecordPathCommand(final FalconTrajectoryDriveSubsystem drive) {
     this(drive, true);
   }
 
   /** Creates a new RecordPath. */
-  public RecordPath(final FalconTrajectoryDriveSubsystem drive, final Boolean shouldResetOdometry) {
+  public RecordPathCommand(final FalconTrajectoryDriveSubsystem drive, final Boolean shouldResetOdometry) {
     m_drive = drive;
     m_shouldResetOdometry = shouldResetOdometry;
     m_timestamp = 0.0;

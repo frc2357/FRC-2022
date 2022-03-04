@@ -5,9 +5,11 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.commands.ExampleTrajectoryCommand;
-import com.team2357.frc2022.commands.RecordPath;
+import com.team2357.frc2022.commands.RecordPathCommand;
+import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
@@ -15,6 +17,8 @@ import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,19 +38,33 @@ public class RobotContainer {
   private IntakeSubsystem m_intakeSub;
   private FeederSubsystem m_feederSub;
   private TogglableLimelightSubsystem m_visionSub;
+  private Compressor m_compressor;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
+
+  private final RobotArduino m_arduinoSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    SensorBooleanState intakeIRSensor = () -> {
+      return m_arduinoSensor.getIntakeValue();
+    };
+    SensorBooleanState feederIRSensor = () -> {
+      return m_arduinoSensor.getFeederValue();
+    };
+    SensorBooleanState turretIRSensor = () -> {
+      return m_arduinoSensor.getTurretValue();
+    };
+
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
-    m_intakeSub = subsystemFactory.CreateIntakeSubsystem();
-    m_feederSub = subsystemFactory.CreateFeederSubsystem();
+    m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
+    m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
 
     // Configure the button bindings
@@ -60,9 +78,12 @@ public class RobotContainer {
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
 
-    SmartDashboard.putData("Record Path", new RecordPath(m_driveSub));
-    SmartDashboard.putData("Record Keep Odometry Path", new RecordPath(m_driveSub, true));
+    SmartDashboard.putData("Record Path", new RecordPathCommand(m_driveSub));
+    SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(m_driveSub, true));
     
+    // Setup compressor
+    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
+    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
   }
 
   /**

@@ -33,9 +33,11 @@ public final class Constants {
         public static final int INTAKE_MOTOR_ID = 21;
         // Feeder
         public static final int FEEDER_MOTOR_ID = 0;
+        // Pneumatic hub
+        public static final int PNEUMATICS_HUB_ID = 30;
     }
 
-    public final class PCM_ID {
+    public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
     }
@@ -56,6 +58,8 @@ public final class Constants {
     // Encoder Constants
     public final static class DRIVE {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
+        public static final double DRIVE_MOTOR_RAMP_RATE_SECONDS = 0.75;
+
         public static final int ENCODER_PPR = 256;
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
@@ -124,7 +128,19 @@ public final class Constants {
     }
 
     public final class ARDUINO {
+        public static final String FEEDER_SENSOR_JSON_NAME = "feederIRSensor";
+        public static final String INTAKE_SENSOR_JSON_NAME = "intakeIRSensor";
+        public static final String TURRET_SENSOR_JSON_NAME = "turretHALSensor";
+
+        public static final String FEEDER_SENSOR_STATE_FIELD = "state";
+        public static final String INTAKE_SENSOR_STATE_FIELD = "state";
+        public static final String TURRET_SENSOR_STATE_FIELD = "state";
+
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
-        public static final String IR_SENSOR_JSON_NAME = "IRSensor";
+    }
+
+    public final class COMPRESSOR {
+        public static final int MIN_PRESSURE_PSI = 70;
+        public static final int MAX_PRESSURE_PSI = 120;
     }
 }
