@@ -15,11 +15,16 @@ public class DeployIntakeCommandGroup extends SequentialCommandGroup {
         addCommands(new IntakeSetPivotCommand(m_intakeSub, Value.kForward),
                 new WaitCommand(Constants.INTAKE.PIVOT_WAIT_SECONDS),
                 new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
-                this.andThen(new DeactivateIntakeCommandGroup(m_intakeSub));
-                addRequirements(m_intakeSub);
+        addRequirements(m_intakeSub);
     }
+
     @Override
-    public boolean isFinished(){
-        return m_intakeSub.isCargoInIntake()||super.isFinished();
+    public void end(boolean interrupted) {
+        new DeactivateIntakeCommandGroup(m_intakeSub).schedule();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return m_intakeSub.isCargoInIntake() || super.isFinished();
     }
 }

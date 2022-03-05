@@ -3,7 +3,6 @@ package com.team2357.log;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.team2357.log.LogSession;
 import com.team2357.log.outputs.LogOutput;
 import com.team2357.log.outputs.ZipFileOutput;
 import com.team2357.log.util.SineWave;
