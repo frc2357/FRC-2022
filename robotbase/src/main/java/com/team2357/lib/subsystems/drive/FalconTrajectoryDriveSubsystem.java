@@ -7,7 +7,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
     public double m_distancePerPulse;
@@ -24,6 +29,9 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
     // The right-side drive encoder
     private final Encoder m_rightEncoder;
+
+    //Data log
+    private DataLog m_robotLog = DataLogManager.getLog();
 
     public static class Configuration extends SkidSteerDriveSubsystem.Configuration {
         /**
@@ -71,6 +79,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 -1 * m_rightEncoder.getDistance());
+        
+        logMotorAmperage();
     }
 
     public void configure(Configuration config) {
@@ -200,5 +210,13 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_gyro.getYawPitchRoll(ypr);
 
         return ypr;
+    }
+
+    public void logMotorAmperage() {
+        DoubleLogEntry leftMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/leftMasterAmps");
+        DoubleLogEntry rightMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/rightMasterAmps");
+
+        leftMasterMotorLog.append(m_leftFalconMaster.getStatorCurrent());
+        rightMasterMotorLog.append(m_rightFalconMaster.getStatorCurrent());
     }
 }
