@@ -118,26 +118,21 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
-        /** Angle of the Limelight axis from horizontal (degrees) */
-        public static final double MOUNTING_ANGLE = 0;
 
-        /** Height of the Limelight lens center from the floor (inches) */
-        public static final double MOUNTING_HEIGHT = 0;
-
-        /** Target width in inches */
-        public static final double VISION_TARGET_WIDTH = 5;
-
-        /** Target height in inches */
-        public static final double VISION_TARGET_HEIGHT = 2;
-
-        public static final LimelightSubsystem.Configuration GET_LimelightSubsystem_CONFIG() {
+        public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
+            /** Angle of the Limelight axis from horizontal (degrees) */
             config.m_LimelightMountingAngle = 0;
+            /** Height of the Limelight lens center from the floor (inches) */
+
             config.m_LimelightMountingHeightInches = 0;
+            /** Target width in inches */
             config.m_TargetWidth = 5;
+            /** Target height in inches */
             config.m_TargetHeight = 2;
             return config;
         }
+
     }
 
     public final class ARDUINO {

@@ -75,12 +75,7 @@ public class SubsystemFactory {
                 TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
                 subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);
                 subsystem.setStream(false);
-                LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
-                config.m_LimelightMountingAngle = Constants.LIMELIGHT.MOUNTING_ANGLE;
-                config.m_LimelightMountingHeightInches = Constants.LIMELIGHT.MOUNTING_HEIGHT;
-                config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH;
-                config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT;
-                subsystem.setConfiguration(config);
+                subsystem.setConfiguration(Constants.LIMELIGHT.GET_LIMELIGHT_SUBSYSTEM_CONFIG());
                 return subsystem;
         }
 }
