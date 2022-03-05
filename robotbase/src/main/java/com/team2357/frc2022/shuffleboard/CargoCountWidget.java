@@ -48,7 +48,7 @@ public class CargoCountWidget extends ShuffleboardWidget {
         } else if (!m_readyToSub && m_feederSensor.getState()) {
             m_readyToSub = true;
         }
-        if (m_readyToAdd && !m_intakeSensor.getState()) {
+        if (m_readyToAdd) {
             addCargo();
         } else if (!m_readyToAdd && m_intakeSensor.getState()) {
             m_readyToAdd = true;
