@@ -13,18 +13,20 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class ClimberTogglePivotCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
 
-    public ClimberTogglePivotCommand(ClimberSubsystem climbSub){
+    public ClimberTogglePivotCommand(ClimberSubsystem climbSub) {
         m_climbSub = climbSub;
         addRequirements(m_climbSub);
     }
 
     @Override
-    public void initialize(){
-        m_climbSub.setPivot(m_climbSub.getPivot() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse);
+    public void initialize() {
+        m_climbSub.setClimberPivot(
+                m_climbSub.getClimberPivot() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward
+                        : DoubleSolenoid.Value.kReverse);
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return true;
     }
 }

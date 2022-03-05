@@ -32,9 +32,11 @@ public class SubsystemFactory {
         config.m_isGyroReversed = Constants.DRIVE.INVERT_RIGHT_SIDE;
 
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
-        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3) };
+        WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2),
+                new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3) };
         WPI_TalonFX rightFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1);
-        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2), new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
+        WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] { new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2),
+                new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3) };
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
@@ -65,12 +67,16 @@ public class SubsystemFactory {
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
         DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
-
-        ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid);
+        DoubleSolenoid hookSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
+                Constants.PCM_ID.CLIMBER_HOOK_SOLENOID_FORWARD_CHANNEL,
+                Constants.PCM_ID.CLIMBER_HOOK_SOLENOID_REVERSE_CHANNEL);
+        ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid,
+                hookSolenoid);
         subsystem.configure(config);
 
         return subsystem;
     }
+
     public FeederSubsystem CreateFeederSubsystem() {
         WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
         return new FeederSubsystem(feederTalon);

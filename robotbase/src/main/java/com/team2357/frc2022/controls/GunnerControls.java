@@ -1,6 +1,7 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.commands.ClimberHookTogglePivotCommand;
 import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
 import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
@@ -52,6 +53,7 @@ public class GunnerControls {
     public Trigger m_bButtonAndRightDPad;
     public Trigger m_yButtonAndRightDPad;
     public Trigger m_aButtonAndRightDPad;
+    public Trigger m_xButtonAndRightDPad;
 
     /**
      * @param builder The GunnerControlsBuilder object
@@ -85,6 +87,7 @@ public class GunnerControls {
         m_bButtonAndRightDPad = m_bButton.and(m_rightDPad);
         m_yButtonAndRightDPad = m_yButton.and(m_rightDPad);
         m_aButtonAndRightDPad = m_aButton.and(m_rightDPad);
+        m_xButtonAndRightDPad = m_xButton.and(m_rightDPad);
     }
 
     /**
@@ -162,6 +165,7 @@ public class GunnerControls {
                 m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
                         new ClimberSimpleRunMotorsCommand(m_climbSub, 0.4));
                 m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
+                m_gunnerControls.m_yButtonAndRightDPad.whileActiveOnce(new ClimberHookTogglePivotCommand(m_climbSub));
             }
 
             return m_gunnerControls;
