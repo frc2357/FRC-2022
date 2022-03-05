@@ -10,7 +10,7 @@ public class KickerSubsystem extends ClosedLoopSubsystem{
         m_kickerMotor = kickerMotor;
     }
 
-    public void runKickermotor(double speed) {
+    public void runKickerMotor(double speed) {
         m_kickerMotor.set(speed);
     }
 }

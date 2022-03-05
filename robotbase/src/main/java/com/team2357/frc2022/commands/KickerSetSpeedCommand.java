@@ -16,13 +16,13 @@ public class KickerSetSpeedCommand extends CommandLoggerBase{
     @Override
     public void initialize(){
         super.initialize();
-        m_kickerSub.runKickermotor(m_speed);
+        m_kickerSub.runKickerMotor(m_speed);
 
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        m_kickerSub.runKickermotor(0.0);
+        m_kickerSub.runKickerMotor(0.0);
     }
 }
