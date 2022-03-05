@@ -15,19 +15,20 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class ClimberSetPivotCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
     private DoubleSolenoid.Value m_value;
-    ClimberSetPivotCommand(ClimberSubsystem climbSub, DoubleSolenoid.Value value){
+
+    ClimberSetPivotCommand(ClimberSubsystem climbSub, DoubleSolenoid.Value value) {
         m_value = value;
         m_climbSub = climbSub;
         addRequirements(m_climbSub);
     }
 
     @Override
-    public void initialize(){
-        m_climbSub.setPivot(m_value);
+    public void initialize() {
+        m_climbSub.setClimberPivot(m_value);
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return true;
     }
 }

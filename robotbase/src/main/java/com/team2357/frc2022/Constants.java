@@ -44,6 +44,8 @@ public final class Constants {
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 1;
         public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 2;
         public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 3;
+        public static final int CLIMBER_HOOK_SOLENOID_FORWARD_CHANNEL = 4;
+        public static final int CLIMBER_HOOK_SOLENOID_REVERSE_CHANNEL = 5;
     }
 
     public final class CONTROLLER {
@@ -103,6 +105,7 @@ public final class Constants {
         public static final double MISS_TOLERANCE_METERS = 0;
         public static final int ON_BAR_AMPS = 0;
     }
+
     public final class LIMELIGHT {
         /** Angle of the Limelight axis from horizontal (degrees) */
         public static final double MOUNTING_ANGLE = 0;

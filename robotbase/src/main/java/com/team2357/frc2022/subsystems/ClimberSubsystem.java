@@ -75,17 +75,23 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private CANSparkMax m_leftClimberMotor;
     private CANSparkMax m_rightClimberMotor;
     private DoubleSolenoid m_climberSolenoid;
+    private DoubleSolenoid m_hookSolenoid;
     private boolean m_isLeftClimberMotorValid;
     private boolean m_isRightClimberMotorValid;
     private State m_currentState;
+    private boolean m_isHookOpen;
 
-    ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid) {
+    ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
+            DoubleSolenoid hookSolenoid) {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
         m_climberSolenoid = climberSolenoid;
+        m_hookSolenoid = hookSolenoid;
         m_climberSolenoid.set(DoubleSolenoid.Value.kOff);
+        m_hookSolenoid.set(DoubleSolenoid.Value.kOff);
         m_isLeftClimberMotorValid = false;
         m_isRightClimberMotorValid = false;
+        m_isHookOpen = false;
         m_currentState = State.GROUND;
     }
 
@@ -184,14 +190,15 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean checkRightClimberMotorMissed(double targetRotations, int amps) {
-        if(getRightClimberRotations() < targetRotations-m_config.m_climberMissedToleranceRotations && !checkRightClimberMotorAmps(amps)){
+        if (getRightClimberRotations() < targetRotations - m_config.m_climberMissedToleranceRotations
+                && !checkRightClimberMotorAmps(amps)) {
             return true;
         }
         return false;
     }
 
     public boolean checkLeftClimberMotorMissed(double targetRotations, int amps) {
-        if(getLeftClimberRotations() < targetRotations && !checkRightClimberMotorAmps(amps)){
+        if (getLeftClimberRotations() < targetRotations && !checkRightClimberMotorAmps(amps)) {
             return true;
         }
         return false;
@@ -233,8 +240,26 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_rightClimberMotor.getEncoder().getPosition();
     }
 
-    public void setPivot(DoubleSolenoid.Value value) {
+    public void setClimberPivot(DoubleSolenoid.Value value) {
         m_climberSolenoid.set(value);
+    }
+
+    public DoubleSolenoid.Value getClimberPivot() {
+        return m_climberSolenoid.get();
+    }
+
+    public void setHookPivot(DoubleSolenoid.Value value) {
+        m_hookSolenoid.set(value);
+
+        if (value == DoubleSolenoid.Value.kForward) {
+            m_isHookOpen = true;
+        } else if (value == DoubleSolenoid.Value.kReverse) {
+            m_isHookOpen = false;
+        }
+    }
+
+    public boolean isHookOpen() {
+        return m_isHookOpen;
     }
 
     public State getState() {
@@ -245,7 +270,4 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_currentState = newState;
     }
 
-    public DoubleSolenoid.Value getPivot() {
-        return m_climberSolenoid.get();
-    }
 }
