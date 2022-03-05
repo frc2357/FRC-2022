@@ -32,7 +32,9 @@ public final class Constants {
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
         // Feeder
-        public static final int FEEDER_MOTOR_ID = 0;
+        public static final int FEEDER_MOTOR_ID = 28;
+        // Kicker
+        public static final int KICKER_MOTOR_ID = 29;
         // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 30;
     }
@@ -148,5 +150,9 @@ public final class Constants {
     public final class COMPRESSOR {
         public static final int MIN_PRESSURE_PSI = 70;
         public static final int MAX_PRESSURE_PSI = 120;
+    }
+
+    public final class KICKER {
+        public static final double SPEED = 0;
     }
 }
