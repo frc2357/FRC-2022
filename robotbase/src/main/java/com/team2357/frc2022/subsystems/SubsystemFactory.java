@@ -47,6 +47,7 @@ public class SubsystemFactory {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
+        intakeVictor.setInverted(Constants.INTAKE.INVERT_MOTOR);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }
 

@@ -4,6 +4,9 @@ import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 /**
+ * @ category Intake
+ */
+/**
  * This command runs the intake roller from {@link IntakeSubsystem}.
  * 
  * @category Intake
@@ -24,8 +27,8 @@ public class IntakeRollerCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         super.initialize();
-            m_intakeSub.triggerIntakeRoller(m_speed);
-        }
+        m_intakeSub.triggerIntakeRoller(m_speed);
+    }
 
     @Override
     public void end(boolean interrupted) {
