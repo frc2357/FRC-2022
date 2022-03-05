@@ -31,10 +31,10 @@ public class SubsystemFactory {
             Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
 
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] {
-        Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
-            Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
-        Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
-            Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
 
         WPI_TalonFX rightFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1,
             Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
