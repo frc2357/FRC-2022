@@ -20,13 +20,8 @@ public class ClimberHookTogglePivotCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         m_climbSub
-                .setHookPivot(m_climbSub.isHookOpen() ? DoubleSolenoid.Value.kReverse
-                        : DoubleSolenoid.Value.kForward);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        m_climbSub.setHookPivot(DoubleSolenoid.Value.kOff);
+                .setHookPivot(m_climbSub.isHookOpen() ? false
+                        : true);
     }
 
     @Override

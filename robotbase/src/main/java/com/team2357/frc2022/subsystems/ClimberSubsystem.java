@@ -6,6 +6,7 @@ import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * Subsystem to control climbing
@@ -75,23 +76,21 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private CANSparkMax m_leftClimberMotor;
     private CANSparkMax m_rightClimberMotor;
     private DoubleSolenoid m_climberSolenoid;
-    private DoubleSolenoid m_hookSolenoid;
+    private Solenoid m_hookSolenoid;
     private boolean m_isLeftClimberMotorValid;
     private boolean m_isRightClimberMotorValid;
     private State m_currentState;
-    private boolean m_isHookOpen;
 
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
-            DoubleSolenoid hookSolenoid) {
+            Solenoid hookSolenoid) {
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
         m_climberSolenoid = climberSolenoid;
         m_hookSolenoid = hookSolenoid;
         m_climberSolenoid.set(DoubleSolenoid.Value.kOff);
-        m_hookSolenoid.set(DoubleSolenoid.Value.kOff);
+        m_hookSolenoid.set(false);
         m_isLeftClimberMotorValid = false;
         m_isRightClimberMotorValid = false;
-        m_isHookOpen = false;
         m_currentState = State.GROUND;
     }
 
@@ -248,18 +247,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_climberSolenoid.get();
     }
 
-    public void setHookPivot(DoubleSolenoid.Value value) {
+    public void setHookPivot(boolean value) {
         m_hookSolenoid.set(value);
-
-        if (value == DoubleSolenoid.Value.kForward) {
-            m_isHookOpen = true;
-        } else if (value == DoubleSolenoid.Value.kReverse) {
-            m_isHookOpen = false;
-        }
     }
 
     public boolean isHookOpen() {
-        return m_isHookOpen;
+        return m_hookSolenoid.get();
     }
 
     public State getState() {

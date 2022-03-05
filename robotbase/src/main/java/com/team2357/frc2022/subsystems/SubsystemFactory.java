@@ -16,6 +16,7 @@ import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * This class is a factory that creates subsystems.
@@ -67,9 +68,8 @@ public class SubsystemFactory {
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
         DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
-        DoubleSolenoid hookSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
-                Constants.PCM_ID.CLIMBER_HOOK_SOLENOID_FORWARD_CHANNEL,
-                Constants.PCM_ID.CLIMBER_HOOK_SOLENOID_REVERSE_CHANNEL);
+        Solenoid hookSolenoid = new Solenoid(30, PneumaticsModuleType.REVPH,
+                Constants.PCM_ID.CLIMBER_HOOK_SOLENOID_CHANNEL);
         ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid,
                 hookSolenoid);
         subsystem.configure(config);
