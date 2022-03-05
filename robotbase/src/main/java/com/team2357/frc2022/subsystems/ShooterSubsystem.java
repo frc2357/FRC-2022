@@ -24,7 +24,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private VisionTarget m_currentTarget;
 
     private double m_lastVisionRPMs;
-    private double m_minutesTo100MS = 600;
+    private static final double m_minutesTo100MS = 600;
 
     private Configuration m_config;
 
@@ -32,7 +32,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public int m_encoder_cpr = 0;
 
         public double m_shooterMotorPeakOutput = 1.0;
-        public double m_shooterGearingRatio = 0;
+        public double m_bottomShooterGearingRatio = 0;
+        public double m_topShooterGearingRatio = 0;
         public int m_timeoutMS = 0;
 
         // bottom shooter motors
@@ -120,7 +121,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * 
      * @param rpm rotations per minute
      */
-    public void setClosedLoopRPMBottom(double rpm) {
+    public void setRPMBottom(double rpm) {
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_leftBottomMotor.set(ControlMode.Velocity, nativeSpeed);
     }
@@ -130,7 +131,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * 
      * @param rpm rotations per minute
      */
-    public void setClosedLoopRPMTop(double rpm) {
+    public void setRPMTop(double rpm) {
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
@@ -158,6 +159,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private void setClosedLoopRPMs() {
         int curveSegmentIndex = RobotMath.getCurveSegmentIndex(degreesToRPMsCurve, m_currentTarget.getY());
         if (curveSegmentIndex == -1) {
+            System.err.println("----- Curve segment index out of bounds -----");
             return;
         }
 
@@ -181,37 +183,44 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
             bottomRpms = m_lastVisionRPMs;
         }
 
-        setClosedLoopRPMBottom(bottomRpms);
-        setClosedLoopRPMTop(topRpms);
-    }
-
-    /**
-     * Set the motor to a percent output. This bypasses closed-loop control.
-     * 
-     * @param output
-     */
-    public void runMotorOpenLoop(double output) {
-        m_currentTarget = null;
-        m_leftBottomMotor.set(ControlMode.PercentOutput, output);
+        setRPMBottom(bottomRpms);
+        setRPMTop(topRpms);
     }
 
     public void setVisionTarget(VisionTargetSupplier targetSupplier) {
         m_targetSupplier = targetSupplier;
     }
 
-    public double getMotorSpeed() {
-        return getMotorSpeed(m_leftBottomMotor);
+    /**
+     * 
+     * @return Bottom motor speed in rpms
+     */
+    public double getBottomMotorSpeedRPMs() {
+        return m_leftBottomMotor.getSelectedSensorVelocity() * m_minutesTo100MS / m_config.m_encoder_cpr;
     }
 
     /**
-     * @return current motor velocity in rpm
+     * 
+     * @return Top motor speed in rpms
      */
-    public double getMotorSpeed(WPI_TalonFX motor) {
-        return motor.getSelectedSensorVelocity() * m_minutesTo100MS / m_config.m_encoder_cpr;
+    public double getTopMotorSpeedRPMs() {
+        return m_topMotor.getSelectedSensorVelocity() * m_minutesTo100MS / m_config.m_encoder_cpr;
     }
 
-    public double getShooterRPMs() {
-        return getMotorSpeed() * m_config.m_shooterGearingRatio;
+    /**
+     * 
+     * @return bottom Shooter rpms
+     */
+    public double getBottomShooterRPMs() {
+        return getBottomMotorSpeedRPMs() * m_config.m_bottomShooterGearingRatio;
     }
 
+    /**
+     * 
+     * @return top Shooter rpms
+     */
+    public double getTopShooterRPMs() {
+        return getTopMotorSpeedRPMs() * m_config.m_bottomShooterGearingRatio;
+
+    }
 }

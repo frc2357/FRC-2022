@@ -136,7 +136,8 @@ public final class Constants {
             /** Clicks per rotation for the internal encoder in the Falcon 500 */
             config.m_encoder_cpr = 2048;
 
-            config.m_shooterGearingRatio = 0;
+            config.m_bottomShooterGearingRatio = 1/1.3;
+            config.m_topShooterGearingRatio = 1/2;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 

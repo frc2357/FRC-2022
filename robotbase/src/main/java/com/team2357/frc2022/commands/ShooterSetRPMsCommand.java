@@ -28,13 +28,13 @@ public class ShooterSetRPMsCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_shooterSub.setClosedLoopRPMTop(m_topRpms);
-        m_shooterSub.setClosedLoopRPMBottom(m_bottomRpms);
+        m_shooterSub.setRPMTop(m_topRpms);
+        m_shooterSub.setRPMBottom(m_bottomRpms);
     }
 
     @Override
     public void end(boolean isInterrupted) {
-        m_shooterSub.setClosedLoopRPMTop(0);
-        m_shooterSub.setClosedLoopRPMBottom(0);
+        m_shooterSub.setRPMTop(0);
+        m_shooterSub.setRPMBottom(0);
     }
 }
