@@ -4,19 +4,21 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.lib.subsystems.LimelightSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
+import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose. All constants should be declared globally (i.e. public static). Do
+ * not put anything functional in this class.
  *
  * <p>
  * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
+ * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
 
@@ -72,16 +74,11 @@ public final class Constants {
         public static final int RIGHT_ENCODER_CHANNEL_A = 8;
         public static final int RIGHT_ENCODER_CHANNEL_B = 9;
 
-        public static final boolean INVERT_GYRO = true;
-        public static final boolean INVERT_RIGHT_SIDE = true;
-
         public static final double MAX_VOLTAGE = 10;
-
         // TODO: Run characterization on all below constants
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
-
         public static final double kS_VOLTS = 0.0;
         public static final double KV_VOLTS_SECONDS_PER_METER = 0.0;
         public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.0;
@@ -102,9 +99,8 @@ public final class Constants {
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
 
         /**
-         * Values from the ramsete example.
-         * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
-         * of meters and seconds.
+         * Values from the ramsete example. Ramsete Parameters Reasonable baseline
+         * values for a RAMSETE follower in units of meters and seconds.
          */
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
@@ -115,24 +111,30 @@ public final class Constants {
          */
         public static final double P_DRIVE_VEL = 0;
 
-        /**
-         * Controls if Ggyro is reversed or not.
-         */
-
+        public static final FalconTrajectoryDriveSubsystem.Configuration GET_FALCON_DRIVE_CONFIG() {
+            FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
+            config.m_isRightInverted = true;
+            config.m_isGyroReversed = true;
+            return config;
+        }
     }
 
-    public final class LIMELIGHT {
-        /** Angle of the Limelight axis from horizontal (degrees) */
-        public static final double MOUNTING_ANGLE = 0;
+    public static final class LIMELIGHT {
 
-        /** Height of the Limelight lens center from the floor (inches) */
-        public static final double MOUNTING_HEIGHT = 0;
+        public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
+            LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
+            /** Angle of the Limelight axis from horizontal (degrees) */
+            config.m_LimelightMountingAngle = 0;
+            /** Height of the Limelight lens center from the floor (inches) */
 
-        /** Target width in inches */
-        public static final double VISION_TARGET_WIDTH = 5;
+            config.m_LimelightMountingHeightInches = 0;
+            /** Target width in inches */
+            config.m_TargetWidth = 5;
+            /** Target height in inches */
+            config.m_TargetHeight = 2;
+            return config;
+        }
 
-        /** Target height in inches */
-        public static final double VISION_TARGET_HEIGHT = 2;
     }
 
     public final class ARDUINO {
