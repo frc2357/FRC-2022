@@ -23,7 +23,6 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private VisionTargetSupplier m_targetSupplier;
     private VisionTarget m_currentTarget;
 
-    private double m_lastVisionRPMs;
     private static final double m_minutesTo100MS = 600;
 
     private Configuration m_config;
@@ -53,12 +52,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * 
      * @param leftBottomShooter  The motor on the bottom left
      * @param rightBottomShooter The motor on the bottom right
-     * @param topRoller          The motor on the top
+     * @param topMotor           The motor on the top
      */
-    public ShooterSubsystem(WPI_TalonFX leftBottomShooter, WPI_TalonFX rightBottomShooter, WPI_TalonFX topRoller) {
+    public ShooterSubsystem(WPI_TalonFX leftBottomShooter, WPI_TalonFX rightBottomShooter, WPI_TalonFX topMotor) {
         m_leftBottomMotor = leftBottomShooter;
         m_rightBottomMotor = rightBottomShooter;
-        m_topMotor = topRoller;
+        m_topMotor = topMotor;
 
     }
 
@@ -179,15 +178,15 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         double topRpms = RobotMath.lineralyInterpolate(highAngle, lowAngle, highTopRPMs, lowTopRPMs,
                 m_currentTarget.getY());
 
-        if (bottomRpms == Double.NaN) {
-            bottomRpms = m_lastVisionRPMs;
+        if (bottomRpms == Double.NaN || topRpms == Double.NaN) {
+            System.err.println("----- Invalid shooter rpms -----");
         }
 
         setRPMBottom(bottomRpms);
         setRPMTop(topRpms);
     }
 
-    public void setVisionTarget(VisionTargetSupplier targetSupplier) {
+    public void setVisionTargetSupplier(VisionTargetSupplier targetSupplier) {
         m_targetSupplier = targetSupplier;
     }
 
