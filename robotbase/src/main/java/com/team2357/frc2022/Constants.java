@@ -4,7 +4,11 @@
 
 package com.team2357.frc2022;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -111,6 +115,22 @@ public final class Constants {
          * Proportional velocity value for Ramsete PID
          */
         public static final double P_DRIVE_VEL = 3.0953;
+
+        public static final SimpleMotorFeedforward TRAJECTORY_FEEDFORWARD = new SimpleMotorFeedforward(
+                Constants.DRIVE.KS_VOLTS,
+                Constants.DRIVE.KV_VOLTS_SECONDS_PER_METER,
+                Constants.DRIVE.KA_VOLTS_SECONDS_SQUARED_PER_METER);
+
+        public static final RamseteController TRAJECTORY_RAMSETE_CONTROLLER = new RamseteController(
+                Constants.DRIVE.RAMSETE_B, Constants.DRIVE.RAMSETE_ZETA);
+
+        public static final PIDController TRAJECTORY_DRIVE_PID = new PIDController(Constants.DRIVE.P_DRIVE_VEL, 0, 0);
+
+        public static final DifferentialDriveVoltageConstraint TRAJECTORY_VOLTAGE_CONSTRAINT = new DifferentialDriveVoltageConstraint(
+                Constants.DRIVE.TRAJECTORY_FEEDFORWARD,
+                Constants.DRIVE.DRIVE_KINEMATICS,
+                Constants.DRIVE.MAX_VOLTAGE);
+
     }
 
     public final class LIMELIGHT {
