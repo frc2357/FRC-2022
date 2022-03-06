@@ -18,7 +18,7 @@ public class FailsafeCommand extends CommandLoggerBase{
     public void initialize() {
         super.initialize();
 
-        m_subsystem.setClosedLoopEnabled(m_failsafeActive);
+        m_subsystem.setClosedLoopEnabled(!m_failsafeActive);
 
         if (!m_subsystem.isClosedLoopEnabled()){
             CommandScheduler.getInstance().requiring(m_subsystem).cancel();
