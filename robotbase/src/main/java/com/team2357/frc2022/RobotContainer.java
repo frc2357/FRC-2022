@@ -4,7 +4,6 @@
 
 package com.team2357.frc2022;
 
-import com.team2357.frc2022.commands.ExampleTrajectoryCommand;
 import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.controls.GunnerControls;
@@ -13,6 +12,7 @@ import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
+import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
@@ -80,10 +80,13 @@ public class RobotContainer {
 
     SmartDashboard.putData("Record Path", new RecordPathCommand(m_driveSub));
     SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(m_driveSub, true));
-    
+
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
     m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
+
+    // Build trajectories
+    AvailableTrajectories.generateTrajectories(m_driveSub);
   }
 
   /**
@@ -92,12 +95,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    int auto = 3;
-    switch(auto) {
-      case 3:
-      return new ExampleTrajectoryCommand(m_driveSub).getRamsete();
+    int auto = 1;
+    switch (auto) {
+      case 1:
+        return AvailableTrajectories.exampleTrajectory;
       default:
-      return null;
+        return null;
     }
   }
 }
