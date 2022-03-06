@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class RecordPathCommand extends CommandBase {
 
   private static final double TIME_STEP = 1.0;
-  private static final String FILE_PATH = "/home/lvuser/RecordPaths";
 
   private final FalconTrajectoryDriveSubsystem m_drive;
   private final Boolean m_shouldResetOdometry;
@@ -89,10 +88,7 @@ public class RecordPathCommand extends CommandBase {
     lines += "),\n";
     lines += "new Pose2d(" + end.getX() + ", " + end.getY() + ", Rotation2d.fromDegrees("
         + m_endRotation.getDegrees() + ")),\n";
-   // PrintWriter fileWriter = createFile();
-    //fileWriter.println(lines);
     System.out.print(lines);
-    //fileWriter.close();
   }
 
   // Returns true when the command should end.
@@ -104,28 +100,5 @@ public class RecordPathCommand extends CommandBase {
   @Override
   public boolean runsWhenDisabled() {
     return true;
-  }
-
-  public PrintWriter createFile() {
-
-    try {
-      File file = new File(FILE_PATH);
-      if (!file.exists()) {
-        if (file.mkdir()) {
-          System.out.println("Log Directory is created!");
-        } else {
-          System.out.println("Failed to create Log directory!");
-        }
-      }
-
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-      PrintWriter fileWriter = new PrintWriter(FILE_PATH + dtf.format(LocalDateTime.now()) + "-Log.txt", "UTF-8");
-      fileWriter.flush();
-      return fileWriter;
-    } catch (Exception e) {
-      System.err.println("Done messed up the file for the trajectory record");
-    }
-    return null;
-
   }
 }
