@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -69,6 +71,11 @@ public class SubsystemFactory {
         WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
         return new FeederSubsystem(feederTalon, feederSensorState);
     }   
+
+    public KickerSubsystem CreateKickerSubsystem() {
+        CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        return new KickerSubsystem(kickerMotor);
+    }
 
     public TogglableLimelightSubsystem CreateVisionSubsystem() {
         TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
