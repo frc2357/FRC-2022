@@ -31,30 +31,30 @@ public class SubsystemFactory {
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
 
         WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,
-                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
+            Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
 
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] {
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
 
         WPI_TalonFX rightFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1,
-                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
+            Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
 
         WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] {
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
+            Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3,
+                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
 
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
 
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
-                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
-                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
-                Constants.DRIVE.LEFT_ENCODER_CHANNEL_A, Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
-                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A, Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
+            leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
+            Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
+            Constants.DRIVE.LEFT_ENCODER_CHANNEL_A, Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
+            Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A, Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
 
         subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
