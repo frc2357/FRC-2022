@@ -5,6 +5,7 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
@@ -38,6 +39,7 @@ public final class Constants {
         public static final int DRIVE_MOTOR_RIGHT_3 = 16;
 
         public static final int GYRO_ID = 5;
+
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
 
@@ -46,10 +48,15 @@ public final class Constants {
         public static final int SHOOTER_BOTTOM_RIGHT = 23;
         public static final int SHOOTER_TOP = 24;
 
+        // Turret
+        public static final int TURRET_MOTOR_ID = 25;
+
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
+
         // Kicker
         public static final int KICKER_MOTOR_ID = 29;
+
         // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 30;
     }
@@ -157,7 +164,47 @@ public final class Constants {
 
             return config;
         }
+    }
 
+    // Turret
+    // TODO: Tune Turret constants, currently values from rev's example
+    public static final class TURRET {
+        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
+
+        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
+        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
+                * 2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
+                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
+
+        public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
+
+        public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
+            TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
+
+            config.m_turretMotorStallLimitAmps = 15;
+            config.m_turretMotorFreeLimitAmps = 3;
+
+            config.m_turretMotorP = 0.00005;
+            config.m_turretMotorI = 0.0;
+            config.m_turretMotorD = 0.0;
+            config.m_turretMotorIZone = 0.0;
+            config.m_turretMotorFF = 0.000156;
+            config.m_turretMotorMaxOutput = 0.2;
+            config.m_turretMotorMinOutput = -0.2;
+            config.m_turretMotorMaxRPM = 1000;
+
+            config.m_turretMotorMaxVel = 500;
+            config.m_turretMotorMinVel = 0;
+            config.m_turretMotorMaxAcc = 5;
+            config.m_turretMotorAllowedError = (10/360); // Max error is 10 degrees of motor rotation (0.20 degrees turret rotation)
+
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
+            config.m_turretRotationsClockwiseSoftLimit = 0.75;
+            config.m_turretGearRatio = 49.6;
+            return config;
+        }
     }
 
     public static final class LIMELIGHT {
