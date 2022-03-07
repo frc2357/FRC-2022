@@ -40,7 +40,6 @@ public class RobotContainer {
 
   private final DigitalInput m_intakeSensor;
   private final DigitalInput m_feederSensor;
-  private final DigitalInput m_turretSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,7 +47,6 @@ public class RobotContainer {
   public RobotContainer() {
     m_intakeSensor = new DigitalInput(Constants.SENSORS.INTAKE_SENSOR_DIO_PORT);
     m_feederSensor = new DigitalInput(Constants.SENSORS.FEEDER_SENSOR_DIO_PORT);
-    m_turretSensor = new DigitalInput(Constants.SENSORS.TURRET_SENSOR_DIO_PORT);
 
     SensorBooleanState intakeIRSensor = () -> {
       return m_intakeSensor.get();
@@ -56,9 +54,7 @@ public class RobotContainer {
     SensorBooleanState feederIRSensor = () -> {
       return m_feederSensor.get();
     };
-    SensorBooleanState turretIRSensor = () -> {
-      return m_turretSensor.get();
-    };
+
 
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();

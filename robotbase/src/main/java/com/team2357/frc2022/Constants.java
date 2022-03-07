@@ -148,10 +148,8 @@ public final class Constants {
     }
 
     public final class SENSORS {
-        public static final int FEEDER_SENSOR_DIO_PORT = -1;
-        public static final int INTAKE_SENSOR_DIO_PORT = -1;
-        public static final int TURRET_SENSOR_DIO_PORT = -1;
-
+        public static final int FEEDER_SENSOR_DIO_PORT = 1;
+        public static final int INTAKE_SENSOR_DIO_PORT = 0;
     }
 
     public final class COMPRESSOR {
