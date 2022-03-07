@@ -4,13 +4,15 @@
 
 package com.team2357.frc2022;
 
-import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.arduino.RobotArduino;
+import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
+import com.team2357.frc2022.subsystems.KickerSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveProportionalCommand;
@@ -25,18 +27,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
+  private ShooterSubsystem m_shooterSub;
   private FeederSubsystem m_feederSub;
+  private KickerSubsystem m_kickerSub;
   private TogglableLimelightSubsystem m_visionSub;
   private Compressor m_compressor;
 
@@ -63,9 +65,11 @@ public class RobotContainer {
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
+    m_shooterSub = subsystemFactory.CreateShooterSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
+    m_kickerSub = subsystemFactory.CreateKickerSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
@@ -74,12 +78,9 @@ public class RobotContainer {
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
-            .build();
+            .withShooterSub(m_shooterSub).build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
-
-    SmartDashboard.putData("Record Path", new RecordPathCommand(m_driveSub));
-    SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(m_driveSub, true));
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
@@ -87,6 +88,9 @@ public class RobotContainer {
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories(m_driveSub);
+
+    SmartDashboard.putData("Record Path", new RecordPathCommand(m_driveSub));
+    SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(m_driveSub, true));
   }
 
   /**

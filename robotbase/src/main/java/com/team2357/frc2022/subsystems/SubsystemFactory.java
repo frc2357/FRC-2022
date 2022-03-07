@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -27,9 +29,6 @@ public class SubsystemFactory {
     }
 
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
-        FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
-        config.m_isRightInverted = Constants.DRIVE.INVERT_RIGHT_SIDE;
-        config.m_isGyroReversed = Constants.DRIVE.INVERT_GYRO;
 
         WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,
                 Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
@@ -53,21 +52,29 @@ public class SubsystemFactory {
 
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
-                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS, Constants.DRIVE.LEFT_ENCODER_CHANNEL_A,
-                Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
-                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
-                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
+                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
+                Constants.DRIVE.LEFT_ENCODER_CHANNEL_A, Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
+                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A, Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
 
-        subsystem.configure(config);
+        subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
     }
 
     public IntakeSubsystem CreateIntakeSubsystem(SensorBooleanState intakeSensorState) {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(Constants.CAN_ID.PNEUMATICS_HUB_ID,
-                PneumaticsModuleType.REVPH,
-                Constants.PH_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PH_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
+                PneumaticsModuleType.REVPH, Constants.PH_ID.INTAKE_SOLENOID_FORWARD_CHANNEL,
+                Constants.PH_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
+    }
+
+    public ShooterSubsystem CreateShooterSubsystem() {
+        WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
+        WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
+        WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        ShooterSubsystem subsystem = new ShooterSubsystem(leftBottom, rightBottom, top);
+        subsystem.configure(Constants.SHOOTER.CONFIG_SHOOTER());
+        return subsystem;
     }
 
     public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
@@ -75,17 +82,17 @@ public class SubsystemFactory {
         return new FeederSubsystem(feederTalon, feederSensorState);
     }
 
+    public KickerSubsystem CreateKickerSubsystem() {
+        CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID,
+                CANSparkMaxLowLevel.MotorType.kBrushless);
+        return new KickerSubsystem(kickerMotor);
+    }
+
     public TogglableLimelightSubsystem CreateVisionSubsystem() {
         TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
         subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);
         subsystem.setStream(false);
-        LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
-        config.m_LimelightMountingAngle = Constants.LIMELIGHT.MOUNTING_ANGLE;
-        config.m_LimelightMountingHeightInches = Constants.LIMELIGHT.MOUNTING_HEIGHT;
-        config.m_TargetWidth = Constants.LIMELIGHT.VISION_TARGET_WIDTH;
-        config.m_TargetHeight = Constants.LIMELIGHT.VISION_TARGET_HEIGHT;
-        subsystem.setConfiguration(config);
+        subsystem.setConfiguration(Constants.LIMELIGHT.GET_LIMELIGHT_SUBSYSTEM_CONFIG());
         return subsystem;
     }
-
 }

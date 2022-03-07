@@ -288,10 +288,12 @@ public class ArduinoUSBController implements Runnable {
 	 */
 	@Override
 	public void run() {
-		
-		/*if (m_serialPort.isOpen()) {
-			this.start();
-		}*/
+
+		/*
+		 * if (m_serialPort.isOpen()) {
+		 * this.start();
+		 * }
+		 */
 
 		while (m_thread != null) {
 			try {

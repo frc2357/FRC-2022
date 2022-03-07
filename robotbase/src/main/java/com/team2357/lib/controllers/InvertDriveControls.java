@@ -3,8 +3,6 @@ package com.team2357.lib.controllers;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.commands.InvertDriveCommand;
 
-import com.team2357.lib.controllers.DriverControls;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import com.team2357.lib.subsystems.drive.SingleSpeedFalconDriveSubsystem;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -60,7 +58,8 @@ public class InvertDriveControls extends DriverControls {
 
     /**
      * Calculates the curve of a turn
-     * @param input The turn value from a joystick
+     * 
+     * @param input       The turn value from a joystick
      * @param curveFactor The factor to determine how aggressive the turn is
      * @return The turn value to be used
      */
