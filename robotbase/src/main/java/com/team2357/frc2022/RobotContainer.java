@@ -4,7 +4,6 @@
 
 package com.team2357.frc2022;
 
-import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.sensors.SensorBooleanState;
@@ -16,6 +15,7 @@ import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,21 +38,26 @@ public class RobotContainer {
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
-  private final RobotArduino m_arduinoSensor;
+  private final DigitalInput m_intakeSensor;
+  private final DigitalInput m_feederSensor;
+  private final DigitalInput m_turretSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    m_intakeSensor = new DigitalInput(Constants.SENSORS.INTAKE_SENSOR_DIO_PORT);
+    m_feederSensor = new DigitalInput(Constants.SENSORS.FEEDER_SENSOR_DIO_PORT);
+    m_turretSensor = new DigitalInput(Constants.SENSORS.TURRET_SENSOR_DIO_PORT);
+
     SensorBooleanState intakeIRSensor = () -> {
-      return m_arduinoSensor.getIntakeValue();
+      return m_intakeSensor.get();
     };
     SensorBooleanState feederIRSensor = () -> {
-      return m_arduinoSensor.getFeederValue();
+      return m_feederSensor.get();
     };
     SensorBooleanState turretIRSensor = () -> {
-      return m_arduinoSensor.getTurretValue();
+      return m_turretSensor.get();
     };
 
     // Create subsystems

@@ -147,6 +147,13 @@ public final class Constants {
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
     }
 
+    public final class SENSORS {
+        public static final int FEEDER_SENSOR_DIO_PORT = -1;
+        public static final int INTAKE_SENSOR_DIO_PORT = -1;
+        public static final int TURRET_SENSOR_DIO_PORT = -1;
+
+    }
+
     public final class COMPRESSOR {
         public static final int MIN_PRESSURE_PSI = 70;
         public static final int MAX_PRESSURE_PSI = 120;
