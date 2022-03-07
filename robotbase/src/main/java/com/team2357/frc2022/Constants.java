@@ -101,7 +101,6 @@ public final class Constants {
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
-
         public static final double KS_VOLTS = 0.65717;
         public static final double KV_VOLTS_SECONDS_PER_METER = 3.5385;
         public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 1.1685;
@@ -109,7 +108,6 @@ public final class Constants {
         /**
          * Differential Drive Kinematics Zeroes as place holder values
          */
-
         public static final double TRACK_WIDTH_METERS = 0.650875;
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
                 TRACK_WIDTH_METERS);
@@ -117,7 +115,6 @@ public final class Constants {
         /**
          * Max Trajectory acceleration and velocity Zeroes as place holder values
          */
-
         public static final double MAX_SPEED_METERS_PER_SECOND = 1;
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.5;
 
@@ -126,7 +123,7 @@ public final class Constants {
          * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
          * of meters and seconds.
          */
-        public static final double RAMSETE_B = 1.5; // Example is 2
+        public static final double RAMSETE_B = 1.5;
         public static final double RAMSETE_ZETA = 0.7;
 
         /**
@@ -196,7 +193,8 @@ public final class Constants {
 
             config.m_LimelightMountingHeightInches = 0;
             /** Target width in inches */
-            config.m_TargetWidth = 5;/** Target height in inches */
+            config.m_TargetWidth = 5;
+            /** Target height in inches */
             config.m_TargetHeight = 2;
             return config;
         }
