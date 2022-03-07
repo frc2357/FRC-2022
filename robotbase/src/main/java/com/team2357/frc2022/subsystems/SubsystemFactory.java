@@ -86,6 +86,13 @@ public class SubsystemFactory {
         return new KickerSubsystem(kickerMotor);
     }
 
+    public TurretSubsystem CreateTurretSubsystem() {
+        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID,  CANSparkMaxLowLevel.MotorType.kBrushless);
+        TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
+        subsystem.configure(Constants.TURRET.GET_TURRET_CONFIG());
+        return subsystem;
+    }
+
     public TogglableLimelightSubsystem CreateVisionSubsystem() {
         TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
         subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);

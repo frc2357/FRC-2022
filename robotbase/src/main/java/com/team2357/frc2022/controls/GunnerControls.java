@@ -7,6 +7,8 @@ import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.commands.KickerSetSpeedCommand;
+import com.team2357.frc2022.commands.TurretRotateCommand;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.KickerSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
@@ -121,6 +123,7 @@ public class GunnerControls {
         private IntakeSubsystem m_intakeSub = null;
         private ShooterSubsystem m_shooterSub = null;
         private KickerSubsystem m_kickerSub = null;
+        private TurretSubsystem m_turretSub = null;
 
         /**
          * @param controller the controller of the gunner controls
@@ -144,6 +147,11 @@ public class GunnerControls {
             return this;
         }
 
+        public GunnerControlsBuilder withTurretSub(TurretSubsystem turretSub) {
+            m_turretSub = turretSub;
+            return this;
+        }
+
         public GunnerControls build() {
             GunnerControls m_gunnerControls = new GunnerControls(this);
 
@@ -164,6 +172,15 @@ public class GunnerControls {
                 m_gunnerControls.m_rightTrigger.whileActiveOnce(
                         new ShooterSetRPMsCommand(m_shooterSub, 2250, 2750));
             }
+
+            // Turret bindings
+            if (m_turretSub != null) {
+                m_gunnerControls.m_leftBumper.whileActiveOnce(
+                        new TurretRotateCommand(m_turretSub, -Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
+                m_gunnerControls.m_rightBumper.whileActiveOnce(
+                        new TurretRotateCommand(m_turretSub, Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
+            }
+
             if (m_kickerSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
                         new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
