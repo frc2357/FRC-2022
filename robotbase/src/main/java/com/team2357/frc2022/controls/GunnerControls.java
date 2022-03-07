@@ -149,6 +149,7 @@ public class GunnerControls {
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
             }
 
+            // TODO: Finish shooter controls
             if (m_shooterSub != null) {
                 m_gunnerControls.m_rightTrigger.whileActiveOnce(
                         new ShooterSetRPMsCommand(m_shooterSub, 2250, 2750));
