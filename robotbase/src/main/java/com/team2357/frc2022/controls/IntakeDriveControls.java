@@ -16,16 +16,16 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
  * 
  * @category Drive
  */
-public class IntakeDriveControls extends InvertDriveControls{
+public class IntakeDriveControls extends InvertDriveControls {
     public AxisThresholdTrigger m_leftTrigger;
 
     /**
      * @param builder The IntakeDriverControlsBuilder object
      */
     public IntakeDriveControls(IntakeDriveControlsBuilder builder) {
-      super(builder.m_invertDriveBuilder);
+        super(builder.m_invertDriveBuilder);
 
-        //Triggers
+        // Triggers
         m_leftTrigger = new AxisThresholdTrigger(super.m_controller, Axis.kLeftTrigger, .1);
 
     }
@@ -78,7 +78,7 @@ public class IntakeDriveControls extends InvertDriveControls{
             return this;
         }
 
-        public IntakeDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem){
+        public IntakeDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem) {
             m_invertDriveBuilder.withDriveSub(driveSubsystem);
             return this;
         }
@@ -93,9 +93,10 @@ public class IntakeDriveControls extends InvertDriveControls{
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                    m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
-                            new IntakeRollerCommand(m_intakeSub,
-                                    m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)),false);
+                m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
+                        new IntakeRollerCommand(m_intakeSub,
+                                m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)),
+                        false);
 
             }
 
