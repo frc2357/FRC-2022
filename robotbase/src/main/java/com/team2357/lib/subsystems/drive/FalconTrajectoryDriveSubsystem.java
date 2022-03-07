@@ -1,5 +1,7 @@
 package com.team2357.lib.subsystems.drive;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -32,6 +34,10 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
     //Data log
     private DataLog m_robotLog = DataLogManager.getLog();
+    private DoubleLogEntry m_leftMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/leftMasterAmps");
+    private DoubleLogEntry m_rightMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/rightMasterAmps");
+    private ArrayList<DoubleLogEntry> m_leftSlaveMotorsLogs =  new ArrayList<DoubleLogEntry>();
+    private ArrayList<DoubleLogEntry> m_rightSlaveMotorsLogs = new ArrayList<DoubleLogEntry>();
 
     public static class Configuration extends SkidSteerDriveSubsystem.Configuration {
         /**
@@ -72,6 +78,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_gyro = gyro;
         m_gyro.configFactoryDefault();
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
+        generateMotorLogEntries();
     }
 
     @Override
@@ -213,10 +221,25 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     }
 
     public void logMotorAmperage() {
-        DoubleLogEntry leftMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/leftMasterAmps");
-        DoubleLogEntry rightMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/rightMasterAmps");
+        m_leftMasterMotorLog.append(m_leftFalconMaster.getStatorCurrent());
+        m_rightMasterMotorLog.append(m_rightFalconMaster.getStatorCurrent());
 
-        leftMasterMotorLog.append(m_leftFalconMaster.getStatorCurrent());
-        rightMasterMotorLog.append(m_rightFalconMaster.getStatorCurrent());
+        for(int i =0; i < m_leftFalconSlaves.length; i++){
+            m_leftSlaveMotorsLogs.get(i).append(m_leftFalconSlaves[i].getStatorCurrent());
+        }
+
+        for(int i = 0; i < m_rightFalconSlaves.length; i++) {
+            m_rightSlaveMotorsLogs.get(i).append(m_rightFalconSlaves[i].getStatorCurrent());
+        }
+    }
+
+    private void generateMotorLogEntries() {
+        for(int i = 0; i < m_leftFalconSlaves.length; i++ ) {
+            m_leftSlaveMotorsLogs.add(new DoubleLogEntry(m_robotLog, "/motors/leftSlaveAmps" + i));
+        }
+
+        for(int i = 0; i < m_rightFalconSlaves.length; i++ ) {
+            m_rightSlaveMotorsLogs.add(new DoubleLogEntry(m_robotLog, "/motors/rightSlaveAmps" + i));
+        }
     }
 }

@@ -8,6 +8,8 @@ public class SingleSpeedFalconDriveSubsystem extends SkidSteerDriveSubsystem {
     // Left out of the abstract to use Falcon Specific
     protected WPI_TalonFX m_leftFalconMaster;
     protected WPI_TalonFX m_rightFalconMaster;
+    protected WPI_TalonFX[] m_leftFalconSlaves;
+    protected WPI_TalonFX[] m_rightFalconSlaves;
 
     public SingleSpeedFalconDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
             WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves) {
