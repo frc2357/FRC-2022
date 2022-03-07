@@ -67,10 +67,7 @@ public final class Constants {
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
 
-        public static final int LEFT_ENCODER_CHANNEL_A = 6;
-        public static final int LEFT_ENCODER_CHANNEL_B = 7;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
+        
 
         public static final double MAX_VOLTAGE = 10;
         // TODO: Run characterization on all below constants
@@ -147,9 +144,13 @@ public final class Constants {
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
     }
 
-    public final class SENSORS {
+    public final class DIO_IDS {
         public static final int FEEDER_SENSOR_DIO_PORT = 1;
         public static final int INTAKE_SENSOR_DIO_PORT = 0;
+        public static final int LEFT_ENCODER_CHANNEL_A = 6;
+        public static final int LEFT_ENCODER_CHANNEL_B = 7;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
     }
 
     public final class COMPRESSOR {

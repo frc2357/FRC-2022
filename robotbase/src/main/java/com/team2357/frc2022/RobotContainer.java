@@ -45,8 +45,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_intakeSensor = new DigitalInput(Constants.SENSORS.INTAKE_SENSOR_DIO_PORT);
-    m_feederSensor = new DigitalInput(Constants.SENSORS.FEEDER_SENSOR_DIO_PORT);
+    m_intakeSensor = new DigitalInput(Constants.DIO_IDS.INTAKE_SENSOR_DIO_PORT);
+    m_feederSensor = new DigitalInput(Constants.DIO_IDS.FEEDER_SENSOR_DIO_PORT);
 
     SensorBooleanState intakeIRSensor = () -> {
       return m_intakeSensor.get();

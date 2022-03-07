@@ -50,8 +50,8 @@ public class SubsystemFactory {
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
             leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
             Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
-            Constants.DRIVE.LEFT_ENCODER_CHANNEL_A, Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
-            Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A, Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
+            Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_A, Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_B,
+            Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_A, Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_B);
 
         subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
