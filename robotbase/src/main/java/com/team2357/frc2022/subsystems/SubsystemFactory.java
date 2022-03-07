@@ -67,6 +67,15 @@ public class SubsystemFactory {
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }    
 
+    public ShooterSubsystem CreateShooterSubsystem() {
+        WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
+        WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
+        WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        ShooterSubsystem subsystem = new ShooterSubsystem(leftBottom, rightBottom, top);
+        subsystem.configure(Constants.SHOOTER.CONFIG_SHOOTER());
+        return subsystem;
+    }
+
     public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
         WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
         return new FeederSubsystem(feederTalon, feederSensorState);

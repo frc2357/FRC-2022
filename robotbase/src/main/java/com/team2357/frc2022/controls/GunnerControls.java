@@ -3,8 +3,10 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
-import com.team2357.frc2022.commands.KickerSetSpeedCommand;
+import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
+import com.team2357.frc2022.commands.KickerSetSpeedCommand;
 import com.team2357.frc2022.subsystems.KickerSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
@@ -117,6 +119,7 @@ public class GunnerControls {
     public static class GunnerControlsBuilder {
         private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
+        private ShooterSubsystem m_shooterSub = null;
         private KickerSubsystem m_kickerSub = null;
 
         /**
@@ -128,6 +131,11 @@ public class GunnerControls {
 
         public GunnerControlsBuilder withIntakeSub(IntakeSubsystem intakeSub) {
             m_intakeSub = intakeSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withShooterSub(ShooterSubsystem shooterSub) {
+            m_shooterSub = shooterSub;
             return this;
         }
 
@@ -151,9 +159,14 @@ public class GunnerControls {
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
             }
 
+            // TODO: Finish shooter controls
+            if (m_shooterSub != null) {
+                m_gunnerControls.m_rightTrigger.whileActiveOnce(
+                        new ShooterSetRPMsCommand(m_shooterSub, 2250, 2750));
+            }
             if (m_kickerSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
-                    new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
+                        new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
             }
 
             return m_gunnerControls;

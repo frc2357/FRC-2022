@@ -4,6 +4,7 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
@@ -22,6 +23,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
 
+    /**
+     * When setting values on components, wait this long for a response before
+     * failing. milliseconds
+     */
+    public static final int TIMEOUT_MS = 30;
+
     public final class CAN_ID {
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
@@ -33,6 +40,12 @@ public final class Constants {
         public static final int GYRO_ID = 5;
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
+
+        // Shooter
+        public static final int SHOOTER_BOTTOM_LEFT = 22;
+        public static final int SHOOTER_BOTTOM_RIGHT = 23;
+        public static final int SHOOTER_TOP = 24;
+
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
         // Kicker
@@ -117,6 +130,34 @@ public final class Constants {
             config.m_isGyroReversed = true;
             return config;
         }
+    }
+
+    public static final class SHOOTER {
+        public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+            /** Clicks per rotation for the internal encoder in the Falcon 500 */
+            config.m_encoder_cpr = 2048;
+
+            config.m_bottomShooterGearingRatio = 1.3;
+            config.m_topShooterGearingRatio = 2;
+            config.m_timeoutMS = TIMEOUT_MS;
+            config.m_shooterMotorPeakOutput = 1.0;
+
+            // Bottom
+            config.m_bottomShooterP = 0.09;
+            config.m_bottomShooterI = 0;
+            config.m_bottomShooterD = 0;
+            config.m_bottomShooterF = 0.01;
+
+            // Top
+            config.m_topShooterP = 0.09;
+            config.m_topShooterI = 0;
+            config.m_topShooterD = 0;
+            config.m_topShooterF = 0.01;
+
+            return config;
+        }
+
     }
 
     public static final class LIMELIGHT {
