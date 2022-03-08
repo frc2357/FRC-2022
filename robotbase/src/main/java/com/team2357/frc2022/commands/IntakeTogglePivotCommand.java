@@ -23,7 +23,7 @@ public class IntakeTogglePivotCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_intakeSub.setPivot(m_intakeSub.getPivot() == Value.kReverse ? Value.kForward : Value.kReverse);
+        m_intakeSub.setPivot(m_intakeSub.isIntakeDeployed() ? Value.kReverse : Value.kForward);
     }
 
     @Override

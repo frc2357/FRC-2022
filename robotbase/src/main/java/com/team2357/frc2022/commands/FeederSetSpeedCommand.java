@@ -3,7 +3,7 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class FeederSetSpeedCommand extends CommandLoggerBase{
+public class FeederSetSpeedCommand extends CommandLoggerBase {
     private FeederSubsystem m_feederSub;
     private double m_speed;
 
@@ -14,7 +14,7 @@ public class FeederSetSpeedCommand extends CommandLoggerBase{
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         super.initialize();
         if (m_feederSub.isCargoAtFeederWheel()) {
             m_feederSub.runFeedermotor(m_speed);

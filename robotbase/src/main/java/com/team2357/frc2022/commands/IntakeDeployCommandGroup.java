@@ -7,6 +7,9 @@ import com.team2357.frc2022.Constants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+/**
+ * @category Intake
+ */
 public class IntakeDeployCommandGroup extends SequentialCommandGroup {
 
     private IntakeSubsystem m_intakeSub;
@@ -20,9 +23,8 @@ public class IntakeDeployCommandGroup extends SequentialCommandGroup {
     }
 
     @Override
-    public void execute() {
-        super.execute();
-        System.out.println("Running deploy intake");
+    public void end(boolean interrupted) {
+        new IntakeStowCommandGroup(m_intakeSub).schedule();
     }
 
     @Override

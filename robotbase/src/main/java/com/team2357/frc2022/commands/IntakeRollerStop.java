@@ -7,6 +7,9 @@ public class IntakeRollerStop extends CommandLoggerBase {
     private IntakeSubsystem m_intakeSub;
 
     /**
+     * category Intake
+     */
+    /**
      * @param intakeSub The {@link IntakeSubsystem}.
      */
     public IntakeRollerStop(IntakeSubsystem intakeSub) {
@@ -17,11 +20,11 @@ public class IntakeRollerStop extends CommandLoggerBase {
     @Override
     public void initialize() {
         super.initialize();
-            m_intakeSub.triggerIntakeRoller(0.0);
+        m_intakeSub.triggerIntakeRoller(0.0);
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return true;
     }
 }

@@ -18,6 +18,7 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
     public DoubleSolenoid m_intakeSolenoid;
     private VictorSPX m_intakeVictor;
     private SensorBooleanState m_intakeSensor;
+    private boolean m_isIntakeDeployed;
 
     /**
      * @param intakeVictor Victor SPX to use to control intake
@@ -26,8 +27,8 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
         m_intakeSolenoid = intakeSolenoid;
         m_intakeSolenoid.set(Value.kOff);
         m_intakeSensor = intakeSensor;
-
         m_intakeVictor = intakeVictor;
+        m_isIntakeDeployed = false;
     }
 
     /**
@@ -37,8 +38,8 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
         m_intakeVictor.set(ControlMode.PercentOutput, percentPowerOutput);
     }
 
-    public DoubleSolenoid.Value getPivot() {
-        return m_intakeSolenoid.get();
+    public Boolean isIntakeDeployed() {
+        return m_isIntakeDeployed;
     }
 
     /**
@@ -46,6 +47,11 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
      */
     public void setPivot(DoubleSolenoid.Value value) {
         m_intakeSolenoid.set(value);
+        if (value == DoubleSolenoid.Value.kForward) {
+            m_isIntakeDeployed = true;
+        } else if (value == DoubleSolenoid.Value.kReverse) {
+            m_isIntakeDeployed = false;
+        }
     }
 
     public boolean isCargoInIntake() {

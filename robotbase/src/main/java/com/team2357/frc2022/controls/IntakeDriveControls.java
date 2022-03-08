@@ -2,8 +2,6 @@ package com.team2357.frc2022.controls;
 
 import java.util.function.BooleanSupplier;
 
-import com.team2357.frc2022.commands.IntakeDeactivateCommandGroup;
-import com.team2357.frc2022.commands.IntakeDeployAndDeactivateCommandGroup;
 import com.team2357.frc2022.commands.IntakeDeployCommandGroup;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
@@ -21,17 +19,19 @@ import edu.wpi.first.wpilibj2.command.button.Button;
  * 
  * @category Drive
  */
-public class IntakeDriveControls extends InvertDriveControls{
+public class IntakeDriveControls extends InvertDriveControls {
     public Button m_leftTrigger;
 
     /**
      * @param builder The IntakeDriverControlsBuilder object
      */
     public IntakeDriveControls(IntakeDriveControlsBuilder builder) {
-      super(builder.m_invertDriveBuilder);
+        super(builder.m_invertDriveBuilder);
 
-        //Triggers
-        BooleanSupplier condition = () -> {return super.m_controller.getLeftTriggerAxis()>.1;};
+        // Triggers
+        BooleanSupplier condition = () -> {
+            return super.m_controller.getLeftTriggerAxis() > .1;
+        };
         m_leftTrigger = new Button(condition);
 
     }
@@ -84,7 +84,7 @@ public class IntakeDriveControls extends InvertDriveControls{
             return this;
         }
 
-        public IntakeDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem){
+        public IntakeDriveControlsBuilder withDriveSub(SingleSpeedFalconDriveSubsystem driveSubsystem) {
             m_invertDriveBuilder.withDriveSub(driveSubsystem);
             return this;
         }
@@ -99,9 +99,8 @@ public class IntakeDriveControls extends InvertDriveControls{
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                    m_IntakeDriverControls.m_leftTrigger.whenPressed(
-                       new IntakeDeployCommandGroup(m_intakeSub), false);
-                    m_IntakeDriverControls.m_leftTrigger.whenReleased(new IntakeDeactivateCommandGroup(m_intakeSub), false);
+                m_IntakeDriverControls.m_leftTrigger.toggleWhenPressed(new IntakeDeployCommandGroup(m_intakeSub),
+                        false);
             }
 
             return m_IntakeDriverControls;

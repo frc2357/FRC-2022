@@ -1,6 +1,5 @@
 package com.team2357.frc2022.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -37,8 +36,7 @@ public class SubsystemFactory {
         FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
                 leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
                 Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS, Constants.DRIVE.LEFT_ENCODER_CHANNEL_A,
-                Constants.DRIVE.LEFT_ENCODER_CHANNEL_B,
-                Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
+                Constants.DRIVE.LEFT_ENCODER_CHANNEL_B, Constants.DRIVE.RIGHT_ENCODER_CHANNEL_A,
                 Constants.DRIVE.RIGHT_ENCODER_CHANNEL_B);
 
         subsystem.configure(config);
@@ -49,6 +47,7 @@ public class SubsystemFactory {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
                 Constants.PCM_ID.INTAKE_SOLENOID_FORWARD_CHANNEL, Constants.PCM_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
+        intakeVictor.setInverted(Constants.INTAKE.INVERT_MOTOR);
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }
 
