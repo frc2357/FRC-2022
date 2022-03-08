@@ -4,6 +4,14 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem;
+import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
+import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -16,19 +24,44 @@ package com.team2357.frc2022;
  */
 public final class Constants {
 
+    /**
+     * When setting values on components, wait this long for a response before
+     * failing. milliseconds
+     */
+    public static final int TIMEOUT_MS = 30;
+
     public final class CAN_ID {
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
         public static final int DRIVE_MOTOR_LEFT_2 = 13;
         public static final int DRIVE_MOTOR_RIGHT_2 = 14;
+        public static final int DRIVE_MOTOR_LEFT_3 = 15;
+        public static final int DRIVE_MOTOR_RIGHT_3 = 16;
+
         public static final int GYRO_ID = 5;
+
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
+
+        // Shooter
+        public static final int SHOOTER_BOTTOM_LEFT = 22;
+        public static final int SHOOTER_BOTTOM_RIGHT = 23;
+        public static final int SHOOTER_TOP = 24;
+
+        // Turret
+        public static final int TURRET_MOTOR_ID = 25;
+
         // Feeder
-        public static final int FEEDER_MOTOR_ID = 0;
+        public static final int FEEDER_MOTOR_ID = 28;
+
+        // Kicker
+        public static final int KICKER_MOTOR_ID = 29;
+
+        // Pneumatic hub
+        public static final int PNEUMATICS_HUB_ID = 30;
     }
 
-    public final class PCM_ID {
+    public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
     }
@@ -50,34 +83,149 @@ public final class Constants {
     }
 
     // Encoder Constants
-    public final class DRIVE {
+    public final static class DRIVE {
+        public static final double DRIVE_MOTOR_RAMP_RATE_SECONDS = 0.75;
+
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
 
-        public static final int LEFT_ENCODER_CHANNEL_A = 0;
-        public static final int LEFT_ENCODER_CHANNEL_B = 1;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 2;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 3;
+        public static final int LEFT_ENCODER_CHANNEL_A = 6;
+        public static final int LEFT_ENCODER_CHANNEL_B = 7;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
 
-        public static final boolean INVERT_GYRO = true;
-        public static final boolean INVERT_RIGHT_SIDE = true;
+        public static final double MAX_VOLTAGE = 10;
+        // TODO: Run characterization on all below constants
+        /**
+         * Characterization Constants Zeroes are currently placeholder values
+         */
+        public static final double kS_VOLTS = 0.0;
+        public static final double KV_VOLTS_SECONDS_PER_METER = 0.0;
+        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.0;
+
+        /**
+         * Differential Drive Kinematics Zeroes as place holder values
+         */
+
+        public static final double TRACK_WIDTH_METERS = 0.0;
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
+                TRACK_WIDTH_METERS);
+
+        /**
+         * Max Trajectory acceleration and velocity Zeroes as place holder values
+         */
+
+        public static final double MAX_SPEED_METERS_PER_SECOND = 0;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+
+        /**
+         * Values from the ramsete example. Ramsete Parameters Reasonable baseline
+         * values for a RAMSETE follower in units of meters and seconds.
+         */
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
+        public static final double KS_VOLTS = 0;
+
+        /**
+         * Proportional velocity value for Ramsete PID
+         */
+        public static final double P_DRIVE_VEL = 0;
+
+        public static final FalconTrajectoryDriveSubsystem.Configuration GET_FALCON_DRIVE_CONFIG() {
+            FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
+            config.m_isRightInverted = true;
+            config.m_isGyroReversed = true;
+            return config;
+        }
     }
 
-    public final class LIMELIGHT {
-        /** Angle of the Limelight axis from horizontal (degrees) */
-        public static final double MOUNTING_ANGLE = 0;
+    public static final class SHOOTER {
+        public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+            /** Clicks per rotation for the internal encoder in the Falcon 500 */
+            config.m_encoder_cpr = 2048;
 
-        /** Height of the Limelight lens center from the floor (inches) */
-        public static final double MOUNTING_HEIGHT = 0;
+            config.m_bottomShooterGearingRatio = 1.3;
+            config.m_topShooterGearingRatio = 2;
+            config.m_timeoutMS = TIMEOUT_MS;
+            config.m_shooterMotorPeakOutput = 1.0;
 
-        /** Target width in inches */
-        public static final double VISION_TARGET_WIDTH = 5;
+            // Bottom
+            config.m_bottomShooterP = 0.09;
+            config.m_bottomShooterI = 0;
+            config.m_bottomShooterD = 0;
+            config.m_bottomShooterF = 0.01;
 
-        /** Target height in inches */
-        public static final double VISION_TARGET_HEIGHT = 2;
+            // Top
+            config.m_topShooterP = 0.09;
+            config.m_topShooterI = 0;
+            config.m_topShooterD = 0;
+            config.m_topShooterF = 0.01;
+
+            return config;
+        }
+    }
+
+    // Turret
+    // TODO: Tune Turret constants, currently values from rev's example
+    public static final class TURRET {
+        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
+
+        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
+        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
+                * 2;
+        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
+                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
+
+        public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
+
+        public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
+            TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
+
+            config.m_turretMotorStallLimitAmps = 15;
+            config.m_turretMotorFreeLimitAmps = 3;
+
+            config.m_turretMotorP = 0.00005;
+            config.m_turretMotorI = 0.0;
+            config.m_turretMotorD = 0.0;
+            config.m_turretMotorIZone = 0.0;
+            config.m_turretMotorFF = 0.000156;
+            config.m_turretMotorMaxOutput = 0.2;
+            config.m_turretMotorMinOutput = -0.2;
+            config.m_turretMotorMaxRPM = 1000;
+
+            config.m_turretMotorMaxVel = 500;
+            config.m_turretMotorMinVel = 0;
+            config.m_turretMotorMaxAcc = 5;
+            config.m_turretMotorAllowedError = (10/360); // Max error is 10 degrees of motor rotation (0.20 degrees turret rotation)
+
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
+            config.m_turretRotationsClockwiseSoftLimit = 0.75;
+            config.m_turretGearRatio = 49.6;
+            return config;
+        }
+    }
+
+    public static final class LIMELIGHT {
+
+        public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
+            LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
+            /** Angle of the Limelight axis from horizontal (degrees) */
+            config.m_LimelightMountingAngle = 0;
+            /** Height of the Limelight lens center from the floor (inches) */
+
+            config.m_LimelightMountingHeightInches = 0;
+            /** Target width in inches */
+            config.m_TargetWidth = 5;
+            /** Target height in inches */
+            config.m_TargetHeight = 2;
+            return config;
+        }
+
     }
 
     public final class ARDUINO {
@@ -90,5 +238,14 @@ public final class Constants {
         public static final String TURRET_SENSOR_STATE_FIELD = "state";
 
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
+    }
+
+    public final class COMPRESSOR {
+        public static final int MIN_PRESSURE_PSI = 70;
+        public static final int MAX_PRESSURE_PSI = 120;
+    }
+
+    public final class KICKER {
+        public static final double SPEED = 0;
     }
 }

@@ -55,8 +55,13 @@ public class InvertDriveControls extends DriverControls {
         return Utility.clamp(turn, -.7, .7);
     }
 
-    // I would put a javadoc here, but I really don't understand it. If you do,
-    // please delete this and put a javadoc here.
+    /**
+     * Calculates the curve of a turn
+     * 
+     * @param input       The turn value from a joystick
+     * @param curveFactor The factor to determine how aggressive the turn is
+     * @return The turn value to be used
+     */
     public double inputCurve(double input, int curveFactor) {
         return Math.signum(input) * Math.abs(Math.pow(input, curveFactor));
     }

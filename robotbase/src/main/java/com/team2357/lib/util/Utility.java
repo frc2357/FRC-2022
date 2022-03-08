@@ -1,26 +1,28 @@
 package com.team2357.lib.util;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class Utility{
-  public static double clamp(double input, double min, double max){
-      double value = input;
-      value = Math.max(value, min);
-      value = Math.min(value, max);
-      return value;
+public class Utility {
+  public static double clamp(double input, double min, double max) {
+    double value = input;
+    value = Math.max(value, min);
+    value = Math.min(value, max);
+    return value;
   }
 
-  public static int clamp(int input, int min, int max){
-      int value = input;
-      value = Math.max(value, min);
-      value = Math.min(value, max);
-      return value;
+  public static int clamp(int input, int min, int max) {
+    int value = input;
+    value = Math.max(value, min);
+    value = Math.min(value, max);
+    return value;
   }
 
   /**
    *
    * @param talon The talon SRX to config
-   * @param pid PID values to set
+   * @param pid   PID values to set
    */
   public static void configTalonPID(WPI_TalonSRX talon, PIDValues pid) {
     configTalonPID(talon, 0, pid);
@@ -28,9 +30,9 @@ public class Utility{
 
   /**
    *
-   * @param talon The talon SRX to config
+   * @param talon   The talon SRX to config
    * @param slotIdx Index of the profile slot to configure
-   * @param pid PID values to set
+   * @param pid     PID values to set
    */
   public static void configTalonPID(WPI_TalonSRX talon, int slotIdx, PIDValues pid) {
     talon.config_kP(slotIdx, pid.kp);
@@ -41,9 +43,22 @@ public class Utility{
     talon.configClosedLoopPeakOutput(slotIdx, pid.peak);
   }
 
+  /**
+   * 
+   * @param CANID         The CAN ID of the motor
+   * @param secondstoFull The number of seconds for the motors to reach 100%. Used
+   *                      for open-loop ramping
+   */
+  public static WPI_TalonFX createDriveTalonFX(int CANID, double secondsToFull) {
+    WPI_TalonFX talon = new WPI_TalonFX(CANID);
+    talon.configOpenloopRamp(secondsToFull);
+    talon.setNeutralMode(NeutralMode.Brake);
+    return talon;
+  }
+
   public static int getAverage(int[] samples) {
     int sum = 0;
-    for(int sample : samples) {
+    for (int sample : samples) {
       sum += sample;
     }
     return sum / samples.length;
