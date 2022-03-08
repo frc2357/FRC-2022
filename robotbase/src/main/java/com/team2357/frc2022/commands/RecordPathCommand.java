@@ -22,7 +22,7 @@ public class RecordPathCommand extends CommandBase {
   private final FalconTrajectoryDriveSubsystem m_drive;
   private final Boolean m_shouldResetOdometry;
   private double m_timestamp;
-  private ArrayList<Translation2d> m_path;
+  private ArrayList<Pose2d> m_path;
   private Rotation2d m_beginRotation;
   private Rotation2d m_endRotation;
 
@@ -35,7 +35,7 @@ public class RecordPathCommand extends CommandBase {
     m_drive = drive;
     m_shouldResetOdometry = shouldResetOdometry;
     m_timestamp = 0.0;
-    m_path = new ArrayList<Translation2d>();
+    m_path = new ArrayList<Pose2d>();
   }
 
   // Called when the command is initially scheduled.
@@ -47,7 +47,7 @@ public class RecordPathCommand extends CommandBase {
     }
     m_timestamp = Timer.getFPGATimestamp();
     m_path.clear();
-    m_path.add(m_drive.getPose().getTranslation());
+    m_path.add(m_drive.getPose());
     m_beginRotation = m_drive.getPose().getRotation();
     System.out.println("Recording...");
   }
@@ -63,27 +63,19 @@ public class RecordPathCommand extends CommandBase {
         && Utility.isWithinTolerance(m_drive.getVelocityRightEncoder(), 0, 0.1)) {
       return;
     }
-    m_path.add(m_drive.getPose().getTranslation());
+    m_path.add(m_drive.getPose());
     m_timestamp = currentTime;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_path.add(m_drive.getPose().getTranslation());
-    m_endRotation = m_drive.getPose().getRotation();
-    final Translation2d begin = m_path.remove(0);
-    final Translation2d end = m_path.remove(m_path.size() - 1);
+    m_path.add(m_drive.getPose());
     String lines = "";
-    lines += "new Pose2d(" + begin.getX() + ", " + begin.getY() + ", Rotation2d.fromDegrees("
-        + m_beginRotation.getDegrees() + ")),\n";
-    lines += "List.of(\n";
-    for (Translation2d t : m_path) {
-      lines += "  new Translation2d(" + t.getX() + ", " + t.getY() + "),\n";
+    lines += "List.of(";
+    for (Pose2d t : m_path) {
+      lines += "  new Pose2d(" + t.getX() + ", " + t.getY() + ", Rotation2d.fromDegrees("+ t.getRotation().getDegrees() + "))),\n";
     }
-    lines += "),\n";
-    lines += "new Pose2d(" + end.getX() + ", " + end.getY() + ", Rotation2d.fromDegrees("
-        + m_endRotation.getDegrees() + ")),\n";
     System.out.print(lines);
   }
 

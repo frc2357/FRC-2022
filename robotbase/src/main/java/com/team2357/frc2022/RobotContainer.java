@@ -45,21 +45,24 @@ public class RobotContainer {
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
-  private final RobotArduino m_arduinoSensor;
+  //private final RobotArduino m_arduinoSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    //m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
     SensorBooleanState intakeIRSensor = () -> {
-      return m_arduinoSensor.getIntakeValue();
+      //return m_arduinoSensor.getIntakeValue();
+      return false;
     };
     SensorBooleanState feederIRSensor = () -> {
-      return m_arduinoSensor.getFeederValue();
+      //return m_arduinoSensor.getFeederValue();
+      return false;
     };
     SensorBooleanState turretIRSensor = () -> {
-      return m_arduinoSensor.getTurretValue();
+      //return m_arduinoSensor.getTurretValue();
+      return false;
     };
 
     // Create subsystems
@@ -85,7 +88,7 @@ public class RobotContainer {
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
-    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
+    m_compressor.enableAnalog(0, 1);
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories(m_driveSub);
@@ -100,10 +103,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    int auto = 1;
+    int auto = 2;
     switch (auto) {
       case 1:
         return AvailableTrajectories.exampleTrajectory;
+      case 2:
+        return AvailableTrajectories.exampleRecordPathTrajectory;
       default:
         return null;
     }

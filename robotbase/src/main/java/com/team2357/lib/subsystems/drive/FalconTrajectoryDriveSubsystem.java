@@ -72,11 +72,11 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 m_rightEncoder.getDistance());
-        // System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
-        // System.out.println(" Right encoder distance: " +
+         //System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
+         //System.out.println(" Right encoder distance: " +
         // m_rightEncoder.getDistance());
         // System.out.println(getHeading());
-        System.out.println("Pose: " + getPose().toString());
+        //System.out.println("Pose: " + getPose().toString());
         // System.out.println(m_leftControllers.get());
         // System.out.println(m_rightControllers.get());
 
