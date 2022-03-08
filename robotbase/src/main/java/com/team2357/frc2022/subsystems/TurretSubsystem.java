@@ -138,8 +138,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
      * @return Clockwise or CounterClokwise soft limit
      */
     public double getTurretFlipRotations() {
-        if (Math.abs(getTurretRotation() - m_config.m_turretRotationsClockwiseSoftLimit) > 
-            Math.abs(getTurretRotation() - m_config.m_turretRotationsCounterClockwiseSoftLimit)) {
+        if (m_targetMotorRotations - m_config.m_turretRotationsClockwiseSoftLimit > 
+            m_targetMotorRotations - m_config.m_turretRotationsCounterClockwiseSoftLimit) {
            return m_config.m_turretRotationsClockwiseSoftLimit;
         } else {
             return m_config.m_turretRotationsCounterClockwiseSoftLimit;
