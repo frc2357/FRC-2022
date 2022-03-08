@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -65,10 +67,31 @@ public class SubsystemFactory {
         return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
     }    
 
+    public ShooterSubsystem CreateShooterSubsystem() {
+        WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
+        WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
+        WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        ShooterSubsystem subsystem = new ShooterSubsystem(leftBottom, rightBottom, top);
+        subsystem.configure(Constants.SHOOTER.CONFIG_SHOOTER());
+        return subsystem;
+    }
+
     public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
         WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
         return new FeederSubsystem(feederTalon, feederSensorState);
     }   
+
+    public KickerSubsystem CreateKickerSubsystem() {
+        CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+        return new KickerSubsystem(kickerMotor);
+    }
+
+    public TurretSubsystem CreateTurretSubsystem() {
+        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID,  CANSparkMaxLowLevel.MotorType.kBrushless);
+        TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
+        subsystem.configure(Constants.TURRET.GET_TURRET_CONFIG());
+        return subsystem;
+    }
 
     public TogglableLimelightSubsystem CreateVisionSubsystem() {
         TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);

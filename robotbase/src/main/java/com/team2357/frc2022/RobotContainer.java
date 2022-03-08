@@ -9,6 +9,9 @@ import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.ShooterSubsystem;
+import com.team2357.frc2022.subsystems.KickerSubsystem;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
@@ -31,7 +34,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
+  private ShooterSubsystem m_shooterSub;
   private FeederSubsystem m_feederSub;
+  private KickerSubsystem m_kickerSub;
+  private TurretSubsystem m_turretSub;
   private TogglableLimelightSubsystem m_visionSub;
   private Compressor m_compressor;
 
@@ -59,17 +65,26 @@ public class RobotContainer {
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
+    m_shooterSub = subsystemFactory.CreateShooterSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
+    m_kickerSub = subsystemFactory.CreateKickerSubsystem();
+    m_turretSub = subsystemFactory.CreateTurretSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
         new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
             .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
 
+
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
-        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub).build();
+        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
+            .withIntakeSub(m_intakeSub)
+            .withShooterSub(m_shooterSub)
+            .withKickerSub(m_kickerSub)
+            .withTurretSub(m_turretSub)
+            .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
 
