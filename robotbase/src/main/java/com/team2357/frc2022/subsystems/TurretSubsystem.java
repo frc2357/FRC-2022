@@ -134,6 +134,19 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     /**
+     * Determines what direction the turret needs flipped
+     * @return Clockwise or CounterClokwise soft limit
+     */
+    public double getTurretFlipRotations() {
+        if (Math.abs(getTurretRotation() - m_config.m_turretRotationsClockwiseSoftLimit) > 
+            Math.abs(getTurretRotation() - m_config.m_turretRotationsCounterClockwiseSoftLimit)) {
+           return m_config.m_turretRotationsClockwiseSoftLimit;
+        } else {
+            return m_config.m_turretRotationsCounterClockwiseSoftLimit;
+        }
+    }
+
+    /**
      * Handles if the turret is stalling
      * Probably happening because we are on the mechanical stop
      */
