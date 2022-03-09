@@ -56,6 +56,23 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
         public int m_climberMotorStallLimitAmps = 0;
         public int m_climberMotorFreeLimitAmps = 0;
+
+        public double m_climberMotorP = 0;
+        public double m_climberMotorI = 0;
+        public double m_climberMotorD = 0;
+        public double m_climberMotorIZone = 0;
+        public double m_climberMotorFF = 0;
+        public double m_climberMotorMaxOutput = 0;
+        public double m_climberMotorMinOutput = 0;
+        public double m_climberMotorMaxRPM = 0;
+        public double m_climberMotorMaxVel = 0;
+        public double m_climberMotorMinVel = 0;
+        public double m_climberMotorMaxAcc = 0;
+        public double m_climberMotorAllowedError = 0;
+
+        public double m_climberRotationsCounterClockwiseSoftLimit = 0.0;
+        public double m_climberRotationsClockwiseSoftLimit = 0.0;
+        public double m_climberGearRatio = 0.0;
         public boolean m_isRightSideInverted = false;
 
     }
@@ -114,7 +131,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     // Method to return climber arms
-    public void returnClimber(double speed) {
+    public void retractClimber(double speed) {
         this.climberMotorSpeed(-1 * speed);
     }
 
@@ -134,28 +151,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_isLeftClimberMotorValid && m_isRightClimberMotorValid;
     }
 
-    public boolean validate(double rotations, int amps) {
-        boolean[] validMotorsExtension = validateRotations(rotations);
+    public boolean isGripped(double rotations, int amps) {
+        boolean validMotorsExtension = atTargetRotations(rotations);
         boolean[] validMotorsAmps = validateClimberMotorsAmps(amps);
 
-        if (validMotorsExtension[0] && validMotorsAmps[0]) {
+        if (validMotorsExtension && validMotorsAmps[0]) {
             m_isLeftClimberMotorValid = true;
         }
-        if (validMotorsExtension[1] && validMotorsAmps[1]) {
-            m_isRightClimberMotorValid = true;
-        }
-        return areMotorsValid();
-    }
-
-    public boolean validate(double rotations) {
-        boolean[] validMotors = validateRotations(rotations);
-
-        if (validMotors[0]) {
-            m_leftClimberMotor.set(0.0);
-            m_isLeftClimberMotorValid = true;
-        }
-        if (validMotors[1]) {
-            m_rightClimberMotor.set(0.0);
+        if (validMotorsExtension && validMotorsAmps[1]) {
             m_isRightClimberMotorValid = true;
         }
         return areMotorsValid();
@@ -168,39 +171,23 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
             isAtAmps[0] = true;
         }
         if (checkRightClimberMotorAmps(amps)) {
-            m_leftClimberMotor.set(0);
+            m_rightClimberMotor.set(0);
             isAtAmps[1] = true;
         }
         return isAtAmps;
     }
 
-    public boolean[] validateRotations(double rotations) {
-        boolean[] isAtDistance = new boolean[2];
+    public boolean atTargetRotations(double rotations) {
 
         if (Utility.isWithinTolerance(getLeftClimberRotations(), rotations,
                 Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
-            isAtDistance[0] = true;
+            m_isLeftClimberMotorValid = true;
         }
         if (Utility.isWithinTolerance(getRightClimberRotations(), rotations,
                 Constants.CLIMBER.EXTENSION_TOLERANCE_METERS)) {
-            isAtDistance[1] = true;
+            m_isLeftClimberMotorValid = true;
         }
-        return isAtDistance;
-    }
-
-    public boolean checkRightClimberMotorMissed(double targetRotations, int amps) {
-        if (getRightClimberRotations() < targetRotations - m_config.m_climberMissedToleranceRotations
-                && !checkRightClimberMotorAmps(amps)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkLeftClimberMotorMissed(double targetRotations, int amps) {
-        if (getLeftClimberRotations() < targetRotations && !checkRightClimberMotorAmps(amps)) {
-            return true;
-        }
-        return false;
+        return areMotorsValid();
     }
 
     public void resetValidation() {

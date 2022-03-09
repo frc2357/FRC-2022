@@ -8,12 +8,11 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * 
  * @category Climber
  */
-public class ClimberReturnCommand extends CommandLoggerBase {
+public class ClimberRetractCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
     private double m_climberMotorRotations;
     private double m_speed;
     private int m_amps;
-    private boolean m_isFinished;
 
     /**
      * 
@@ -22,25 +21,18 @@ public class ClimberReturnCommand extends CommandLoggerBase {
      *                              1.0
      * @param climberMotorRotations The number times the motor spindle should rotate
      */
-    public ClimberReturnCommand(ClimberSubsystem climbSub, double speed, double climberMotorRotations, int amps) {
+    public ClimberRetractCommand(ClimberSubsystem climbSub, double speed, double climberMotorRotations, int amps) {
         m_climbSub = climbSub;
         m_speed = speed;
         m_climberMotorRotations = climberMotorRotations;
         m_amps = amps;
 
-        m_isFinished = false;
         addRequirements(m_climbSub);
     }
 
     @Override
     public void initialize() {
-        m_climbSub.returnClimber(m_speed);
-    }
-
-    @Override
-    public void execute() {
-        m_isFinished = m_climbSub.validate(m_climberMotorRotations, m_amps)
-                || m_climbSub.checkRightClimberMotorMissed(m_climberMotorRotations, m_amps);
+        m_climbSub.retractClimber(m_speed);
     }
 
     @Override
@@ -50,6 +42,6 @@ public class ClimberReturnCommand extends CommandLoggerBase {
 
     @Override
     public boolean isFinished() {
-        return m_isFinished;
+        return m_climbSub.isGripped(m_climberMotorRotations, m_amps);
     }
 }

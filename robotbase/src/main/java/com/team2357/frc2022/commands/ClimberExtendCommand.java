@@ -12,7 +12,6 @@ public class ClimberExtendCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climberSub;
     private double m_climberMotorRotations;
     private double m_speed;
-    private boolean m_isFinished;
 
     /**
      * 
@@ -25,7 +24,6 @@ public class ClimberExtendCommand extends CommandLoggerBase {
         m_climberSub = climbSub;
         m_speed = speed;
         m_climberMotorRotations = climberMotorRotations;
-        m_isFinished = false;
         addRequirements(climbSub);
     }
 
@@ -35,17 +33,7 @@ public class ClimberExtendCommand extends CommandLoggerBase {
     }
 
     @Override
-    public void execute() {
-        m_isFinished = m_climberSub.validate(m_climberMotorRotations);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-
-    }
-
-    @Override
     public boolean isFinished() {
-        return m_isFinished;
+        return m_climberSub.atTargetRotations(m_climberMotorRotations);
     }
 }
