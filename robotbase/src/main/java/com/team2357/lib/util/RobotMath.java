@@ -14,7 +14,7 @@ public class RobotMath {
 	 * Using 'w' for where the wheels are now, and 'W' for where we want them to be,
 	 * we can draw two supplementary angles towards the arc of the wheels.
 	 * 
-	 *                 /W\
+	*                 /W\
 	 *                /   |
 	 *         w----------w
 	 *         |   /
@@ -56,34 +56,27 @@ public class RobotMath {
 	}
 
 	/**
-	 * Function to linearly interpolate a value on a curve. Will find the two points
-	 * on the curve with the closest "x" value and do the linear interpolation
+	 * Function to linearly interpolate a value. Will find the two points
+	 * on with the closest "x" value and do the linear interpolation
 	 * formula from there
 	 * 
 	 * Formula:
 	 * y = y1 + ((x – x1) / (x2 – x1)) * (y2 – y1)
 	 * 
-	 * @param curve The 2D array of values to interpolate on. The first element of
-	 *              the 2nd set of arrays should be x, while the second element is y
-	 *              Ex. curve[0][0] = known x, curve[0][1] = unknown y
-	 * 
-	 * @param x     The known value on the current curve point (x)
+	 * @param y2    y2
+	 * @param y1    y1
+	 * @param x2    x2
+	 * @param x1    x1
+	 * @param x     x
+	 * @param index the index of the row of the 2d curve array
 	 * @return The unknown value on the curve point (y)
 	 */
-	public static double interpolateCurve(double[][] curve, double x) {
-		int index = getCurveSegmentIndex(curve, x);
-
-		double y2 = curve[index][0];
-		double y1 = curve[index + 1][0];
-		double x2 = curve[index][1];
-		double x1 = curve[index + 1][1];
-
+	public static double lineralyInterpolate(double y2, double y1, double x2, double x1, double x) {
 		double factor = (x - x1) / (x2 - x1);
 		return ((y2 - y1) * factor) + y1;
 	}
 
 	/**
-	 * Primarily a helper function for the InterpolateCurve function
 	 * Finds the index of the lower side of the given x value
 	 * 
 	 * @param curve The 2D array of values to interpolate on. The first element of
