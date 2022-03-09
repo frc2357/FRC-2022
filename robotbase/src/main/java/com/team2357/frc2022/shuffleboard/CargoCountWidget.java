@@ -11,8 +11,8 @@ public class CargoCountWidget extends ShuffleboardWidget {
     private final SensorBooleanState m_intakeSensor;
     private static NetworkTableEntry m_cargoCountWidget;
 
-    private boolean m_readyToSub = false;
-    private boolean m_readyToAdd = false;
+    private boolean m_feederStateChange = false;
+    private boolean m_intakeStateChange = false;
     private int m_numOfCargo;
 
     public CargoCountWidget(String tabTitle, SensorBooleanState feederSensor, SensorBooleanState intakeSensor) {
@@ -30,28 +30,28 @@ public class CargoCountWidget extends ShuffleboardWidget {
         int numOfCargo = getNumOfCargo();
         setNumOfCargo(++numOfCargo);
         m_cargoCountWidget.setNumber(numOfCargo);
-        m_readyToAdd = false;
+        m_intakeStateChange = false;
     }
 
     public void subCargo() {
         int numOfCargo = getNumOfCargo();
         setNumOfCargo(++numOfCargo);
         m_cargoCountWidget.setNumber(numOfCargo);
-        m_readyToSub = false;
+        m_feederStateChange = false;
     }
 
 
 
     public void periodic() {
-        if (m_readyToSub && !m_feederSensor.getState()) {
+        if (m_feederStateChange && !m_feederSensor.getState()) {
             subCargo();
-        } else if (!m_readyToSub && m_feederSensor.getState()) {
-            m_readyToSub = true;
+        } else if (!m_feederStateChange && m_feederSensor.getState()) {
+            m_feederStateChange = true;
         }
-        if (m_readyToAdd) {
+        if (m_intakeStateChange) {
             addCargo();
-        } else if (!m_readyToAdd && m_intakeSensor.getState()) {
-            m_readyToAdd = true;
+        } else if (!m_intakeStateChange && m_intakeSensor.getState()) {
+            m_intakeStateChange = true;
         }
     } 
 
