@@ -31,6 +31,11 @@ public final class Constants {
     public static final int TIMEOUT_MS = 30;
 
     public final class CAN_ID {
+        // Pneumatic hub
+        public static final int PNEUMATICS_HUB_ID = 2;
+
+
+        // Drive
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
         public static final int DRIVE_MOTOR_LEFT_2 = 13;
@@ -43,22 +48,25 @@ public final class Constants {
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
 
-        // Shooter
-        public static final int SHOOTER_BOTTOM_LEFT = 22;
-        public static final int SHOOTER_BOTTOM_RIGHT = 23;
-        public static final int SHOOTER_TOP = 24;
+        // Climber
+        public static final int CLIMBER_MOTOR_LEFT_ID = 22;
+        public static final int CLIMBER_MOTOR_RIGHT_ID = 23;
 
         // Turret
-        public static final int TURRET_MOTOR_ID = 25;
+        public static final int TURRET_MOTOR_ID = 24;
 
+
+        // Shooter
+        public static final int SHOOTER_BOTTOM_LEFT = 25;
+        public static final int SHOOTER_BOTTOM_RIGHT = 26;
+        public static final int SHOOTER_TOP = 27;
+   
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
 
         // Kicker
         public static final int KICKER_MOTOR_ID = 29;
 
-        // Pneumatic hub
-        public static final int PNEUMATICS_HUB_ID = 30;
     }
 
     public final class PH_ID {
