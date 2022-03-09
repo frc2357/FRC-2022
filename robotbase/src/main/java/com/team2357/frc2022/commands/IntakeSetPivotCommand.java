@@ -25,12 +25,13 @@ public class IntakeSetPivotCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
+        System.out.println("PIVOTING");
         m_intakeSub.setPivot(m_postion);
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_intakeSub.setPivot(Value.kOff);
+        //m_intakeSub.setPivot(Value.kOff);
     }
 
     @Override

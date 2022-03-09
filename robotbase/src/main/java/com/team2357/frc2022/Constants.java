@@ -63,7 +63,7 @@ public final class Constants {
 
     public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
-        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
+        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 1;
     }
 
     public final class CONTROLLER {
@@ -241,7 +241,7 @@ public final class Constants {
     }
 
     public final class COMPRESSOR {
-        public static final int MIN_PRESSURE_PSI = 70;
+        public static final int MIN_PRESSURE_PSI = 90;
         public static final int MAX_PRESSURE_PSI = 120;
     }
 

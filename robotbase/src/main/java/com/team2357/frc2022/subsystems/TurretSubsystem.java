@@ -139,7 +139,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
      */
     private void handleMotorStall() {
         if (m_turretMotor.getOutputCurrent() >= m_config.m_turretMotorStallLimitAmps) {
-            System.err.println("TURRET: Motor stalled!");
+            //System.err.println("TURRET: Motor stalled!");
             setTurretSpeed(0);
             setClosedLoopEnabled(false);
         }

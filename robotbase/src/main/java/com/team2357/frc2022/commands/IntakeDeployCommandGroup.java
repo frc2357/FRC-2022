@@ -20,10 +20,18 @@ public class IntakeDeployCommandGroup extends SequentialCommandGroup {
                 new WaitCommand(Constants.INTAKE.PIVOT_WAIT_SECONDS),
                 new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
         addRequirements(m_intakeSub);
+        System.out.println("Constructing intake deploy");
+    }
+
+    @Override
+    public void execute() {
+        super.execute();
+        System.out.println("Executing intake deploy");
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Ending intake deploy group");
         new IntakeStowCommandGroup(m_intakeSub).schedule();
     }
 

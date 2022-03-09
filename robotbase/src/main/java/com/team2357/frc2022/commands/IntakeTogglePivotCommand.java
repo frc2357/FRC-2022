@@ -28,7 +28,7 @@ public class IntakeTogglePivotCommand extends CommandLoggerBase {
 
     @Override
     public void end(boolean interrupted) {
-        m_intakeSub.setPivot(Value.kOff);
+        //m_intakeSub.setPivot(Value.kOff);
     }
 
     @Override

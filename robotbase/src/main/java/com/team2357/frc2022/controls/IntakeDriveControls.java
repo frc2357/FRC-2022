@@ -8,11 +8,14 @@ import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.SingleSpeedFalconDriveSubsystem;
 import com.team2357.lib.util.ControllerAxis;
+import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * These are the controls for the IntakeDriver.
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
  */
 public class IntakeDriveControls extends InvertDriveControls {
     public Button m_leftTrigger;
+    public Trigger m_aButton;
 
     /**
      * @param builder The IntakeDriverControlsBuilder object
@@ -34,6 +38,7 @@ public class IntakeDriveControls extends InvertDriveControls {
         };
         m_leftTrigger = new Button(condition);
 
+        m_aButton = new JoystickButton(super.m_controller, XboxRaw.A.value);
     }
 
     /**
@@ -99,8 +104,10 @@ public class IntakeDriveControls extends InvertDriveControls {
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                m_IntakeDriverControls.m_leftTrigger.toggleWhenPressed(new IntakeDeployCommandGroup(m_intakeSub),
-                        false);
+               // m_IntakeDriverControls.m_leftTrigger.toggleWhenPressed(new IntakeDeployCommandGroup(m_intakeSub),
+                 //       true);
+                m_IntakeDriverControls.m_aButton.toggleWhenActive(new IntakeDeployCommandGroup(m_intakeSub));
+            
             }
 
             return m_IntakeDriverControls;
