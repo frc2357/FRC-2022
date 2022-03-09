@@ -4,9 +4,11 @@ import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
 import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
+import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.commands.KickerSetSpeedCommand;
+import com.team2357.frc2022.commands.ShootAgainstHubCommand;
 import com.team2357.frc2022.commands.TurretRotateCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.KickerSubsystem;
@@ -52,6 +54,7 @@ public class GunnerControls {
     public Trigger m_xButtonAndLeftDPad;
     public Trigger m_yButtonAndLeftDPad;
     public Trigger m_aButtonAndDownDPad;
+    public Trigger m_xButtonAndDownDPad;
 
     /**
      * @param builder The GunnerControlsBuilder object
@@ -83,7 +86,7 @@ public class GunnerControls {
         m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
         m_yButtonAndLeftDPad = m_yButton.and(m_leftDPad);
         m_aButtonAndDownDPad = m_aButton.and(m_downDPad);
-
+        m_xButtonAndDownDPad = m_aButton.and(m_downDPad);
     }
 
     /**
@@ -123,6 +126,7 @@ public class GunnerControls {
         private IntakeSubsystem m_intakeSub = null;
         private ShooterSubsystem m_shooterSub = null;
         private KickerSubsystem m_kickerSub = null;
+        private FeederSubsystem m_feederSub = null;
         private TurretSubsystem m_turretSub = null;
 
         /**
@@ -144,6 +148,11 @@ public class GunnerControls {
 
         public GunnerControlsBuilder withKickerSub(KickerSubsystem kickerSub) {
             m_kickerSub = kickerSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withFeederSub(FeederSubsystem feederSub) {
+            m_feederSub = feederSub;
             return this;
         }
 
@@ -184,6 +193,11 @@ public class GunnerControls {
             if (m_kickerSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
                         new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
+            }
+
+            if (m_kickerSub != null && m_feederSub != null && m_shooterSub != null) {
+                m_gunnerControls.m_xButtonAndDownDPad.whileActiveOnce(
+                    new ShootAgainstHubCommand(m_kickerSub, m_feederSub, m_shooterSub));
             }
 
             return m_gunnerControls;
