@@ -251,4 +251,12 @@ public final class Constants {
     public final class KICKER {
         public static final double SPEED = 0;
     }
+
+    public final class SHOOT_HUB_SPEEDS {
+        //TODO: Set motor speeds
+        public static final double FEEDER_SPEED = 0;
+        public static final double KICKER_SPEED = 0;
+        public static final double SHOOTER_SPEED_BOTTOM = 0;
+        public static final double SHOOTER_SPEED_TOP = 0;
+    }
 }
