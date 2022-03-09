@@ -34,7 +34,6 @@ public final class Constants {
         // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 2;
 
-
         // Drive
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
@@ -55,12 +54,11 @@ public final class Constants {
         // Turret
         public static final int TURRET_MOTOR_ID = 24;
 
-
         // Shooter
         public static final int SHOOTER_BOTTOM_LEFT = 25;
         public static final int SHOOTER_BOTTOM_RIGHT = 26;
         public static final int SHOOTER_TOP = 27;
-   
+
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
 
@@ -96,8 +94,6 @@ public final class Constants {
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
-
-        
 
         public static final double MAX_VOLTAGE = 10;
         // TODO: Run characterization on all below constants
@@ -203,7 +199,8 @@ public final class Constants {
             config.m_turretMotorMaxVel = 500;
             config.m_turretMotorMinVel = 0;
             config.m_turretMotorMaxAcc = 5;
-            config.m_turretMotorAllowedError = (10/360); // Max error is 10 degrees of motor rotation (0.20 degrees turret rotation)
+            config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
+                                                           // turret rotation)
 
             config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
             config.m_turretRotationsClockwiseSoftLimit = 0.75;
