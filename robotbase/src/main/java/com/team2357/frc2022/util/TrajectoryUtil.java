@@ -27,6 +27,15 @@ public class TrajectoryUtil {
     }
 
     public static SequentialCommandGroup createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem driveSub,
+            List<Pose2d> waypoints, boolean reversed, boolean resetOdometry) {
+
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints,
+                getTrajectoryConfig(reversed));
+        return createDrivePathCommand(driveSub, trajectory, resetOdometry);
+    }
+
+
+    public static SequentialCommandGroup createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem driveSub,
             Pose2d start, List<Translation2d> middle, Pose2d end, boolean reversed, boolean resetOdometry) {
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, middle, end,

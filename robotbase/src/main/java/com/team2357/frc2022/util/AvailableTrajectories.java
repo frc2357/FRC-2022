@@ -31,17 +31,15 @@ public class AvailableTrajectories {
     }
 
     private static SequentialCommandGroup createExampleRecordPathTrajectory(FalconTrajectoryDriveSubsystem driveSub) {
-
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(0.005138387418834883, 2.2083707112308348E-4, Rotation2d.fromDegrees(2.4609375000000004)),
-                new Pose2d(0.15288722766480822, 0.0069894771330836535, Rotation2d.fromDegrees(2.7685546875000004)),
-                new Pose2d(0.507776523613686, 0.027627015045378393, Rotation2d.fromDegrees(4.21875)),
-                new Pose2d(0.8999156245081863, 0.0654740166046273, Rotation2d.fromDegrees(6.723632812500001)),
-                new Pose2d(1.2990866064155986, 0.12095506925746803, Rotation2d.fromDegrees(9.052734375000002)),
-                new Pose2d(1.5115189031964178, 0.15741951993424935, Rotation2d.fromDegrees(90.107421875))),
-                TrajectoryUtil.getTrajectoryConfig(false));
-        return TrajectoryUtil.createDrivePathCommand(driveSub, trajectory, true);
+        return TrajectoryUtil.createTrajectoryPathCommand(driveSub, List.of(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            new Pose2d(0.005138387418834883, 2.2083707112308348E-4, Rotation2d.fromDegrees(2.4609375000000004)),
+            new Pose2d(0.15288722766480822, 0.0069894771330836535, Rotation2d.fromDegrees(2.7685546875000004)),
+            new Pose2d(0.507776523613686, 0.027627015045378393, Rotation2d.fromDegrees(4.21875)),
+            new Pose2d(0.8999156245081863, 0.0654740166046273, Rotation2d.fromDegrees(6.723632812500001)),
+            new Pose2d(1.2990866064155986, 0.12095506925746803, Rotation2d.fromDegrees(9.052734375000002)),
+            new Pose2d(1.5115189031964178, 0.15741951993424935, Rotation2d.fromDegrees(90.107421875))),
+            false, true);
     }
 
     /**

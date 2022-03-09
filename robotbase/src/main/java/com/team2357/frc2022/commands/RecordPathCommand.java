@@ -11,7 +11,6 @@ import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -23,8 +22,6 @@ public class RecordPathCommand extends CommandBase {
   private final Boolean m_shouldResetOdometry;
   private double m_timestamp;
   private ArrayList<Pose2d> m_path;
-  private Rotation2d m_beginRotation;
-  private Rotation2d m_endRotation;
 
   public RecordPathCommand(final FalconTrajectoryDriveSubsystem drive) {
     this(drive, true);
@@ -48,7 +45,6 @@ public class RecordPathCommand extends CommandBase {
     m_timestamp = Timer.getFPGATimestamp();
     m_path.clear();
     m_path.add(m_drive.getPose());
-    m_beginRotation = m_drive.getPose().getRotation();
     System.out.println("Recording...");
   }
 
@@ -74,8 +70,9 @@ public class RecordPathCommand extends CommandBase {
     String lines = "";
     lines += "List.of(";
     for (Pose2d t : m_path) {
-      lines += "  new Pose2d(" + t.getX() + ", " + t.getY() + ", Rotation2d.fromDegrees("+ t.getRotation().getDegrees() + "))),\n";
+      lines += "  new Pose2d(" + t.getX() + ", " + t.getY() + ", Rotation2d.fromDegrees("+ t.getRotation().getDegrees() + ")),\n";
     }
+    lines = lines.substring(0, lines.lastIndexOf(',')) + "),";
     System.out.print(lines);
   }
 
