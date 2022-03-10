@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -215,32 +217,17 @@ public final class Constants {
         }
     }
 
-    public final class CLIMBER {
-        public static final double CLIMB_EXTEND_SPEED = 0; // Climb extension speed for reachable rungs (low, mid)
-        public static final double CLIMB_RETURN_SPEED = 0; // Climb return speed for reachble rungs
-        public static final double TRANS_EXTEND_SPEED = 0; // Climb extend speed for unreachable rungs (high, traversal)
-        public static final double TRANS_RETURN_SPEED = 0; // Climb return speed for unreachable rungs
-        public static final int MOTOR_STALL_LIMIT_AMPS = 35; // Might need to be different
-        public static final int MOTOR_FREE_LIMIT_AMPS = 35;
-        public static final boolean INVERT_RIGHT_SIDE = true;
-        public static final double INCHES_PER_ROTATION_METERS = 0.003175;
-        public static final double CLIMBER_GEAR_RATIO = 10;
-        public static final int PIVOT_UPRIGHT_SECONDS = 0;
+    public static final class CLIMBER {
+        public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
+            ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 
-        // Distances
-        public static final double LOW_RUNG_EXTENSION_ROTATIONS = 0;
-        public static final double LOW_RUNG_RETURN_ROTATIONS = 0;
-        public static final double MID_RUNG_EXTENSION_ROTATIONS = 0;
-        public static final double MID_RUNG_RETURN_ROTATIONS = 0;
-        public static final double HIGH_RUNG_EXTENSION_ROTATIONS = 0;
-        public static final double HIGH_RUNG_RETURN_ROTATIONS = 0;
-        public static final double TRAVERSAL_RUNG_EXTENSION_ROTATIONS = 0;
-        public static final double TRAVERSAL_RETURN_EXTENSION_ROTATIONS = 0;
+            config.m_climberMotorIdleMode = IdleMode.kBrake;
+            config.m_climberMotorStallLimitAmps = 35;
+            config.m_climberMotorFreeLimitAmps = 35;
+            config.m_isRightSideInverted = true;
 
-        // Tollerances
-        public static final double EXTENSION_TOLERANCE_METERS = 0;
-        public static final double MISS_TOLERANCE_METERS = 0;
-        public static final int ON_BAR_AMPS = 0;
+            return config;
+        }
     }
 
     public static final class LIMELIGHT {

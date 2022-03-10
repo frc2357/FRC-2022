@@ -1,17 +1,14 @@
 package com.team2357.frc2022.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem.PipelineIndex;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
@@ -80,12 +77,6 @@ public class SubsystemFactory {
     }
 
     public ClimberSubsystem CreateClimberSubsystem() {
-        ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
-        config.m_climberMotorIdleMode = IdleMode.kBrake;
-        config.m_climberMotorStallLimitAmps = Constants.CLIMBER.MOTOR_STALL_LIMIT_AMPS;
-        config.m_climberMotorFreeLimitAmps = Constants.CLIMBER.MOTOR_FREE_LIMIT_AMPS;
-        config.m_isRightSideInverted = Constants.CLIMBER.INVERT_RIGHT_SIDE;
-
         CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
         DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
@@ -94,7 +85,8 @@ public class SubsystemFactory {
                 Constants.PH_ID.CLIMBER_HOOK_SOLENOID_CHANNEL);
         ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid,
                 hookSolenoid);
-        subsystem.configure(config);
+
+        subsystem.configure(Constants.CLIMBER.GET_CLIMBER_CONFIG());
 
         return subsystem;
     }
