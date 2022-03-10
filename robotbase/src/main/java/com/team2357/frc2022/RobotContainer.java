@@ -84,6 +84,7 @@ public class RobotContainer {
             .withShooterSub(m_shooterSub)
             .withKickerSub(m_kickerSub)
             .withTurretSub(m_turretSub)
+            .withFeederSub(m_feederSub)
             .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
