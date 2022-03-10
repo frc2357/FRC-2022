@@ -64,7 +64,6 @@ public final class Constants {
 
         // Kicker
         public static final int KICKER_MOTOR_ID = 29;
-
     }
 
     public final class PH_ID {
@@ -81,8 +80,8 @@ public final class Constants {
     }
 
     public final class INTAKE {
-        public static final double FORWARD_SPEED = 0;
-        public static final double REVERSE_SPEED = 0;
+        public static final double FORWARD_SPEED = 0.5;
+        public static final double REVERSE_SPEED = -0.5;
     }
 
     // Encoder Constants
@@ -170,7 +169,7 @@ public final class Constants {
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
-        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
+        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.2;
 
         public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
         public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
@@ -249,11 +248,18 @@ public final class Constants {
     }
 
     public final class COMPRESSOR {
-        public static final int MIN_PRESSURE_PSI = 70;
+        public static final int MIN_PRESSURE_PSI = 90;
         public static final int MAX_PRESSURE_PSI = 120;
     }
 
     public final class KICKER {
         public static final double SPEED = 0;
+    }
+
+    public final class FEEDER {
+        public static final boolean IS_INVERTED = true;
+
+        public static final double UP_SPEED = 0.25;
+        public static final double DOWN_SPEED = -0.25;
     }
 }
