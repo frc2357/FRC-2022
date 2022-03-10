@@ -18,6 +18,14 @@ public abstract class SkidSteerDriveSubsystem extends ClosedLoopSubsystem {
 	protected boolean m_isLeftInverted = false;
 	protected boolean m_isRightInverted = false;
 
+	// Drive curves
+	private double m_speedMixedThreshold = 0.0;
+	private double m_speedFullThreshold = 0.0;
+	private double m_wheelGain = 0.0;
+	private double m_wheelNonLinearity = 0.0;
+	private double m_curveCalculationDenominator = 0.0;
+
+
 	public static class Configuration {
 		/**
 		 * The distance between the drive wheels. Measure from the center of the left
@@ -47,6 +55,18 @@ public abstract class SkidSteerDriveSubsystem extends ClosedLoopSubsystem {
 		 * Whether or not the right talon group needs to be inverted Value: boolean
 		 */
 		public boolean m_isRightInverted = false;
+
+		/**
+		 * Thresholds to use curving while driving
+		 */
+		public double m_speedMixedThreshold = 0.15;
+		public double m_speedFullThreshold = 0.3;
+
+		/**
+		 * Values for curve calculations
+		 */
+		private double m_wheelGain = 0.05;
+		private double m_wheelNonLinearity = 0.2;
 	}
 
 	protected MotorControllerGroup m_leftControllers;
@@ -67,6 +87,11 @@ public abstract class SkidSteerDriveSubsystem extends ClosedLoopSubsystem {
 		m_leftControllers.setInverted(config.m_isLeftInverted);
 		m_isRightInverted = config.m_isRightInverted;
 		m_rightControllers.setInverted(config.m_isRightInverted);
+		m_speedMixedThreshold = config.m_speedMixedThreshold;
+		m_speedFullThreshold = config.m_speedFullThreshold;
+		m_wheelGain = config.m_wheelGain;
+		m_wheelNonLinearity = config.m_wheelNonLinearity;
+		m_curveCalculationDenominator = Math.sin(Math.PI / 2.0 * m_wheelNonLinearity);
 	}
 
 	public final double getMaxSpeedInchesPerSecond() {
@@ -91,9 +116,32 @@ public abstract class SkidSteerDriveSubsystem extends ClosedLoopSubsystem {
 	}
 
 	public final void driveProportional(double speedProportion, double turnProportion) {
-		double leftProportion = speedProportion - turnProportion;
-		double rightProportion = speedProportion + turnProportion;
-		setProportional(leftProportion, rightProportion);
+		//Results
+		double leftResult = 0;
+		double rightResult = 0;
+
+        // Apply a sin function for the curve
+		double wheel = speedProportion;
+        wheel = Math.sin(Math.PI / 2.0 * m_wheelNonLinearity * wheel);
+        wheel = Math.sin(Math.PI / 2.0 * m_wheelNonLinearity * wheel);
+        wheel = wheel / (m_curveCalculationDenominator * m_curveCalculationDenominator) * Math.abs(speedProportion);
+		wheel *= m_wheelGain;
+
+		if(speedProportion > m_speedFullThreshold) {
+			// full curve
+			leftResult = speedProportion - wheel;
+			rightResult = speedProportion + wheel;
+		} else if (speedProportion > m_speedMixedThreshold) {
+			// Mixed curve
+			leftResult = speedProportion - ((turnProportion+wheel)/2);
+			rightResult = speedProportion + ((turnProportion+wheel)/2);
+		} else {
+			//Regular proportional
+			leftResult = speedProportion - turnProportion;
+			rightResult = speedProportion + turnProportion;
+		}
+
+		setProportional(leftResult, rightResult);
 	}
 
 	public final void driveVelocity(double speedInchesPerSecond, double turnDegreesPerSecond) {
