@@ -192,7 +192,7 @@ public class GunnerControls {
 
             if (m_kickerSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
-                        new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
+                        new KickerSetSpeedCommand(m_kickerSub, Constants.SHOOTER.KICKER.SPEED));
             }
 
             if (m_kickerSub != null && m_feederSub != null && m_shooterSub != null) {

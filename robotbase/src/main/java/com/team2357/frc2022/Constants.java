@@ -137,6 +137,10 @@ public final class Constants {
     }
 
     public static final class SHOOTER {
+        public final class KICKER {
+            public static final double SPEED = 0;
+        }
+        
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
             ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
             /** Clicks per rotation for the internal encoder in the Falcon 500 */
@@ -246,10 +250,6 @@ public final class Constants {
     public final class COMPRESSOR {
         public static final int MIN_PRESSURE_PSI = 70;
         public static final int MAX_PRESSURE_PSI = 120;
-    }
-
-    public final class KICKER {
-        public static final double SPEED = 0;
     }
 
     public final class SHOOT_HUB_SPEEDS {
