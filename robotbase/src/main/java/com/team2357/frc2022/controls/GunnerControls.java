@@ -189,9 +189,9 @@ public class GunnerControls {
 
             if (m_climbSub != null) {
                 m_gunnerControls.m_yButtonAndRightDPad.whileActiveOnce(
-                        new ClimberSimpleRunMotorsCommand(m_climbSub, -0.2)); // Extend
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, 0.2)); // Extend
                 m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
-                        new ClimberSimpleRunMotorsCommand(m_climbSub, 0.4)); // Retract
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, -0.4)); // Retract
                 m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
                 m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(new ClimberToggleLatchCommand(m_climbSub));
             }

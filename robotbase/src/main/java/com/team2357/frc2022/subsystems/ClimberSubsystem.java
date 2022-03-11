@@ -1,8 +1,11 @@
 package com.team2357.frc2022.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -20,6 +23,20 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public int m_climberMotorFreeLimitAmps = 0;
 
         public boolean m_isRightSideInverted = false;
+
+        // smart motion config
+        public double m_climberMotorP = 0;
+        public double m_climberMotorI = 0;
+        public double m_climberMotorD = 0;
+        public double m_climberMotorIZone = 0;
+        public double m_climberMotorFF = 0;
+        public double m_climberMotorMaxOutput = 0;
+        public double m_climberMotorMinOutput = 0;
+        public double m_climberMotorMaxRPM = 0;
+        public double m_climberMotorMaxVel = 0;
+        public double m_climberMotorMinVel = 0;
+        public double m_climberMotorMaxAcc = 0;
+        public double m_climberMotorAllowedError = 0;
     }
 
     private Configuration m_config;
@@ -27,6 +44,10 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private CANSparkMax m_rightClimberMotor;
     private DoubleSolenoid m_climberSolenoid;
     private Solenoid m_hookSolenoid;
+    private SparkMaxPIDController m_leftPidController;
+    private SparkMaxPIDController m_rightPidController;
+    
+    private double m_targetRotations;
 
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
             Solenoid hookSolenoid) {
@@ -41,15 +62,80 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void configure(Configuration config) {
         m_config = config;
 
-        m_leftClimberMotor.setInverted(!m_config.m_isRightSideInverted);
-        m_leftClimberMotor.setIdleMode(m_config.m_climberMotorIdleMode);
-        m_leftClimberMotor.setSmartCurrentLimit(m_config.m_climberMotorStallLimitAmps,
-                m_config.m_climberMotorFreeLimitAmps);
+        configureClimberMotor(m_leftClimberMotor);
+        configureClimberMotor(m_rightClimberMotor);
 
+        m_leftPidController = m_leftClimberMotor.getPIDController();
+        configureClimberPID(m_leftPidController);
+
+        m_rightPidController = m_rightClimberMotor.getPIDController();
+        configureClimberPID(m_rightPidController);
+
+        m_leftClimberMotor.setInverted(!m_config.m_isRightSideInverted);
         m_rightClimberMotor.setInverted(m_config.m_isRightSideInverted);
-        m_rightClimberMotor.setIdleMode(m_config.m_climberMotorIdleMode);
-        m_rightClimberMotor.setSmartCurrentLimit(m_config.m_climberMotorStallLimitAmps,
+    }
+
+    private void configureClimberMotor(CANSparkMax motor) {
+        motor.setIdleMode(m_config.m_climberMotorIdleMode);
+        motor.setSmartCurrentLimit(m_config.m_climberMotorStallLimitAmps,
                 m_config.m_climberMotorFreeLimitAmps);
+    }
+
+    private void configureClimberPID(SparkMaxPIDController pidController) {
+        // set PID coefficients
+        pidController.setP(m_config.m_climberMotorP);
+        pidController.setI(m_config.m_climberMotorI);
+        pidController.setD(m_config.m_climberMotorD);
+        pidController.setIZone(m_config.m_climberMotorIZone);
+        pidController.setFF(m_config.m_climberMotorFF);
+        pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMinOutput);
+
+        // Configure smart motion
+        int smartMotionSlot = 0;
+        pidController.setSmartMotionMaxVelocity(m_config.m_climberMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_climberMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
+    }
+
+    /**
+     * 
+     * @param rotations Setpoint in rotations for the climber motor to go to
+     * @return
+     */
+    public void setClimberRotations(double rotations) {
+        m_targetRotations = rotations;
+        m_leftPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
+        m_rightPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
+    }
+
+    /**
+     * 
+     * @return Is the climber at the setpoint set by {@Link setClimberRotations}
+     */
+    public boolean isClimberAtRotations() {
+        
+        return isLeftClimberAtRotations() && isRightClimberAtRotations();
+    }
+
+    /**
+     * 
+     * @return Is the climber at the setpoint set by {@Link setClimberRotations}
+     */
+    public boolean isLeftClimberAtRotations() {
+        double currentMotorRotations = m_leftClimberMotor.getEncoder().getPosition();
+        return Utility.isWithinTolerance(currentMotorRotations, m_targetRotations,
+                m_config.m_climberMotorAllowedError);
+    }
+
+    /**
+     * 
+     * @return Is the climber at the setpoint set by {@Link setClimberRotations}
+     */
+    public boolean isRightClimberAtRotations() {
+        double currentMotorRotations = m_rightClimberMotor.getEncoder().getPosition();
+        return Utility.isWithinTolerance(currentMotorRotations, m_targetRotations,
+                m_config.m_climberMotorAllowedError);
     }
 
     // Method to set climber speed
