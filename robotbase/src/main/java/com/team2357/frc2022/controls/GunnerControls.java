@@ -2,8 +2,12 @@ package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.FeederSetSpeedCommand;
+import com.team2357.frc2022.commands.ClimberToggleLatchCommand;
+import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
+import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
 import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
@@ -54,6 +58,11 @@ public class GunnerControls {
     public Trigger m_aButtonAndDownDPad;
     public Trigger m_xButtonAndDownDPad;
 
+    public Trigger m_bButtonAndRightDPad;
+    public Trigger m_yButtonAndRightDPad;
+    public Trigger m_aButtonAndRightDPad;
+    public Trigger m_xButtonAndRightDPad;
+
     /**
      * @param builder The GunnerControlsBuilder object
      */
@@ -83,6 +92,10 @@ public class GunnerControls {
         // Chords
         m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
         m_yButtonAndLeftDPad = m_yButton.and(m_leftDPad);
+        m_bButtonAndRightDPad = m_bButton.and(m_rightDPad);
+        m_yButtonAndRightDPad = m_yButton.and(m_rightDPad);
+        m_aButtonAndRightDPad = m_aButton.and(m_rightDPad);
+        m_xButtonAndRightDPad = m_xButton.and(m_rightDPad);
         m_aButtonAndDownDPad = m_aButton.and(m_downDPad);
         m_xButtonAndDownDPad = m_xButton.and(m_downDPad);
     }
@@ -122,6 +135,7 @@ public class GunnerControls {
     public static class GunnerControlsBuilder {
         private XboxController m_controller = null;
         private IntakeSubsystem m_intakeSub = null;
+        private ClimberSubsystem m_climbSub = null;
         private ShooterSubsystem m_shooterSub = null;
         private FeederSubsystem m_feederSub = null;
         private TurretSubsystem m_turretSub = null;
@@ -135,6 +149,11 @@ public class GunnerControls {
 
         public GunnerControlsBuilder withIntakeSub(IntakeSubsystem intakeSub) {
             m_intakeSub = intakeSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withClimbSub(ClimberSubsystem climbSub) {
+            m_climbSub = climbSub;
             return this;
         }
 
@@ -166,6 +185,15 @@ public class GunnerControls {
                         new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED));
 
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
+            }
+
+            if (m_climbSub != null) {
+                m_gunnerControls.m_yButtonAndRightDPad.whileActiveOnce(
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, -0.2)); // Extend
+                m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
+                        new ClimberSimpleRunMotorsCommand(m_climbSub, 0.4)); // Retract
+                m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
+                m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(new ClimberToggleLatchCommand(m_climbSub));
             }
 
             // TODO: Finish shooter controls
