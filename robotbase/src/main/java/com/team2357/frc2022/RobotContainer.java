@@ -83,7 +83,7 @@ public class RobotContainer {
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
             .withIntakeSub(m_intakeSub)
             .withShooterSub(m_shooterSub)
-            .withKickerSub(m_kickerSub)
+            .withFeederSub(m_feederSub)
             .withTurretSub(m_turretSub)
             .withClimbSub(m_climbSub)
             .build();

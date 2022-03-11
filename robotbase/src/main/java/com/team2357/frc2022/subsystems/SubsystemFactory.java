@@ -3,6 +3,7 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -92,9 +93,10 @@ public class SubsystemFactory {
     }
 
     public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
-        WPI_TalonSRX feederTalon = new WPI_TalonSRX((Constants.CAN_ID.FEEDER_MOTOR_ID));
-        return new FeederSubsystem(feederTalon, feederSensorState);
-    }
+        WPI_VictorSPX feederVictor = new WPI_VictorSPX((Constants.CAN_ID.FEEDER_MOTOR_ID));
+        feederVictor.setInverted(Constants.FEEDER.IS_INVERTED);
+        return new FeederSubsystem(feederVictor, feederSensorState);
+    }   
 
     public KickerSubsystem CreateKickerSubsystem() {
         CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID,
