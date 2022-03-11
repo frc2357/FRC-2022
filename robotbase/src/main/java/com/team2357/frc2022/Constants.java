@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -69,7 +71,10 @@ public final class Constants {
 
     public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
-        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 0;
+        public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 1;
+        public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 2;
+        public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 3;
+        public static final int CLIMBER_HOOK_SOLENOID_CHANNEL = 4;
     }
 
     public final class CONTROLLER {
@@ -142,8 +147,11 @@ public final class Constants {
 
     public static final class SHOOTER {
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
-            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
-            /** Clicks per rotation for the internal encoder in the Falcon 500 */
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();/**
+                                                                                          * Clicks per rotation for the
+                                                                                          * internal encoder in the
+                                                                                          * Falcon 500
+                                                                                          */
             config.m_encoder_cpr = 2048;
 
             config.m_bottomShooterGearingRatio = 1.3;
@@ -205,6 +213,19 @@ public final class Constants {
             config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
             config.m_turretRotationsClockwiseSoftLimit = 0.75;
             config.m_turretGearRatio = 49.6;
+            return config;
+        }
+    }
+
+    public static final class CLIMBER {
+        public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
+            ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
+
+            config.m_climberMotorIdleMode = IdleMode.kBrake;
+            config.m_climberMotorStallLimitAmps = 35;
+            config.m_climberMotorFreeLimitAmps = 35;
+            config.m_isRightSideInverted = true;
+
             return config;
         }
     }
