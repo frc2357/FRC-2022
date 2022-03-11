@@ -3,17 +3,15 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  * Command to toggle dynamic hooks open and close
  * 
  * @category Climber
  */
-public class ClimberHookTogglePivotCommand extends CommandLoggerBase {
+public class ClimberToggleLatchCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
 
-    public ClimberHookTogglePivotCommand(ClimberSubsystem climbSub) {
+    public ClimberToggleLatchCommand(ClimberSubsystem climbSub) {
         m_climbSub = climbSub;
     }
 

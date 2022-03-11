@@ -3,8 +3,6 @@ package com.team2357.frc2022.commands;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  * Command to set the pivot of the pivoting arms
  * 
@@ -20,9 +18,7 @@ public class ClimberTogglePivotCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        m_climbSub.setClimberPivot(
-                m_climbSub.getClimberPivot() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward
-                        : DoubleSolenoid.Value.kReverse);
+        m_climbSub.setClimberUpright(!m_climbSub.isClimberUpright()) ;
     }
 
     @Override

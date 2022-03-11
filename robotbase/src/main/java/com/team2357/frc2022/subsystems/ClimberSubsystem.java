@@ -77,12 +77,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return m_rightClimberMotor.getEncoder().getPosition();
     }
 
-    public void setClimberPivot(DoubleSolenoid.Value value) {
-        m_climberSolenoid.set(value);
+    public void setClimberUpright(boolean setUpright) {
+        m_climberSolenoid.set(setUpright ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     }
 
-    public DoubleSolenoid.Value getClimberPivot() {
-        return m_climberSolenoid.get();
+    public boolean isClimberUpright() {
+        return (m_climberSolenoid.get() == DoubleSolenoid.Value.kForward);
     }
 
     public void setHookPivot(boolean value) {

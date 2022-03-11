@@ -1,7 +1,7 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
-import com.team2357.frc2022.commands.ClimberHookTogglePivotCommand;
+import com.team2357.frc2022.commands.ClimberToggleLatchCommand;
 import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
 import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
 import com.team2357.frc2022.commands.IntakeRollerCommand;
@@ -192,7 +192,7 @@ public class GunnerControls {
                 m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
                         new ClimberSimpleRunMotorsCommand(m_climbSub, 0.4)); // Retract
                 m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
-                m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(new ClimberHookTogglePivotCommand(m_climbSub));
+                m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(new ClimberToggleLatchCommand(m_climbSub));
             }
 
             // TODO: Finish shooter controls
