@@ -1,8 +1,8 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
@@ -69,9 +69,12 @@ public class SubsystemFactory {
     }
 
     public ShooterSubsystem CreateShooterSubsystem() {
-        WPI_TalonFX leftBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
-        WPI_TalonFX rightBottom = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
-        WPI_TalonFX top = new WPI_TalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        WPI_TalonFX leftBottom = Utility.createShooterTalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_LEFT);
+        WPI_TalonFX rightBottom = Utility.createShooterTalonFX(Constants.CAN_ID.SHOOTER_BOTTOM_RIGHT);
+        WPI_TalonFX top = Utility.createShooterTalonFX(Constants.CAN_ID.SHOOTER_TOP);
+        leftBottom.setNeutralMode(NeutralMode.Coast);
+        rightBottom.setNeutralMode(NeutralMode.Coast);
+        top.setNeutralMode(NeutralMode.Coast);
         ShooterSubsystem subsystem = new ShooterSubsystem(leftBottom, rightBottom, top);
         subsystem.configure(Constants.SHOOTER.CONFIG_SHOOTER());
         return subsystem;
