@@ -58,14 +58,13 @@ public class Utility {
 
   /**
    * 
-   * @param CANID         The CAN ID of the motor
+   * @param CANID The CAN ID of the motor
    */
   public static WPI_TalonFX createShooterTalonFX(int CANID) {
     WPI_TalonFX talon = new WPI_TalonFX(CANID);
     talon.setNeutralMode(NeutralMode.Brake);
     return talon;
   }
-
 
   public static int getAverage(int[] samples) {
     int sum = 0;
