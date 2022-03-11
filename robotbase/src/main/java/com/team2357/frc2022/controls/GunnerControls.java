@@ -54,7 +54,7 @@ public class GunnerControls {
     public Trigger m_xButtonAndLeftDPad;
     public Trigger m_yButtonAndLeftDPad;
     public Trigger m_aButtonAndDownDPad;
-    public Trigger m_xButtonAndDownDPad;
+    public Trigger m_rightTriggerAndDownDPad;
 
     /**
      * @param builder The GunnerControlsBuilder object
@@ -86,7 +86,7 @@ public class GunnerControls {
         m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
         m_yButtonAndLeftDPad = m_yButton.and(m_leftDPad);
         m_aButtonAndDownDPad = m_aButton.and(m_downDPad);
-        m_xButtonAndDownDPad = m_aButton.and(m_downDPad);
+        m_rightTriggerAndDownDPad = m_rightTrigger.and(m_downDPad);
     }
 
     /**
@@ -192,11 +192,11 @@ public class GunnerControls {
 
             if (m_kickerSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
-                        new KickerSetSpeedCommand(m_kickerSub, Constants.SHOOTER.KICKER.SPEED));
+                        new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
             }
 
             if (m_kickerSub != null && m_feederSub != null && m_shooterSub != null) {
-                m_gunnerControls.m_xButtonAndDownDPad.whileActiveOnce(
+                m_gunnerControls.m_rightTriggerAndDownDPad.whileActiveOnce(
                     new ShootAgainstHubCommand(m_kickerSub, m_feederSub, m_shooterSub));
             }
 
