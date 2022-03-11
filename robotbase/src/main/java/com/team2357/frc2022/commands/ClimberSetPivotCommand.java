@@ -1,11 +1,7 @@
 package com.team2357.frc2022.commands;
 
-import javax.xml.namespace.QName;
-
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * Command to set the pivot of the pivoting arms
