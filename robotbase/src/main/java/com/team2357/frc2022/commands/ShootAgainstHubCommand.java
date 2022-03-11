@@ -6,6 +6,8 @@ import com.team2357.frc2022.subsystems.KickerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 public class ShootAgainstHubCommand extends CommandLoggerBase{
     private KickerSubsystem m_kickerSub;
     private FeederSubsystem m_feederSub;
@@ -21,10 +23,12 @@ public class ShootAgainstHubCommand extends CommandLoggerBase{
     @Override
     public void initialize(){
         super.initialize();
-        m_kickerSub.runKickerMotor(Constants.SHOOT_HUB_SPEEDS.KICKER_SPEED);
-        m_feederSub.runFeedermotor(Constants.SHOOT_HUB_SPEEDS.FEEDER_SPEED);
-        m_shooterSub.setRPMTop(Constants.SHOOT_HUB_SPEEDS.SHOOTER_SPEED_TOP);
-        m_shooterSub.setRPMBottom(Constants.SHOOT_HUB_SPEEDS.SHOOTER_SPEED_BOTTOM);
+        m_shooterSub.setRPMTop(Constants.SHOOTER.SHOOT_AGAINST_HUB.SHOOTER_SPEED_TOP);
+        m_shooterSub.setRPMBottom(Constants.SHOOTER.SHOOT_AGAINST_HUB.SHOOTER_SPEED_BOTTOM);
+        new WaitCommand(Constants.SHOOTER.SHOOT_AGAINST_HUB.WAIT_AFTER_SHOOTER);
+        m_kickerSub.runKickerMotor(Constants.SHOOTER.SHOOT_AGAINST_HUB.KICKER_SPEED);
+        m_feederSub.runFeedermotor(Constants.SHOOTER.SHOOT_AGAINST_HUB.FEEDER_SPEED);
+        
     }
 
     @Override
