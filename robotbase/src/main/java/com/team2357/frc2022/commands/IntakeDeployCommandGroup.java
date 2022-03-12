@@ -17,7 +17,6 @@ public class IntakeDeployCommandGroup extends SequentialCommandGroup {
     public IntakeDeployCommandGroup(IntakeSubsystem intakeSub) {
         m_intakeSub = intakeSub;
         addCommands(new IntakeSetPivotCommand(m_intakeSub, Value.kForward),
-                new WaitCommand(Constants.INTAKE.PIVOT_WAIT_SECONDS),
                 new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
         addRequirements(m_intakeSub);
         System.out.println("Constructing intake deploy");
@@ -32,6 +31,7 @@ public class IntakeDeployCommandGroup extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
         System.out.println("Ending intake deploy group");
+        super.end(interrupted);
         new IntakeStowCommandGroup(m_intakeSub).schedule();
     }
 

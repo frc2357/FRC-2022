@@ -14,7 +14,7 @@ public class IntakeStowCommandGroup extends SequentialCommandGroup {
 
     public IntakeStowCommandGroup(IntakeSubsystem intakeSub) {
         m_intakeSub = intakeSub;
-        addCommands(new IntakeRollerStop(m_intakeSub), new WaitCommand(Constants.INTAKE.ROLLER_STOP_SECONDS),
+        addCommands(new IntakeRollerStop(m_intakeSub),
                 new IntakeSetPivotCommand(m_intakeSub, Value.kReverse));
         addRequirements(m_intakeSub);
         System.out.println("Running stow constructor");

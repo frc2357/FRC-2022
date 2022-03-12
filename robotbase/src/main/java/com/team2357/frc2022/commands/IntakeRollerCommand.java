@@ -35,4 +35,9 @@ public class IntakeRollerCommand extends CommandLoggerBase {
         super.end(interrupted);
         m_intakeSub.triggerIntakeRoller(0.0);
     }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
