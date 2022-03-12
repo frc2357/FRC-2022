@@ -224,6 +224,7 @@ public final class Constants {
             config.m_climberMotorStallLimitAmps = 35;
             config.m_climberMotorFreeLimitAmps = 35;
             config.m_isRightSideInverted = false;
+            config.m_climberGrippedAmps = 20;
 
 
             // TODO: Tune climber smart motion constants, currently values from rev's example
