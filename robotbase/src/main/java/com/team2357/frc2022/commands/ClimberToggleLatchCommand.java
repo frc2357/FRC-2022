@@ -18,7 +18,7 @@ public class ClimberToggleLatchCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         m_climbSub
-                .setHookPivot(m_climbSub.isHookOpen() ? false
+                .setLatch(m_climbSub.isHookOpen() ? false
                         : true);
     }
 
