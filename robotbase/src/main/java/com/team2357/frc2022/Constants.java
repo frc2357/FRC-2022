@@ -6,10 +6,11 @@ package com.team2357.frc2022;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
+import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -82,11 +83,6 @@ public final class Constants {
         public static final int GUNNER_CONTROLLER_PORT = 1;
 
         public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
-    }
-
-    public final class INTAKE {
-        public static final double FORWARD_SPEED = 0.5;
-        public static final double REVERSE_SPEED = -0.5;
     }
 
     // Encoder Constants
@@ -212,6 +208,27 @@ public final class Constants {
             config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
             config.m_turretRotationsClockwiseSoftLimit = 0.75;
             config.m_turretGearRatio = 49.6;
+            return config;
+        }
+    }
+
+    public static final class INTAKE_ARM {
+        public static final IntakeArmSubsystem.Configuration GET_INTAKE_ARM_CONFIG() {
+            IntakeArmSubsystem.Configuration config = new IntakeArmSubsystem.Configuration();
+
+            config.m_deployMilliseconds = 1000;
+            config.m_stowMilliseconds = 1000;
+
+            return config;
+        }
+    }
+
+    public static final class INTAKE_ROLLER {
+        public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
+            IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
+            
+            config.m_rollerTopSpeed = 0.85;
+
             return config;
         }
     }

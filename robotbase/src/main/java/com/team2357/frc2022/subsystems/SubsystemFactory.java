@@ -63,12 +63,20 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public IntakeSubsystem CreateIntakeSubsystem(SensorBooleanState intakeSensorState) {
+    public IntakeArmSubsystem createIntakeArmSubsystem() {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(Constants.CAN_ID.PNEUMATICS_HUB_ID,
                 PneumaticsModuleType.REVPH, Constants.PH_ID.INTAKE_SOLENOID_FORWARD_CHANNEL,
                 Constants.PH_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
+        IntakeArmSubsystem subsystem = new IntakeArmSubsystem(intakeDoubleSolenoid);
+        subsystem.configure(Constants.INTAKE_ARM.GET_INTAKE_ARM_CONFIG());
+        return subsystem;
+    }
+
+    public IntakeRollerSubsystem CreateIntakeRollerSubsystem() {
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
-        return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
+        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(intakeVictor);
+        subsystem.configure(Constants.INTAKE_ROLLER.GET_INTAKE_ROLLER_CONFIG());
+        return subsystem;
     }
 
     public ShooterSubsystem CreateShooterSubsystem() {
