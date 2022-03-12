@@ -1,25 +1,24 @@
-package com.team2357.frc2022.commands;
+package com.team2357.frc2022.commands.climb;
 
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 /**
- * Command to toggle dynamic hooks open and close
+ * Command to set the pivot of the pivoting arms
  * 
  * @category Climber
  */
-public class ClimberToggleLatchCommand extends CommandLoggerBase {
+public class ClimberTogglePivotCommand extends CommandLoggerBase {
     private ClimberSubsystem m_climbSub;
 
-    public ClimberToggleLatchCommand(ClimberSubsystem climbSub) {
+    public ClimberTogglePivotCommand(ClimberSubsystem climbSub) {
         m_climbSub = climbSub;
+        addRequirements(m_climbSub);
     }
 
     @Override
     public void initialize() {
-        m_climbSub
-                .setHookPivot(m_climbSub.isHookOpen() ? false
-                        : true);
+        m_climbSub.setClimberUpright(!m_climbSub.isClimberUpright()) ;
     }
 
     @Override

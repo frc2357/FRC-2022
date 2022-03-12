@@ -1,4 +1,4 @@
-package com.team2357.frc2022.commands;
+package com.team2357.frc2022.commands.climb;
 
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
