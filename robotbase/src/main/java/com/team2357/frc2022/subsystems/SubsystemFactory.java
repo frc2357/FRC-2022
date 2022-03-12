@@ -27,6 +27,10 @@ public class SubsystemFactory {
     public SubsystemFactory() {
     }
 
+    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
+        return new SensorSubsystem(intakeSensor, feederSensor);
+    }
+
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
 
         WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,

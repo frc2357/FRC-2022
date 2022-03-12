@@ -12,6 +12,7 @@ import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.KickerSubsystem;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.lib.commands.DriveProportionalCommand;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private SensorSubsystem m_sensorSub;
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
   private ShooterSubsystem m_shooterSub;
@@ -65,6 +67,7 @@ public class RobotContainer {
 
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
+    m_sensorSub = subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_shooterSub = subsystemFactory.CreateShooterSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
