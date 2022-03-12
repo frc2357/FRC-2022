@@ -1,7 +1,6 @@
 package com.team2357.frc2022.commands;
 
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.team2357.frc2022.Constants;
 

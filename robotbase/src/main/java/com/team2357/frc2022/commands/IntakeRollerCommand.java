@@ -31,6 +31,11 @@ public class IntakeRollerCommand extends CommandLoggerBase {
     }
 
     @Override
+    public void execute(){
+        System.out.println("Running intake");
+    }
+
+    @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         m_intakeSub.triggerIntakeRoller(0.0);

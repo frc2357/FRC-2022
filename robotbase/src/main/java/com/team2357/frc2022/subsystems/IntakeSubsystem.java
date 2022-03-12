@@ -55,6 +55,7 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isCargoInIntake() {
-        return m_intakeSensor.getState();
+        return false;
+        //return m_intakeSensor.getState();
     }
 }
