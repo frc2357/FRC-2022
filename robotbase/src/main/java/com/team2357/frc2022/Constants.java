@@ -217,6 +217,8 @@ public final class Constants {
     }
 
     public static final class CLIMBER {
+        public static final double PULL_ONTO_RUNG_ROTATIONS = 0;
+
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 
