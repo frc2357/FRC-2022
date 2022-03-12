@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 /* * 
  * 
- * @category climber
+ * @Category climber
  */
 
 public class ClimberSubsystem extends ClosedLoopSubsystem {
