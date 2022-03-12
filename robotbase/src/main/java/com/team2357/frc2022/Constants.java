@@ -31,8 +31,9 @@ public final class Constants {
      * failing. milliseconds
      */
     public static final int TIMEOUT_MS = 30;
-
     public final class CAN_ID {
+        public static final int PDH_ID = 1;
+
         // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 2;
 
@@ -76,6 +77,10 @@ public final class Constants {
         public static final int CLIMBER_HOOK_SOLENOID_CHANNEL = 4;
     }
 
+    public final class POWER_DISTRIBUTION_BOARD_ID {
+        public static final int INTAKE_CHANNEL = 13;
+    }
+
     public final class CONTROLLER {
         public static final int DRIVE_CONTROLLER_PORT = 0;
         // Controller Constants
@@ -85,10 +90,11 @@ public final class Constants {
     }
 
     public final class INTAKE {
-        public static final double FORWARD_SPEED = 0.5;
-        public static final double REVERSE_SPEED = -0.5;
+        public static final double FORWARD_SPEED = 0.85;
+        public static final double REVERSE_SPEED = -0.85;
         public static final double PIVOT_WAIT_SECONDS = 0;
         public static final double ROLLER_STOP_SECONDS = 0;
+        public static final int MAX_LIMIT_AMPS = 60;
         public static final boolean INVERT_MOTOR = false;
     }
 

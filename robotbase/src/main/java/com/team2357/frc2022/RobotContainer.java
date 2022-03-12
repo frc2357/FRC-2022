@@ -21,7 +21,9 @@ import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -41,6 +43,7 @@ public class RobotContainer {
   private KickerSubsystem m_kickerSub;
   private TurretSubsystem m_turretSub;
   private TogglableLimelightSubsystem m_visionSub;
+  private PowerDistribution m_pdh;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
@@ -53,6 +56,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_pdh = new PowerDistribution(Constants.CAN_ID.PDH_ID, ModuleType.kRev);
+
     m_intakeSensor = new DigitalInput(Constants.DIO_IDS.INTAKE_SENSOR_DIO_PORT);
     m_feederSensor = new DigitalInput(Constants.DIO_IDS.FEEDER_SENSOR_DIO_PORT);
 
@@ -77,11 +82,12 @@ public class RobotContainer {
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
         new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
-            .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
+            .withIntakeSub(m_intakeSub).withPDH(m_pdh).withVisionSub(m_visionSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
             .withIntakeSub(m_intakeSub)
+            .withPDH(m_pdh)
             .withShooterSub(m_shooterSub)
             .withFeederSub(m_feederSub)
             .withTurretSub(m_turretSub)

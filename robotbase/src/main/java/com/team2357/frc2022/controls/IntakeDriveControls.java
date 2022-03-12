@@ -1,7 +1,6 @@
 package com.team2357.frc2022.controls;
 
-import java.util.function.BooleanSupplier;
-
+import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.IntakeDeployCommandGroup;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
@@ -11,10 +10,9 @@ import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
 import com.team2357.lib.util.XboxRaw;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -74,6 +72,7 @@ public class IntakeDriveControls extends InvertDriveControls {
     public static class IntakeDriveControlsBuilder {
         private IntakeSubsystem m_intakeSub = null;
         private InvertDriveControlsBuilder m_invertDriveBuilder = null;
+        private PowerDistribution m_pdh = null;
 
         /**
          * @param controller the controller of the IntakeDriver controls
@@ -97,15 +96,18 @@ public class IntakeDriveControls extends InvertDriveControls {
             return this;
         }
 
+        public IntakeDriveControlsBuilder withPDH(PowerDistribution pdh) {
+            m_pdh = pdh;
+            return this;
+        }
+
         public IntakeDriveControls build() {
             IntakeDriveControls m_IntakeDriverControls = new IntakeDriveControls(this);
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                m_IntakeDriverControls.m_leftTrigger.toggleWhenActive(new IntakeDeployCommandGroup(m_intakeSub),
-                       true);
-               // m_IntakeDriverControls.m_aButton.toggleWhenActive(new IntakeDeployCommandGroup(m_intakeSub));
-            
+                m_IntakeDriverControls.m_leftTrigger.toggleWhenActive(new IntakeDeployCommandGroup(m_intakeSub, m_pdh, Constants.INTAKE.MAX_LIMIT_AMPS),
+                       true);            
             }
 
             return m_IntakeDriverControls;

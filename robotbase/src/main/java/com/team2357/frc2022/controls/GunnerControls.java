@@ -18,6 +18,7 @@ import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.ControllerAxis;
 import com.team2357.lib.util.XboxRaw;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -139,6 +140,7 @@ public class GunnerControls {
         private ShooterSubsystem m_shooterSub = null;
         private FeederSubsystem m_feederSub = null;
         private TurretSubsystem m_turretSub = null;
+        private PowerDistribution m_pdh = null;
 
         /**
          * @param controller the controller of the gunner controls
@@ -172,18 +174,25 @@ public class GunnerControls {
             return this;
         }
 
+        public GunnerControlsBuilder withPDH(PowerDistribution pdh) {
+            m_pdh = pdh;
+            return this;
+        }
+
         public GunnerControls build() {
             GunnerControls m_gunnerControls = new GunnerControls(this);
 
             // Intake Mode Bindings
             if (m_intakeSub != null) {
-                m_gunnerControls.m_leftTrigger.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub,
-                                Constants.INTAKE.FORWARD_SPEED));
+                if (m_pdh != null) {
+                    m_gunnerControls.m_leftTrigger.whileActiveOnce(
+                            new IntakeRollerCommand(m_intakeSub,
+                                    Constants.INTAKE.FORWARD_SPEED, m_pdh, Constants.INTAKE.MAX_LIMIT_AMPS));
 
-                m_gunnerControls.m_yButtonAndLeftDPad.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED));
-
+                    m_gunnerControls.m_yButtonAndLeftDPad.whileActiveOnce(
+                            new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED, m_pdh,
+                                    Constants.INTAKE.MAX_LIMIT_AMPS));
+                }
                 m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
             }
 
@@ -213,9 +222,9 @@ public class GunnerControls {
             if (m_feederSub != null) {
                 m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
                         new FeederSetSpeedCommand(m_feederSub, Constants.FEEDER.UP_SPEED));
-                        m_gunnerControls.m_xButtonAndDownDPad.whileActiveOnce(
-                            new FeederSetSpeedCommand(m_feederSub, Constants.FEEDER.DOWN_SPEED));
-                
+                m_gunnerControls.m_xButtonAndDownDPad.whileActiveOnce(
+                        new FeederSetSpeedCommand(m_feederSub, Constants.FEEDER.DOWN_SPEED));
+
             }
 
             return m_gunnerControls;

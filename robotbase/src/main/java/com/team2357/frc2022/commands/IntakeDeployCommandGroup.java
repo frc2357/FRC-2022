@@ -1,6 +1,8 @@
 package com.team2357.frc2022.commands;
 
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.team2357.frc2022.Constants;
 
@@ -13,10 +15,10 @@ public class IntakeDeployCommandGroup extends SequentialCommandGroup {
 
     private IntakeSubsystem m_intakeSub;
 
-    public IntakeDeployCommandGroup(IntakeSubsystem intakeSub) {
+    public IntakeDeployCommandGroup(IntakeSubsystem intakeSub, PowerDistribution pdh, double intakeCurrentLimit) {
         m_intakeSub = intakeSub;
         addCommands(new IntakeSetPivotCommand(m_intakeSub, Value.kForward),
-                new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED));
+                new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.FORWARD_SPEED, pdh, intakeCurrentLimit));
         addRequirements(m_intakeSub);
         System.out.println("Constructing intake deploy");
     }
