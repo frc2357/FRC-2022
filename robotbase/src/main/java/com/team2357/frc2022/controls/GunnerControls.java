@@ -199,7 +199,7 @@ public class GunnerControls {
             // TODO: Finish shooter controls
             if (m_shooterSub != null) {
                 m_gunnerControls.m_rightTrigger.whileActiveOnce(
-                        new ShooterSetRPMsCommand(m_shooterSub, 2250, 2750));
+                        new ShooterSetRPMsCommand(m_shooterSub, 2500 / (24 / 18), 10000 / (2 / 1)));
             }
 
             // Turret bindings
