@@ -98,9 +98,13 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         return m_turretMotor.getEncoder().getPosition() / m_config.m_turretGearRatio;
     }
 
+    private double getTargetTurretRotation() {
+        return m_targetMotorRotations / m_config.m_turretGearRatio;
+    }
+
     public boolean setTurretRotation(double rotation) {
         if (rotation < m_config.m_turretRotationsCounterClockwiseSoftLimit ||
-            rotation > m_config.m_turretRotationsClockwiseSoftLimit) {
+                rotation > m_config.m_turretRotationsClockwiseSoftLimit) {
 
             System.err.println("TURRET: setTurretRotation invalid rotation");
             return false;
@@ -114,7 +118,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     public boolean isAtTarget() {
         double currentMotorRotations = m_turretMotor.getEncoder().getPosition();
-        return Utility.isWithinTolerance(currentMotorRotations, m_targetMotorRotations, m_config.m_turretMotorAllowedError);
+        return Utility.isWithinTolerance(currentMotorRotations, m_targetMotorRotations,
+                m_config.m_turretMotorAllowedError);
     }
 
     @Override
@@ -135,15 +140,21 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     /**
      * Determines what direction the turret needs flipped
+     * 
      * @return Clockwise or CounterClokwise soft limit
      */
-    public double getTurretFlipRotations() {
-        if (m_targetMotorRotations - m_config.m_turretRotationsClockwiseSoftLimit > 
-            m_targetMotorRotations - m_config.m_turretRotationsCounterClockwiseSoftLimit) {
-           return m_config.m_turretRotationsClockwiseSoftLimit;
-        } else {
-            return m_config.m_turretRotationsCounterClockwiseSoftLimit;
+    public double calculateTurretFlipRotations() {
+        if (getTargetTurretRotation() > m_config.m_turretRotationsClockwiseSoftLimit) {
+            return m_config.m_turretRotationsCounterClockwiseSoftLimit
+                    + (getTargetTurretRotation() - m_config.m_turretRotationsClockwiseSoftLimit);
+
+        } else if (getTargetTurretRotation() < m_config.m_turretRotationsCounterClockwiseSoftLimit) {
+            return m_config.m_turretRotationsClockwiseSoftLimit
+                    + (getTargetTurretRotation() - m_config.m_turretRotationsCounterClockwiseSoftLimit);
+
         }
+
+        return getTargetTurretRotation();
     }
 
     /**
