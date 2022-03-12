@@ -1,5 +1,7 @@
 package com.team2357.lib.subsystems.drive;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
@@ -7,7 +9,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
     public double m_distancePerPulse;
@@ -24,6 +31,13 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
     // The right-side drive encoder
     private final Encoder m_rightEncoder;
+
+    //Data log
+    private DataLog m_robotLog = DataLogManager.getLog();
+    private DoubleLogEntry m_leftMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/leftMasterAmps");
+    private DoubleLogEntry m_rightMasterMotorLog = new DoubleLogEntry(m_robotLog, "/motors/rightMasterAmps");
+    private ArrayList<DoubleLogEntry> m_leftSlaveMotorsLogs =  new ArrayList<DoubleLogEntry>();
+    private ArrayList<DoubleLogEntry> m_rightSlaveMotorsLogs = new ArrayList<DoubleLogEntry>();
 
     public static class Configuration extends SkidSteerDriveSubsystem.Configuration {
         /**
@@ -64,6 +78,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_gyro = gyro;
         m_gyro.configFactoryDefault();
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
+        generateMotorLogEntries();
     }
 
     @Override
@@ -71,6 +87,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 -1 * m_rightEncoder.getDistance());
+        
+        logMotorAmperage();
     }
 
     public void configure(Configuration config) {
@@ -200,5 +218,28 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_gyro.getYawPitchRoll(ypr);
 
         return ypr;
+    }
+
+    public void logMotorAmperage() {
+        m_leftMasterMotorLog.append(m_leftFalconMaster.getStatorCurrent());
+        m_rightMasterMotorLog.append(m_rightFalconMaster.getStatorCurrent());
+
+        for(int i =0; i < m_leftFalconSlaves.length; i++){
+            m_leftSlaveMotorsLogs.get(i).append(m_leftFalconSlaves[i].getStatorCurrent());
+        }
+
+        for(int i = 0; i < m_rightFalconSlaves.length; i++) {
+            m_rightSlaveMotorsLogs.get(i).append(m_rightFalconSlaves[i].getStatorCurrent());
+        }
+    }
+
+    private void generateMotorLogEntries() {
+        for(int i = 0; i < m_leftFalconSlaves.length; i++ ) {
+            m_leftSlaveMotorsLogs.add(new DoubleLogEntry(m_robotLog, "/motors/leftSlaveAmps" + i));
+        }
+
+        for(int i = 0; i < m_rightFalconSlaves.length; i++ ) {
+            m_rightSlaveMotorsLogs.add(new DoubleLogEntry(m_robotLog, "/motors/rightSlaveAmps" + i));
+        }
     }
 }
