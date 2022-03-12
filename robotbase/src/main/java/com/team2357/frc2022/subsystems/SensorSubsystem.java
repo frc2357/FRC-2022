@@ -35,7 +35,7 @@ public class SensorSubsystem extends SubsystemBase {
         if (intakeState != m_lastIntakeState) {
             if (intakeState) {
                 m_currentCargoCount++;
-                m_cargoLaunched++;
+                m_cargoAcquired++;
             }
             m_lastIntakeState = intakeState;
         }
