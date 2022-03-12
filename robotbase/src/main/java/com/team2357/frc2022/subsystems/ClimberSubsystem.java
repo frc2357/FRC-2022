@@ -24,6 +24,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
         public boolean m_isRightSideInverted = false;
 
+        public int m_climberGrippedAmps = 0;
+
         // smart motion config
         public double m_climberMotorP = 0;
         public double m_climberMotorI = 0;
@@ -136,6 +138,10 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         double currentMotorRotations = m_rightClimberMotor.getEncoder().getPosition();
         return Utility.isWithinTolerance(currentMotorRotations, m_targetRotations,
                 m_config.m_climberMotorAllowedError);
+    }
+
+    public boolean isClimberGripped() {
+        return (m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) && (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps);
     }
 
     // Method to set climber speed
