@@ -186,7 +186,7 @@ public class GunnerControls {
 
             // Intake Mode Bindings
             if (m_intakeRollerSub != null && m_intakeRollerSub != null && m_sensorSub != null) {
-                m_gunnerControls.m_aButton.whileActiveOnce(new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub));
+                m_gunnerControls.m_aButton.toggleWhenActive(new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub));
             } else {
                 System.out.println("GUNNER: No Intake bindings, required subsystems not present");
             }

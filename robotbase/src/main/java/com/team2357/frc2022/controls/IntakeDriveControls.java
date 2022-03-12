@@ -103,7 +103,7 @@ public class IntakeDriveControls extends InvertDriveControls {
 
             // Intake Mode Bindings
             if (m_intakeArmSub != null && m_intakeRollerSub != null && m_sensorSub != null) {
-                m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
+                m_IntakeDriverControls.m_leftTrigger.toggleWhenActive(
                     new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub)
                 );
             } else {
