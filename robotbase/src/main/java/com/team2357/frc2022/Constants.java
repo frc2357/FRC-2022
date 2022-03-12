@@ -223,7 +223,23 @@ public final class Constants {
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 35;
             config.m_climberMotorFreeLimitAmps = 35;
-            config.m_isRightSideInverted = true;
+            config.m_isRightSideInverted = false;
+
+
+            // TODO: Tune climber smart motion constants, currently values from rev's example
+            config.m_climberMotorP = 0.00005;
+            config.m_climberMotorI = 0.0;
+            config.m_climberMotorD = 0.0;
+            config.m_climberMotorIZone = 0.0;
+            config.m_climberMotorFF = 0.000156;
+            config.m_climberMotorMaxOutput = 0.4;
+            config.m_climberMotorMinOutput = -0.2;
+            config.m_climberMotorMaxRPM = 1000;
+
+            config.m_climberMotorMaxVel = 500;
+            config.m_climberMotorMinVel = 0;
+            config.m_climberMotorMaxAcc = 5;
+            config.m_climberMotorAllowedError = 5;
 
             return config;
         }
