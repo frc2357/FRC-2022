@@ -153,8 +153,8 @@ public final class Constants {
                                                                                           */
             config.m_encoder_cpr = 2048;
 
-            config.m_bottomShooterGearingRatio = 1.3;
-            config.m_topShooterGearingRatio = 2;
+            config.m_bottomShooterGearingRatio = 24/18;
+            config.m_topShooterGearingRatio = 2/1;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
