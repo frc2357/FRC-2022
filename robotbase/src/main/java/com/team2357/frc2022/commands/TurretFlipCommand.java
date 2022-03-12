@@ -1,11 +1,15 @@
 package com.team2357.frc2022.commands;
 
 import com.team2357.frc2022.subsystems.TurretSubsystem;
+import com.team2357.lib.commands.CommandLoggerBase;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
-public class TurretFlipCommand extends SequentialCommandGroup {
+public class TurretFlipCommand extends CommandLoggerBase {
     public TurretFlipCommand (TurretSubsystem turretSub) {
-        addCommands(new TurretSetRotationCommand(turretSub, turretSub.calculateTurretFlipRotations()));
+        new TurretSetRotationCommand(turretSub, turretSub.calculateTurretFlipRotations()).schedule();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }
