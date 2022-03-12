@@ -4,13 +4,14 @@ import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class FeederSubsystem extends ClosedLoopSubsystem {
-    private WPI_TalonSRX m_feederMotor;
+    private WPI_VictorSPX m_feederMotor;
     private SensorBooleanState m_feederSensor;
 
-    public FeederSubsystem(WPI_TalonSRX talonSRX, SensorBooleanState feederSensor) {
-        m_feederMotor = talonSRX;
+    public FeederSubsystem(WPI_VictorSPX feederMotor, SensorBooleanState feederSensor) {
+        m_feederMotor = feederMotor;
         m_feederMotor.setInverted(true); // Does this still need to be inverted?
         m_feederSensor = feederSensor;
 

@@ -4,6 +4,8 @@
 
 package com.team2357.frc2022;
 
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -31,6 +33,10 @@ public final class Constants {
     public static final int TIMEOUT_MS = 30;
 
     public final class CAN_ID {
+        // Pneumatic hub
+        public static final int PNEUMATICS_HUB_ID = 2;
+
+        // Drive
         public static final int DRIVE_MOTOR_LEFT_1 = 11;
         public static final int DRIVE_MOTOR_RIGHT_1 = 12;
         public static final int DRIVE_MOTOR_LEFT_2 = 13;
@@ -43,27 +49,31 @@ public final class Constants {
         // Intake
         public static final int INTAKE_MOTOR_ID = 21;
 
-        // Shooter
-        public static final int SHOOTER_BOTTOM_LEFT = 22;
-        public static final int SHOOTER_BOTTOM_RIGHT = 23;
-        public static final int SHOOTER_TOP = 24;
+        // Climber
+        public static final int CLIMBER_MOTOR_LEFT_ID = 22;
+        public static final int CLIMBER_MOTOR_RIGHT_ID = 23;
 
         // Turret
-        public static final int TURRET_MOTOR_ID = 25;
+        public static final int TURRET_MOTOR_ID = 24;
+
+        // Shooter
+        public static final int SHOOTER_BOTTOM_LEFT = 25;
+        public static final int SHOOTER_BOTTOM_RIGHT = 26;
+        public static final int SHOOTER_TOP = 27;
 
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
 
         // Kicker
         public static final int KICKER_MOTOR_ID = 29;
-
-        // Pneumatic hub
-        public static final int PNEUMATICS_HUB_ID = 30;
     }
 
     public final class PH_ID {
         public static final int INTAKE_SOLENOID_FORWARD_CHANNEL = 0;
         public static final int INTAKE_SOLENOID_REVERSE_CHANNEL = 1;
+        public static final int CLIMBER_SOLENOID_FORWARD_CHANNEL = 2;
+        public static final int CLIMBER_SOLENOID_REVERSE_CHANNEL = 3;
+        public static final int CLIMBER_HOOK_SOLENOID_CHANNEL = 4;
     }
 
     public final class CONTROLLER {
@@ -75,8 +85,8 @@ public final class Constants {
     }
 
     public final class INTAKE {
-        public static final double FORWARD_SPEED = 0;
-        public static final double REVERSE_SPEED = 0;
+        public static final double FORWARD_SPEED = 0.5;
+        public static final double REVERSE_SPEED = -0.5;
         public static final double PIVOT_WAIT_SECONDS = 0;
         public static final double ROLLER_STOP_SECONDS = 0;
         public static final boolean INVERT_MOTOR = true;
@@ -91,11 +101,6 @@ public final class Constants {
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
-
-        public static final int LEFT_ENCODER_CHANNEL_A = 6;
-        public static final int LEFT_ENCODER_CHANNEL_B = 7;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
 
         public static final double MAX_VOLTAGE = 10;
         // TODO: Run characterization on all below constants
@@ -144,8 +149,11 @@ public final class Constants {
 
     public static final class SHOOTER {
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
-            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
-            /** Clicks per rotation for the internal encoder in the Falcon 500 */
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();/**
+                                                                                          * Clicks per rotation for the
+                                                                                          * internal encoder in the
+                                                                                          * Falcon 500
+                                                                                          */
             config.m_encoder_cpr = 2048;
 
             config.m_bottomShooterGearingRatio = 1.3;
@@ -172,7 +180,7 @@ public final class Constants {
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
-        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.1;
+        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.2;
 
         public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
         public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
@@ -201,11 +209,25 @@ public final class Constants {
             config.m_turretMotorMaxVel = 500;
             config.m_turretMotorMinVel = 0;
             config.m_turretMotorMaxAcc = 5;
-            config.m_turretMotorAllowedError = (10/360); // Max error is 10 degrees of motor rotation (0.20 degrees turret rotation)
+            config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
+                                                           // turret rotation)
 
             config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
             config.m_turretRotationsClockwiseSoftLimit = 0.75;
             config.m_turretGearRatio = 49.6;
+            return config;
+        }
+    }
+
+    public static final class CLIMBER {
+        public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
+            ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
+
+            config.m_climberMotorIdleMode = IdleMode.kBrake;
+            config.m_climberMotorStallLimitAmps = 35;
+            config.m_climberMotorFreeLimitAmps = 35;
+            config.m_isRightSideInverted = true;
+
             return config;
         }
     }
@@ -240,6 +262,15 @@ public final class Constants {
         public static final String ARDUINO_SENSOR_DEVICE_NAME = "/dev/ttyACM0";
     }
 
+    public final class DIO_IDS {
+        public static final int FEEDER_SENSOR_DIO_PORT = 1;
+        public static final int INTAKE_SENSOR_DIO_PORT = 0;
+        public static final int LEFT_ENCODER_CHANNEL_A = 6;
+        public static final int LEFT_ENCODER_CHANNEL_B = 7;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
+    }
+
     public final class COMPRESSOR {
         public static final int MIN_PRESSURE_PSI = 90;
         public static final int MAX_PRESSURE_PSI = 120;
@@ -247,5 +278,12 @@ public final class Constants {
 
     public final class KICKER {
         public static final double SPEED = 0;
+    }
+
+    public final class FEEDER {
+        public static final boolean IS_INVERTED = true;
+
+        public static final double UP_SPEED = 0.25;
+        public static final double DOWN_SPEED = -0.25;
     }
 }
