@@ -217,7 +217,13 @@ public final class Constants {
     }
 
     public static final class CLIMBER {
+
+        //TODO: Tune timings and rotations
         public static final double PULL_ONTO_RUNG_ROTATIONS = 0;
+        public static final double EXTEND_TO_RUNG_ROTATIONS = 0;
+        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0;
+        public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0;
+        public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 0;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
