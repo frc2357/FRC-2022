@@ -5,10 +5,10 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-public class FailsafeCommand extends CommandLoggerBase{
+public class FailsafeCommand extends CommandLoggerBase {
     private boolean m_failsafeActive;
     private ClosedLoopSubsystem m_subsystem;
-    
+
     public FailsafeCommand(boolean failsafeActive, ClosedLoopSubsystem subsystem) {
         m_failsafeActive = failsafeActive;
         m_subsystem = subsystem;
@@ -18,11 +18,14 @@ public class FailsafeCommand extends CommandLoggerBase{
     public void initialize() {
         super.initialize();
 
-        m_subsystem.setClosedLoopEnabled(!m_failsafeActive);
-
-        if (!m_subsystem.isClosedLoopEnabled()){
+        if (m_failsafeActive){
+            m_subsystem.setClosedLoopEnabled(false);
             CommandScheduler.getInstance().requiring(m_subsystem).cancel();
+        } else {
+            m_subsystem.setClosedLoopEnabled(true)
         }
+
+        
     }
 
     @Override
