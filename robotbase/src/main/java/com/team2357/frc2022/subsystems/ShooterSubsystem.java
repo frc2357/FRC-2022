@@ -94,7 +94,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.config_kF(0, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
         // Top motor config
-        m_topMotor.setInverted(true);
+        m_topMotor.setInverted(false);
         m_topMotor.configClosedloopRamp(1.0);
 
         m_topMotor
