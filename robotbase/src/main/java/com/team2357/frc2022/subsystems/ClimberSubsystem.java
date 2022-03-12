@@ -177,7 +177,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return (m_climberSolenoid.get() == DoubleSolenoid.Value.kForward);
     }
 
-    public void setHookPivot(boolean value) {
+    public void setLatch(boolean value) {
         m_hookSolenoid.set(value);
     }
 
