@@ -9,8 +9,13 @@ import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 import com.team2357.lib.util.RobotMath;
 
 public class ShooterSubsystem extends ClosedLoopSubsystem {
+    private static ShooterSubsystem instance = null;
 
-    // {degrees, bottom motor rpm, top motor rpm}
+    public static ShooterSubsystem getInstance() {
+        return instance;
+    }
+
+    // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
             { 0, 0, 0 }, // Closest
             { 0, 0, 0 }, // Furthest
@@ -55,6 +60,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @param topMotor           The motor on the top
      */
     public ShooterSubsystem(WPI_TalonFX leftBottomShooter, WPI_TalonFX rightBottomShooter, WPI_TalonFX topMotor) {
+        instance = this;
         m_leftBottomMotor = leftBottomShooter;
         m_rightBottomMotor = rightBottomShooter;
         m_topMotor = topMotor;
@@ -94,7 +100,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.config_kF(0, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
         // Top motor config
-        m_topMotor.setInverted(true);
+        m_topMotor.setInverted(false);
         m_topMotor.configClosedloopRamp(1.0);
 
         m_topMotor
@@ -118,9 +124,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     /**
      * Set the motor speed using closed-loop control
      * 
-     * @param rpm rotations per minute
+     * @param rpm rotations per minute of the shooter wheels
      */
     public void setRPMBottom(double rpm) {
+        rpm /= m_config.m_bottomShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_leftBottomMotor.set(ControlMode.Velocity, nativeSpeed);
     }
@@ -128,9 +135,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     /**
      * Set the motor speed using closed-loop control
      * 
-     * @param rpm rotations per minute
+     * @param rpm rotations per minute of the shooter wheels
      */
     public void setRPMTop(double rpm) {
+        rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }

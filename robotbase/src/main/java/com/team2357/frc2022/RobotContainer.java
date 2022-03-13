@@ -8,11 +8,13 @@ import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
-import com.team2357.frc2022.subsystems.KickerSubsystem;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveProportionalCommand;
@@ -20,6 +22,7 @@ import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,45 +37,46 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private SensorSubsystem m_sensorSub;
   private FalconTrajectoryDriveSubsystem m_driveSub;
   private IntakeSubsystem m_intakeSub;
   private ShooterSubsystem m_shooterSub;
   private FeederSubsystem m_feederSub;
-  private KickerSubsystem m_kickerSub;
+  private ClimberSubsystem m_climbSub;
+  private TurretSubsystem m_turretSub;
   private TogglableLimelightSubsystem m_visionSub;
-  private Compressor m_compressor;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
+  private final Compressor m_compressor;
 
-  //private final RobotArduino m_arduinoSensor;
+  private final DigitalInput m_intakeSensor;
+  private final DigitalInput m_feederSensor;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    //m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    m_intakeSensor = new DigitalInput(Constants.DIO_IDS.INTAKE_SENSOR_DIO_PORT);
+    m_feederSensor = new DigitalInput(Constants.DIO_IDS.FEEDER_SENSOR_DIO_PORT);
+
     SensorBooleanState intakeIRSensor = () -> {
-      //return m_arduinoSensor.getIntakeValue();
-      return false;
+      return m_intakeSensor.get();
     };
     SensorBooleanState feederIRSensor = () -> {
-      //return m_arduinoSensor.getFeederValue();
-      return false;
-    };
-    SensorBooleanState turretIRSensor = () -> {
-      //return m_arduinoSensor.getTurretValue();
-      return false;
+      return m_feederSensor.get();
     };
 
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
+    m_sensorSub = subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_shooterSub = subsystemFactory.CreateShooterSubsystem();
     m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
-    m_kickerSub = subsystemFactory.CreateKickerSubsystem();
+    m_climbSub = subsystemFactory.CreateClimberSubsystem();
+    m_turretSub = subsystemFactory.CreateTurretSubsystem();
 
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
@@ -80,9 +84,13 @@ public class RobotContainer {
             .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
-        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT)).withIntakeSub(m_intakeSub)
-            .withKickerSub(m_kickerSub)
-            .withShooterSub(m_shooterSub).build();
+        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
+            .withIntakeSub(m_intakeSub)
+            .withShooterSub(m_shooterSub)
+            .withFeederSub(m_feederSub)
+            .withTurretSub(m_turretSub)
+            .withClimbSub(m_climbSub)
+            .build();
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
 
@@ -112,5 +120,9 @@ public class RobotContainer {
       default:
         return null;
     }
+  }
+
+  public void periodic() {
+    System.out.println("Pressure: " + m_compressor.getPressure());
   }
 }
