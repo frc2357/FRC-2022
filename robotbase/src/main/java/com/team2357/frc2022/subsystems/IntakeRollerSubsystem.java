@@ -11,6 +11,12 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
  * @category Subsystems
  */
 public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
+    private static IntakeRollerSubsystem instance = null;
+
+    public static IntakeRollerSubsystem getInstance() {
+        return instance;
+    }
+
     public static class Configuration {
        public double m_rollerTopSpeed = 0; 
     }
@@ -23,6 +29,7 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
      * @param intakeVictor Victor SPX to use to control intake
      */
     public IntakeRollerSubsystem(VictorSPX intakeVictor) {
+        instance = this;
         m_intakeVictor = intakeVictor;
     }
 

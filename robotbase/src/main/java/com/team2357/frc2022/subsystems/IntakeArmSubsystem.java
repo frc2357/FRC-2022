@@ -11,6 +11,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * @category Subsystems
  */
 public class IntakeArmSubsystem extends SubsystemBase {
+    private static IntakeArmSubsystem instance = null;
+
+    public static IntakeArmSubsystem getInstance() {
+        return instance;
+    }
+
     public static class Configuration {
        public int m_deployMilliseconds = 0; 
        public int m_stowMilliseconds = 0; 
@@ -28,6 +34,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
      * @param intakeVictor Victor SPX to use to control intake
      */
     public IntakeArmSubsystem(DoubleSolenoid intakeSolenoid) {
+        instance = this;
         m_intakeSolenoid = intakeSolenoid;
         m_intakeSolenoid.set(Value.kOff);
         m_currentState = ArmState.Unknown;
