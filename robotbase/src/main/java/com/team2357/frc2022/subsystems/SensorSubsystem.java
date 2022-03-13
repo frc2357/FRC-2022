@@ -5,6 +5,12 @@ import com.team2357.frc2022.sensors.SensorBooleanState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SensorSubsystem extends SubsystemBase {
+    private static SensorSubsystem instance = null;
+
+    public static SensorSubsystem getInstance() {
+        return instance;
+    }
+
     private SensorBooleanState m_intakeSensor;
     private SensorBooleanState m_feederSensor;
 
@@ -18,6 +24,7 @@ public class SensorSubsystem extends SubsystemBase {
      * @param intakeVictor Victor SPX to use to control intake
      */
     public SensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
+        instance = this;
         m_intakeSensor = intakeSensor;
         m_feederSensor = feederSensor;
         m_lastIntakeState = false;

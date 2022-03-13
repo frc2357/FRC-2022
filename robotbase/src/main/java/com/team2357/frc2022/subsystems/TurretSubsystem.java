@@ -9,6 +9,12 @@ import com.team2357.frc2022.util.Utility;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
+    private static TurretSubsystem instance = null;
+
+    public static TurretSubsystem getInstance() {
+        return instance;
+    }
+
     CANSparkMax m_turretMotor;
 
     private SparkMaxPIDController m_pidController;
@@ -41,6 +47,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public TurretSubsystem(CANSparkMax turretMotor) {
+        instance = this;
         m_turretMotor = turretMotor;
         m_turretMotor.getEncoder().setPosition(0);
     }

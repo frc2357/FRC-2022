@@ -15,6 +15,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
  * @category Subsystems
  */
 public class IntakeSubsystem extends ClosedLoopSubsystem {
+    private static IntakeSubsystem instance = null;
+
+    public static IntakeSubsystem getInstance() {
+        return instance;
+    }
+
     public DoubleSolenoid m_intakeSolenoid;
     private VictorSPX m_intakeVictor;
     private SensorBooleanState m_intakeSensor;
@@ -23,6 +29,7 @@ public class IntakeSubsystem extends ClosedLoopSubsystem {
      * @param intakeVictor Victor SPX to use to control intake
      */
     public IntakeSubsystem(VictorSPX intakeVictor, DoubleSolenoid intakeSolenoid, SensorBooleanState intakeSensor) {
+        instance = this;
         m_intakeSolenoid = intakeSolenoid;
         m_intakeSolenoid.set(Value.kOff);
         m_intakeSensor = intakeSensor;

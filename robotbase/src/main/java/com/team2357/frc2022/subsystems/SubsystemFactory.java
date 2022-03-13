@@ -101,12 +101,6 @@ public class SubsystemFactory {
         return new FeederSubsystem(feederVictor, feederSensorState);
     }   
 
-    public KickerSubsystem CreateKickerSubsystem() {
-        CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID,
-                CANSparkMaxLowLevel.MotorType.kBrushless);
-        return new KickerSubsystem(kickerMotor);
-    }
-
     public TurretSubsystem CreateTurretSubsystem() {
         CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID,
                 CANSparkMaxLowLevel.MotorType.kBrushless);

@@ -15,6 +15,11 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 
 public class ClimberSubsystem extends ClosedLoopSubsystem {
+    private static ClimberSubsystem instance = null;
+
+    public static ClimberSubsystem getInstance() {
+        return instance;
+    }
 
     public static class Configuration {
         public IdleMode m_climberMotorIdleMode = IdleMode.kBrake;
@@ -53,6 +58,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
             Solenoid hookSolenoid) {
+        instance = this;
         m_leftClimberMotor = leftClimberMotor;
         m_rightClimberMotor = rightClimberMotor;
         m_climberSolenoid = climberSolenoid;

@@ -11,7 +11,6 @@ import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
-import com.team2357.frc2022.subsystems.KickerSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
@@ -40,7 +39,6 @@ public class RobotContainer {
   private ShooterSubsystem m_shooterSub;
   private FeederSubsystem m_feederSub;
   private ClimberSubsystem m_climbSub;
-  private KickerSubsystem m_kickerSub;
   private TurretSubsystem m_turretSub;
   private TogglableLimelightSubsystem m_visionSub;
 
@@ -74,7 +72,6 @@ public class RobotContainer {
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
     m_climbSub = subsystemFactory.CreateClimberSubsystem();
-    m_kickerSub = subsystemFactory.CreateKickerSubsystem();
     m_turretSub = subsystemFactory.CreateTurretSubsystem();
 
     // Configure the button bindings
