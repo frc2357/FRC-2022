@@ -195,9 +195,9 @@ public class GunnerControls {
                         new KickerSetSpeedCommand(m_kickerSub, Constants.KICKER.SPEED));
             }
 
-            if (m_kickerSub != null && m_feederSub != null && m_shooterSub != null) {
+            if (m_feederSub != null && m_shooterSub != null) {
                 m_gunnerControls.m_rightTriggerAndDownDPad.whileActiveOnce(
-                    new ShootAgainstHubCommand(m_kickerSub, m_feederSub, m_shooterSub));
+                    new ShootAgainstHubCommand(m_feederSub, m_shooterSub));
             }
 
             return m_gunnerControls;

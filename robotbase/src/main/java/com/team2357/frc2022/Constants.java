@@ -140,7 +140,6 @@ public final class Constants {
         public final class SHOOT_AGAINST_HUB {
             //TODO: Set motor speeds
             public static final double FEEDER_SPEED = 0;
-            public static final double KICKER_SPEED = 0;
             public static final double SHOOTER_SPEED_BOTTOM = 0;
             public static final double SHOOTER_SPEED_TOP = 0;
             public static final double WAIT_AFTER_SHOOTER = 0;
