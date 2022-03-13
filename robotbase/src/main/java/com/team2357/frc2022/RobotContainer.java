@@ -77,21 +77,12 @@ public class RobotContainer {
     m_climbSub = subsystemFactory.CreateClimberSubsystem();
     m_turretSub = subsystemFactory.CreateTurretSubsystem();
 
-    // Configure the button bindings
-    m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
-        new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
-            .withSensorSub(m_sensorSub)
-            .withIntakeSubs(m_intakeArmSub, m_intakeRollerSub).withVisionSub(m_visionSub).build();
+    // Configure the controllers
+    XboxController driverXboxController = new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT);
+    XboxController gunnerXboxController = new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT);
 
-    m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
-        new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
-            .withSensorSub(m_sensorSub)
-            .withIntakeSubs(m_intakeArmSub, m_intakeRollerSub)
-            .withShooterSub(m_shooterSub)
-            .withFeederSub(m_feederSub)
-            .withTurretSub(m_turretSub)
-            .withClimbSub(m_climbSub)
-            .build();
+    m_driverControls = new IntakeDriveControls(driverXboxController, Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    m_gunnerControls = new GunnerControls(gunnerXboxController);
 
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
 

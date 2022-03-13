@@ -1,22 +1,17 @@
 package com.team2357.frc2022.controls;
 
-import com.team2357.frc2022.Constants;
-import com.team2357.frc2022.commands.FeederSetSpeedCommand;
-import com.team2357.frc2022.commands.ClimberToggleLatchCommand;
-import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
-import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
+import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
+import com.team2357.frc2022.commands.human.FireCommand;
 import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
-import com.team2357.frc2022.subsystems.ClimberSubsystem;
-import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
-import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
-import com.team2357.frc2022.subsystems.SensorSubsystem;
-import com.team2357.frc2022.subsystems.ShooterSubsystem;
-import com.team2357.frc2022.commands.TurretRotateCommand;
-import com.team2357.frc2022.subsystems.TurretSubsystem;
+import com.team2357.frc2022.commands.human.TargetLockCommand;
+import com.team2357.frc2022.commands.human.TurretAxisCommand;
+import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
+import com.team2357.frc2022.commands.human.panic.ClimberLatchCommand;
+import com.team2357.frc2022.commands.human.panic.ClimberWinchAxisCommand;
+import com.team2357.frc2022.commands.human.panic.FeederRollerAxisCommand;
+import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
+import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
-import com.team2357.lib.util.ControllerAxis;
 import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -54,175 +49,66 @@ public class GunnerControls {
     public POVButton m_leftDPad;
 
     // Chords
-    public Trigger m_xButtonAndLeftDPad;
-    public Trigger m_yButtonAndLeftDPad;
-    public Trigger m_aButtonAndDownDPad;
-    public Trigger m_xButtonAndDownDPad;
-
-    public Trigger m_bButtonAndRightDPad;
-    public Trigger m_yButtonAndRightDPad;
-    public Trigger m_aButtonAndRightDPad;
-    public Trigger m_xButtonAndRightDPad;
+    public Trigger m_upDPadAndXButton;
+    public Trigger m_upDPadAndYButton;
+    public Trigger m_downDPadAndAButton;
 
     /**
      * @param builder The GunnerControlsBuilder object
      */
-    public GunnerControls(GunnerControlsBuilder builder) {
-        m_controller = builder.m_controller;
+    public GunnerControls(XboxController controller) {
+        m_controller = controller;
 
         // Triggers
-        m_rightTrigger = new AxisThresholdTrigger(builder.m_controller, Axis.kRightTrigger, .1);
-        m_leftTrigger = new AxisThresholdTrigger(builder.m_controller, Axis.kLeftTrigger, .1);
+        m_rightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
-        m_backButton = new JoystickButton(builder.m_controller, XboxRaw.Back.value);
-        m_startButton = new JoystickButton(builder.m_controller, XboxRaw.Start.value);
-        m_leftBumper = new JoystickButton(builder.m_controller, XboxRaw.BumperLeft.value);
-        m_rightBumper = new JoystickButton(builder.m_controller, XboxRaw.BumperRight.value);
-        m_aButton = new JoystickButton(builder.m_controller, XboxRaw.A.value);
-        m_bButton = new JoystickButton(builder.m_controller, XboxRaw.B.value);
-        m_xButton = new JoystickButton(builder.m_controller, XboxRaw.X.value);
-        m_yButton = new JoystickButton(builder.m_controller, XboxRaw.Y.value);
+        m_backButton = new JoystickButton(controller, XboxRaw.Back.value);
+        m_startButton = new JoystickButton(controller, XboxRaw.Start.value);
+        m_leftBumper = new JoystickButton(controller, XboxRaw.BumperLeft.value);
+        m_rightBumper = new JoystickButton(controller, XboxRaw.BumperRight.value);
+        m_aButton = new JoystickButton(controller, XboxRaw.A.value);
+        m_bButton = new JoystickButton(controller, XboxRaw.B.value);
+        m_xButton = new JoystickButton(controller, XboxRaw.X.value);
+        m_yButton = new JoystickButton(controller, XboxRaw.Y.value);
 
         // Dpad
-        m_upDPad = new POVButton(builder.m_controller, 0);
-        m_rightDPad = new POVButton(builder.m_controller, 90);
-        m_downDPad = new POVButton(builder.m_controller, 180);
-        m_leftDPad = new POVButton(builder.m_controller, 270);
+        m_upDPad = new POVButton(controller, 0);
+        m_rightDPad = new POVButton(controller, 90);
+        m_downDPad = new POVButton(controller, 180);
+        m_leftDPad = new POVButton(controller, 270);
 
         // Chords
-        m_xButtonAndLeftDPad = m_xButton.and(m_leftDPad);
-        m_yButtonAndLeftDPad = m_yButton.and(m_leftDPad);
-        m_bButtonAndRightDPad = m_bButton.and(m_rightDPad);
-        m_yButtonAndRightDPad = m_yButton.and(m_rightDPad);
-        m_aButtonAndRightDPad = m_aButton.and(m_rightDPad);
-        m_xButtonAndRightDPad = m_xButton.and(m_rightDPad);
-        m_aButtonAndDownDPad = m_aButton.and(m_downDPad);
-        m_xButtonAndDownDPad = m_xButton.and(m_downDPad);
+        m_upDPadAndXButton = m_leftDPad.and(m_xButton);
+        m_upDPadAndYButton = m_leftDPad.and(m_yButton);
+        m_downDPadAndAButton = m_downDPad.and(m_aButton);
+
+        mapControls();
     }
 
-    /**
-     * Gets the current trigger value from the axis on the left or right.
-     * 
-     * @param axis Which axis you want to get a value from.
-     * 
-     * @return The trigger value from the left or right axis.
-     */
-    public double getControllerAxisValue(Axis axis) {
-
-        ControllerAxis controllerAxis = () -> {
-            switch (axis) {
-                case kLeftX:
-                    return m_controller.getLeftX();
-                case kLeftY:
-                    return m_controller.getLeftY();
-                case kLeftTrigger:
-                    return m_controller.getLeftTriggerAxis();
-                case kRightTrigger:
-                    return m_controller.getRightTriggerAxis();
-                case kRightX:
-                    return m_controller.getRightX();
-                case kRightY:
-                    return m_controller.getRightY();
-            }
-            return 0;
+    private void mapControls() {
+        AxisInterface axisLeftStickX = () -> {
+            return m_controller.getLeftX();
         };
-        return controllerAxis.getAxisValue();
-    }
 
-    /**
-     * Class for building GunnerControls
-     */
-    public static class GunnerControlsBuilder {
-        private XboxController m_controller = null;
-        private SensorSubsystem m_sensorSub = null;
-        private IntakeArmSubsystem m_intakeArmSub = null;
-        private IntakeRollerSubsystem m_intakeRollerSub = null;
-        private ClimberSubsystem m_climbSub = null;
-        private ShooterSubsystem m_shooterSub = null;
-        private FeederSubsystem m_feederSub = null;
-        private TurretSubsystem m_turretSub = null;
+        AxisInterface axisRightStickY = () -> {
+            return m_controller.getRightY();
+        };
 
-        /**
-         * @param controller the controller of the gunner controls
-         */
-        public GunnerControlsBuilder(XboxController controller) {
-            m_controller = controller;
-        }
+        new TurretAxisCommand(axisLeftStickX);
 
-        public GunnerControlsBuilder withSensorSub(SensorSubsystem sensorSub) {
-            m_sensorSub = sensorSub;
-            return this;
-        }
+        m_aButton.toggleWhenActive(new IntakeDeployToggleCommand());
+        m_bButton.toggleWhenActive(new TargetLockCommand());
+        m_yButton.toggleWhenActive(new ClimbProgressionCommand());
+        m_rightTrigger.whenActive(new FireCommand());
 
-        public GunnerControlsBuilder withIntakeSubs(IntakeArmSubsystem intakeArmSub, IntakeRollerSubsystem intakeRollerSub) {
-            m_intakeArmSub = intakeArmSub;
-            m_intakeRollerSub = intakeRollerSub;
-            return this;
-        }
+        m_downDPad.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
+        m_rightDPad.whileActiveOnce(new ShooterRollerAxisCommand(axisRightStickY));
+        m_leftDPad.whileActiveOnce(new FeederRollerAxisCommand(axisRightStickY));
+        m_upDPad.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
 
-        public GunnerControlsBuilder withClimbSub(ClimberSubsystem climbSub) {
-            m_climbSub = climbSub;
-            return this;
-        }
-
-        public GunnerControlsBuilder withShooterSub(ShooterSubsystem shooterSub) {
-            m_shooterSub = shooterSub;
-            return this;
-        }
-
-        public GunnerControlsBuilder withFeederSub(FeederSubsystem feederSub) {
-            m_feederSub = feederSub;
-            return this;
-        }
-
-        public GunnerControlsBuilder withTurretSub(TurretSubsystem turretSub) {
-            m_turretSub = turretSub;
-            return this;
-        }
-
-        public GunnerControls build() {
-            GunnerControls m_gunnerControls = new GunnerControls(this);
-
-            // Intake Mode Bindings
-            if (m_intakeRollerSub != null && m_intakeRollerSub != null && m_sensorSub != null) {
-                m_gunnerControls.m_aButton.toggleWhenActive(new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub));
-            } else {
-                System.out.println("GUNNER: No Intake bindings, required subsystems not present");
-            }
-
-            if (m_climbSub != null) {
-                m_gunnerControls.m_yButtonAndRightDPad.whileActiveOnce(
-                        new ClimberSimpleRunMotorsCommand(m_climbSub, 0.2)); // Extend
-                m_gunnerControls.m_aButtonAndRightDPad.whileActiveOnce(
-                        new ClimberSimpleRunMotorsCommand(m_climbSub, -0.4)); // Retract
-                m_gunnerControls.m_bButtonAndRightDPad.whileActiveOnce(new ClimberTogglePivotCommand(m_climbSub));
-                m_gunnerControls.m_xButtonAndRightDPad.whileActiveOnce(new ClimberToggleLatchCommand(m_climbSub));
-            }
-
-            // TODO: Finish shooter controls
-            if (m_shooterSub != null) {
-                m_gunnerControls.m_rightTrigger.whileActiveOnce(
-                        new ShooterSetRPMsCommand(m_shooterSub, 2500, 10000));
-            }
-
-            // Turret bindings
-            if (m_turretSub != null) {
-                m_gunnerControls.m_leftBumper.whileActiveOnce(
-                        new TurretRotateCommand(m_turretSub, -Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
-                m_gunnerControls.m_rightBumper.whileActiveOnce(
-                        new TurretRotateCommand(m_turretSub, Constants.TURRET.MANUAL_TURRET_ROTATE_SPEED));
-            }
-
-            if (m_feederSub != null) {
-                m_gunnerControls.m_aButtonAndDownDPad.whileActiveOnce(
-                        new FeederSetSpeedCommand(m_feederSub, Constants.FEEDER.UP_SPEED));
-                        m_gunnerControls.m_xButtonAndDownDPad.whileActiveOnce(
-                            new FeederSetSpeedCommand(m_feederSub, Constants.FEEDER.DOWN_SPEED));
-                
-            }
-
-            return m_gunnerControls;
-        }
+        m_upDPadAndXButton.whenActive(new ClimberLatchCommand());
+        m_upDPadAndYButton.whenActive(new ClimberArmsCommand());
     }
 }

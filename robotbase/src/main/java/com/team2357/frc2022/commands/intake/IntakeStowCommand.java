@@ -10,26 +10,19 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * @category Intake
  */
 public class IntakeStowCommand extends CommandLoggerBase {
-    private IntakeArmSubsystem m_intakeArmSub;
-    private IntakeRollerSubsystem m_intakeRollerSub;
-
     /**
      * Stows and stops the intake
      * 
-     * @param intakeArmSub The {@link IntakeArmSubsystem}.
-     * @param intakeRollerSub The {@link IntakeRollerSubsystem}.
      */
-    public IntakeStowCommand(IntakeArmSubsystem intakeArmSub, IntakeRollerSubsystem intakeRollerSub) {
-        m_intakeArmSub = intakeArmSub;
-        m_intakeRollerSub = intakeRollerSub;
-        addRequirements(m_intakeArmSub);
-        addRequirements(m_intakeRollerSub);
+    public IntakeStowCommand() {
+        addRequirements(IntakeArmSubsystem.getInstance());
+        addRequirements(IntakeRollerSubsystem.getInstance());
     }
 
     @Override 
     public void initialize() {
-        m_intakeArmSub.stow();
-        m_intakeRollerSub.stop();
+        IntakeArmSubsystem.getInstance().stow();
+        IntakeRollerSubsystem.getInstance().stop();
     }
 
     @Override
