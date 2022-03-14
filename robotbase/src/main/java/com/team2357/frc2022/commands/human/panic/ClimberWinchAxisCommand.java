@@ -19,7 +19,7 @@ public class ClimberWinchAxisCommand extends CommandLoggerBase {
         if (axisValue != 0) {
             System.out.println("ClimberWinchAxisCommand:" + axisValue);
             ClimberSubsystem climber = ClimberSubsystem.getInstance();
-            //climber.climberMotorSpeed(speed);
+            climber.setClimberAxisSpeed(axisValue);
         }
     }
 

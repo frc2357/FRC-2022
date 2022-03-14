@@ -9,11 +9,12 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 
-/* * 
- * 
- * @category climber
+/** 
+ * Climber Subsystem
+ * Dynamic arms
+ * Static hook latches
+ * Climbing winch motors
  */
-
 public class ClimberSubsystem extends ClosedLoopSubsystem {
     private static ClimberSubsystem instance = null;
 
@@ -22,6 +23,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public static class Configuration {
+        public double m_climberAxisMaxSpeed = 0;
+
         public IdleMode m_climberMotorIdleMode = IdleMode.kBrake;
 
         public int m_climberMotorStallLimitAmps = 0;
@@ -112,6 +115,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
      * @return
      */
     public void setClimberRotations(double rotations) {
+        setClosedLoopEnabled(true);
         m_targetRotations = rotations;
         m_leftPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
         m_rightPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
@@ -122,7 +126,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
      * @return Is the climber at the setpoint set by {@Link setClimberRotations}
      */
     public boolean isClimberAtRotations() {
-        
         return isLeftClimberAtRotations() && isRightClimberAtRotations();
     }
 
@@ -150,14 +153,19 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         return (m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) && (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps);
     }
 
-    // Method to set climber speed
-    public void climberMotorSpeed(double speed) {
-        m_leftClimberMotor.set(speed);
-        m_rightClimberMotor.set(speed);
+    // Method to set climber speed from a joystick
+    public void setClimberAxisSpeed(double axisSpeed) {
+        setClosedLoopEnabled(false);
+
+        double motorSpeed = axisSpeed * m_config.m_climberAxisMaxSpeed;
+
+        m_leftClimberMotor.set(motorSpeed);
+        m_rightClimberMotor.set(motorSpeed);
     }
 
     // Method to stop the motors
-    public void StopClimberMotors() {
+    public void stopClimberMotors() {
+        setClosedLoopEnabled(false);
         m_leftClimberMotor.set(0);
         m_rightClimberMotor.set(0);
     }
@@ -189,5 +197,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public boolean isHookOpen() {
         return m_hookSolenoid.get();
+    }
+
+    @Override
+    public void periodic() {
+        if (isClosedLoopEnabled() && isClimberAtRotations()) {
+            setClosedLoopEnabled(false);
+        }
     }
 }
