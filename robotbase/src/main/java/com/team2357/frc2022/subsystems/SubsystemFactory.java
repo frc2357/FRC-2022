@@ -91,12 +91,23 @@ public class SubsystemFactory {
     public ClimberSubsystem CreateClimberSubsystem() {
         CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
-        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
-                Constants.PH_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PH_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
-        Solenoid hookSolenoid = new Solenoid(30, PneumaticsModuleType.REVPH,
-                Constants.PH_ID.CLIMBER_HOOK_SOLENOID_CHANNEL);
-        ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid,
-                hookSolenoid);
+        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(
+                Constants.CAN_ID.PNEUMATICS_HUB_ID,
+                PneumaticsModuleType.REVPH,
+                Constants.PH_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL,
+                Constants.PH_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL
+        );
+        Solenoid hookSolenoid = new Solenoid(
+                Constants.CAN_ID.PNEUMATICS_HUB_ID,
+                PneumaticsModuleType.REVPH,
+                Constants.PH_ID.CLIMBER_HOOK_SOLENOID_CHANNEL
+        );
+        ClimberSubsystem subsystem = new ClimberSubsystem(
+                leftClimberMotor,
+                rightClimberMotor,
+                climberDoubleSolenoid,
+                hookSolenoid
+        );
 
         subsystem.configure(Constants.CLIMBER.GET_CLIMBER_CONFIG());
 
