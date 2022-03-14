@@ -5,6 +5,9 @@
 
 - Add `setRollerAxisSpeed` to subsystems for gunner panic controls
 
+- Climber: Set up pneumatics control in subsystem like Intake is, with delay and such
+- Climber: Use setClosedLoopEnabled() when seeking to a specific position
+
 - Add "Target Lock" mode to main Robot class
 - Set up Limelight pipelines
 - Save Limelight files to repo
