@@ -1,6 +1,7 @@
 package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.controls.AxisInterface;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class TurretAxisCommand extends CommandLoggerBase {
@@ -8,6 +9,7 @@ public class TurretAxisCommand extends CommandLoggerBase {
 
     public TurretAxisCommand(AxisInterface axis) {
         m_axis = axis;
+        addRequirements(TurretSubsystem.getInstance());
     }
 
     @Override
@@ -21,6 +23,6 @@ public class TurretAxisCommand extends CommandLoggerBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

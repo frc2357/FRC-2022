@@ -14,14 +14,16 @@ public class ShooterRollerAxisCommand extends CommandLoggerBase {
 
     @Override
     public void execute() {
-        ShooterSubsystem shooter = ShooterSubsystem.getInstance();
         double axisValue = m_axis.getValue();
 
-        System.out.println("ShooterRollerAxisCommand:" + axisValue);
+        if (axisValue != 0) {
+            ShooterSubsystem shooter = ShooterSubsystem.getInstance();
+            System.out.println("ShooterRollerAxisCommand:" + axisValue);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

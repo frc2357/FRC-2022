@@ -14,14 +14,16 @@ public class IntakeRollerAxisCommand extends CommandLoggerBase {
 
     @Override
     public void execute() {
-        IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
         double axisValue = m_axis.getValue();
 
-        System.out.println("IntakeRollerAxisCommand:" + axisValue);
+        if (axisValue != 0) {
+            IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
+            System.out.println("IntakeRollerAxisCommand:" + axisValue);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

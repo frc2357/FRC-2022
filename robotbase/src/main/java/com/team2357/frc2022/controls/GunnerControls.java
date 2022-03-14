@@ -1,5 +1,6 @@
 package com.team2357.frc2022.controls;
 
+import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireCommand;
 import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
@@ -9,9 +10,12 @@ import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberLatchCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberWinchAxisCommand;
 import com.team2357.frc2022.commands.human.panic.FeederRollerAxisCommand;
+import com.team2357.frc2022.commands.human.panic.IntakeArmsCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
+import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
+import com.team2357.lib.util.Utility;
 import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -79,36 +83,66 @@ public class GunnerControls {
         m_downDPad = new POVButton(controller, 180);
         m_leftDPad = new POVButton(controller, 270);
 
-        // Chords
-        m_upDPadAndXButton = m_leftDPad.and(m_xButton);
-        m_upDPadAndYButton = m_leftDPad.and(m_yButton);
-        m_downDPadAndAButton = m_downDPad.and(m_aButton);
-
         mapControls();
+    }
+
+    public double getLeftXAxis() {
+        double value = m_controller.getLeftX();
+        return Utility.deadband(value, Constants.CONTROLLER.GUNNER_CONTROLLER_DEADBAND);
+    }
+
+    public double getRightYAxis() {
+        double value = m_controller.getRightY();
+        return Utility.deadband(value, Constants.CONTROLLER.GUNNER_CONTROLLER_DEADBAND);
     }
 
     private void mapControls() {
         AxisInterface axisLeftStickX = () -> {
-            return m_controller.getLeftX();
+            return getLeftXAxis();
         };
 
         AxisInterface axisRightStickY = () -> {
-            return m_controller.getRightY();
+            return getRightYAxis();
         };
 
-        new TurretAxisCommand(axisLeftStickX);
+        Trigger noDPad = new Trigger(() -> {
+            return !m_upDPad.get() && !m_downDPad.get() && !m_leftDPad.get() && !m_rightDPad.get();
+        });
 
-        m_aButton.toggleWhenActive(new IntakeDeployToggleCommand());
-        m_bButton.toggleWhenActive(new TargetLockCommand());
-        m_yButton.toggleWhenActive(new ClimbProgressionCommand());
+        Trigger noLetterButtons = new Trigger(() -> {
+            return !m_aButton.get() && !m_bButton.get() && !m_xButton.get() && !m_yButton.get();
+        });
+
+        Trigger upDPadOnly = m_upDPad.and(noLetterButtons);
+        Trigger downDPadOnly = m_downDPad.and(noLetterButtons);
+        Trigger leftDPadOnly = m_leftDPad.and(noLetterButtons);
+        Trigger rightDPadOnly = m_rightDPad.and(noLetterButtons);
+
+        Trigger upDPadAndX = m_upDPad.and(m_xButton);
+        Trigger upDPadAndY = m_upDPad.and(m_yButton);
+        Trigger downDPadAndA = m_downDPad.and(m_aButton);
+
+        Trigger aButton = m_aButton.and(noDPad);
+        Trigger bButton = m_bButton.and(noDPad);
+        Trigger yButton = m_yButton.and(noDPad);
+
+        // Left stick is "always on" for turret movement.
+        TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
+
+        aButton.toggleWhenActive(new IntakeDeployToggleCommand());
+        bButton.toggleWhenActive(new TargetLockCommand());
+        yButton.toggleWhenActive(new ClimbProgressionCommand());
         m_rightTrigger.whenActive(new FireCommand());
 
-        m_downDPad.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
-        m_rightDPad.whileActiveOnce(new ShooterRollerAxisCommand(axisRightStickY));
-        m_leftDPad.whileActiveOnce(new FeederRollerAxisCommand(axisRightStickY));
-        m_upDPad.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
+        downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
+        downDPadAndA.whenActive(new IntakeArmsCommand());
 
-        m_upDPadAndXButton.whenActive(new ClimberLatchCommand());
-        m_upDPadAndYButton.whenActive(new ClimberArmsCommand());
+        rightDPadOnly.whileActiveOnce(new ShooterRollerAxisCommand(axisRightStickY));
+
+        leftDPadOnly.whileActiveOnce(new FeederRollerAxisCommand(axisRightStickY));
+
+        upDPadOnly.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
+        upDPadAndX.whenActive(new ClimberLatchCommand());
+        upDPadAndY.whenActive(new ClimberArmsCommand());
     }
 }
