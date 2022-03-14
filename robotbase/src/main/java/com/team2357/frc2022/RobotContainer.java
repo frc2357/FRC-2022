@@ -9,7 +9,8 @@ import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
@@ -35,7 +36,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private SensorSubsystem m_sensorSub;
   private FalconTrajectoryDriveSubsystem m_driveSub;
-  private IntakeSubsystem m_intakeSub;
+  private IntakeArmSubsystem m_intakeArmSub;
+  private IntakeRollerSubsystem m_intakeRollerSub;
   private ShooterSubsystem m_shooterSub;
   private FeederSubsystem m_feederSub;
   private ClimberSubsystem m_climbSub;
@@ -68,7 +70,8 @@ public class RobotContainer {
     m_sensorSub = subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
     m_driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     m_shooterSub = subsystemFactory.CreateShooterSubsystem();
-    m_intakeSub = subsystemFactory.CreateIntakeSubsystem(intakeIRSensor);
+    m_intakeArmSub = subsystemFactory.createIntakeArmSubsystem();
+    m_intakeRollerSub = subsystemFactory.CreateIntakeRollerSubsystem();
     m_feederSub = subsystemFactory.CreateFeederSubsystem(feederIRSensor);
     m_visionSub = subsystemFactory.CreateVisionSubsystem();
     m_climbSub = subsystemFactory.CreateClimberSubsystem();
@@ -77,11 +80,13 @@ public class RobotContainer {
     // Configure the button bindings
     m_driverControls = new IntakeDriveControls.IntakeDriveControlsBuilder(
         new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT), Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND)
-            .withIntakeSub(m_intakeSub).withVisionSub(m_visionSub).build();
+            .withSensorSub(m_sensorSub)
+            .withIntakeSubs(m_intakeArmSub, m_intakeRollerSub).withVisionSub(m_visionSub).build();
 
     m_gunnerControls = new GunnerControls.GunnerControlsBuilder(
         new XboxController(Constants.CONTROLLER.GUNNER_CONTROLLER_PORT))
-            .withIntakeSub(m_intakeSub)
+            .withSensorSub(m_sensorSub)
+            .withIntakeSubs(m_intakeArmSub, m_intakeRollerSub)
             .withShooterSub(m_shooterSub)
             .withFeederSub(m_feederSub)
             .withTurretSub(m_turretSub)

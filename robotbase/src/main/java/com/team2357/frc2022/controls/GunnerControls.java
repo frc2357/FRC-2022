@@ -5,12 +5,13 @@ import com.team2357.frc2022.commands.FeederSetSpeedCommand;
 import com.team2357.frc2022.commands.ClimberToggleLatchCommand;
 import com.team2357.frc2022.commands.ClimberSimpleRunMotorsCommand;
 import com.team2357.frc2022.commands.ClimberTogglePivotCommand;
-import com.team2357.frc2022.commands.IntakeRollerCommand;
-import com.team2357.frc2022.commands.IntakeTogglePivotCommand;
+import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.commands.TurretRotateCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
@@ -134,7 +135,9 @@ public class GunnerControls {
      */
     public static class GunnerControlsBuilder {
         private XboxController m_controller = null;
-        private IntakeSubsystem m_intakeSub = null;
+        private SensorSubsystem m_sensorSub = null;
+        private IntakeArmSubsystem m_intakeArmSub = null;
+        private IntakeRollerSubsystem m_intakeRollerSub = null;
         private ClimberSubsystem m_climbSub = null;
         private ShooterSubsystem m_shooterSub = null;
         private FeederSubsystem m_feederSub = null;
@@ -147,8 +150,14 @@ public class GunnerControls {
             m_controller = controller;
         }
 
-        public GunnerControlsBuilder withIntakeSub(IntakeSubsystem intakeSub) {
-            m_intakeSub = intakeSub;
+        public GunnerControlsBuilder withSensorSub(SensorSubsystem sensorSub) {
+            m_sensorSub = sensorSub;
+            return this;
+        }
+
+        public GunnerControlsBuilder withIntakeSubs(IntakeArmSubsystem intakeArmSub, IntakeRollerSubsystem intakeRollerSub) {
+            m_intakeArmSub = intakeArmSub;
+            m_intakeRollerSub = intakeRollerSub;
             return this;
         }
 
@@ -176,15 +185,10 @@ public class GunnerControls {
             GunnerControls m_gunnerControls = new GunnerControls(this);
 
             // Intake Mode Bindings
-            if (m_intakeSub != null) {
-                m_gunnerControls.m_leftTrigger.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub,
-                                Constants.INTAKE.FORWARD_SPEED));
-
-                m_gunnerControls.m_yButtonAndLeftDPad.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub, Constants.INTAKE.REVERSE_SPEED));
-
-                m_gunnerControls.m_xButtonAndLeftDPad.whileActiveOnce(new IntakeTogglePivotCommand(m_intakeSub));
+            if (m_intakeRollerSub != null && m_intakeRollerSub != null && m_sensorSub != null) {
+                m_gunnerControls.m_aButton.toggleWhenActive(new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub));
+            } else {
+                System.out.println("GUNNER: No Intake bindings, required subsystems not present");
             }
 
             if (m_climbSub != null) {

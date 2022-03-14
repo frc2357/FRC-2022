@@ -1,7 +1,9 @@
 package com.team2357.frc2022.controls;
 
-import com.team2357.frc2022.commands.IntakeRollerCommand;
-import com.team2357.frc2022.subsystems.IntakeSubsystem;
+import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
+import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
 import com.team2357.lib.subsystems.drive.SingleSpeedFalconDriveSubsystem;
@@ -63,7 +65,9 @@ public class IntakeDriveControls extends InvertDriveControls {
      * Class for building IntakeDriverControls
      */
     public static class IntakeDriveControlsBuilder {
-        private IntakeSubsystem m_intakeSub = null;
+        private IntakeArmSubsystem m_intakeArmSub = null;
+        private IntakeRollerSubsystem m_intakeRollerSub = null;
+        private SensorSubsystem m_sensorSub = null;
         private InvertDriveControlsBuilder m_invertDriveBuilder = null;
 
         /**
@@ -73,8 +77,14 @@ public class IntakeDriveControls extends InvertDriveControls {
             m_invertDriveBuilder = new InvertDriveControlsBuilder(controller, deadband);
         }
 
-        public IntakeDriveControlsBuilder withIntakeSub(IntakeSubsystem intakeSub) {
-            m_intakeSub = intakeSub;
+        public IntakeDriveControlsBuilder withSensorSub(SensorSubsystem sensorSub) {
+            m_sensorSub = sensorSub;
+            return this;
+        }
+
+        public IntakeDriveControlsBuilder withIntakeSubs(IntakeArmSubsystem intakeArmSub, IntakeRollerSubsystem intakeRollerSub) {
+            m_intakeArmSub = intakeArmSub;
+            m_intakeRollerSub = intakeRollerSub;
             return this;
         }
 
@@ -92,12 +102,12 @@ public class IntakeDriveControls extends InvertDriveControls {
             IntakeDriveControls m_IntakeDriverControls = new IntakeDriveControls(this);
 
             // Intake Mode Bindings
-            if (m_intakeSub != null) {
-                m_IntakeDriverControls.m_leftTrigger.whileActiveOnce(
-                        new IntakeRollerCommand(m_intakeSub,
-                                m_IntakeDriverControls.getControllerAxisValue(Axis.kLeftTrigger)),
-                        false);
-
+            if (m_intakeArmSub != null && m_intakeRollerSub != null && m_sensorSub != null) {
+                m_IntakeDriverControls.m_leftTrigger.toggleWhenActive(
+                    new IntakeDeployToggleCommand(m_intakeArmSub, m_intakeRollerSub, m_sensorSub)
+                );
+            } else {
+                System.out.println("DRIVER: No Intake bindings, required subsystems not present");
             }
 
             return m_IntakeDriverControls;
