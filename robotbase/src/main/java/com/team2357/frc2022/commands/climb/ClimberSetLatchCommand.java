@@ -3,18 +3,17 @@ package com.team2357.frc2022.commands.climb;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class ClimberLatchCommand extends CommandLoggerBase{
-        private ClimberSubsystem m_climbSub;
+public class ClimberSetLatchCommand extends CommandLoggerBase{
         private boolean m_openHook;
     
-        public ClimberLatchCommand(ClimberSubsystem climbSub, boolean openHook) {
-            m_climbSub = climbSub;
+        public ClimberSetLatchCommand(boolean openHook) {
             m_openHook = openHook;
+            addRequirements(ClimberSubsystem.getInstance());
         }
     
         @Override
         public void initialize() {
-            m_climbSub.setLatch(m_openHook);
+            ClimberSubsystem.getInstance().setLatch(m_openHook);
         }
     
         @Override

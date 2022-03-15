@@ -5,11 +5,11 @@ import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ClimberClimbToRungCommandGroup extends SequentialCommandGroup {
-    public ClimberClimbToRungCommandGroup(ClimberSubsystem climbSub) {
-        addCommands(new ClimberExtendToRungCommandGroup(climbSub));
+    public ClimberClimbToRungCommandGroup() {
+        addCommands(new ClimberExtendToRungCommandGroup());
 
-        addCommands(new ClimberPullToRungCommandGroup(climbSub));
+        addCommands(new ClimberPullToRungCommandGroup());
 
-        addRequirements(climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 }

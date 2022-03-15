@@ -8,17 +8,17 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * 
  * @category Climber
  */
-public class ClimberTogglePivotCommand extends CommandLoggerBase {
-    private ClimberSubsystem m_climbSub;
+public class ClimberSetUprightCommand extends CommandLoggerBase {
+    private boolean m_setUpright;
 
-    public ClimberTogglePivotCommand(ClimberSubsystem climbSub) {
-        m_climbSub = climbSub;
-        addRequirements(m_climbSub);
+    ClimberSetUprightCommand(boolean setUpright) {
+        m_setUpright = setUpright;
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_climbSub.setClimberUpright(!m_climbSub.isClimberUpright()) ;
+        ClimberSubsystem.getInstance().setClimberUpright(m_setUpright);
     }
 
     @Override

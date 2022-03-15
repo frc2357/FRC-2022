@@ -4,27 +4,25 @@ import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class ClimberGoToRotationsCommand extends CommandLoggerBase {
-    private ClimberSubsystem m_climbSub;
     private double m_rotations;
 
-    public ClimberGoToRotationsCommand(ClimberSubsystem climbSub, double rotations) {
-        climbSub = m_climbSub;
+    public ClimberGoToRotationsCommand(double rotations) {
         m_rotations = rotations;
-        addRequirements(m_climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_climbSub.setClimberRotations(m_rotations);
+        ClimberSubsystem.getInstance().setClimberRotations(m_rotations);
     }
 
     @Override
     public void end(boolean interrupted) {
-        m_climbSub.stopClimberMotors();
+        ClimberSubsystem.getInstance().stopClimberMotors();
     }
 
     @Override
     public boolean isFinished() {
-        return m_climbSub.isClimberAtRotations();
+        return ClimberSubsystem.getInstance().isClimberAtRotations();
     }
 }

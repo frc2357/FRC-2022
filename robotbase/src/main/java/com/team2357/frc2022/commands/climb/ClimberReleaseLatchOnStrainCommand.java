@@ -3,16 +3,14 @@ package com.team2357.frc2022.commands.climb;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase{
-    private ClimberSubsystem m_climbSub;
+public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase {
     private boolean m_isFinished;
     private int m_timeToBalanceAmps;
 
-    public ClimberReleaseLatchOnStrainCommand(ClimberSubsystem climbSub, int timeToBalanceAmps) {
-        m_climbSub = climbSub;
+    public ClimberReleaseLatchOnStrainCommand(int timeToBalanceAmps) {
         m_isFinished = false;
         m_timeToBalanceAmps = timeToBalanceAmps;
-        addRequirements(m_climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
@@ -22,8 +20,8 @@ public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase{
 
     @Override
     public void execute() {
-        if(m_climbSub.isClimberGripped() && m_timeToBalanceAmps < System.currentTimeMillis()) {
-            m_climbSub.setLatch(false);
+        if (ClimberSubsystem.getInstance().isClimberGripped() && m_timeToBalanceAmps < System.currentTimeMillis()) {
+            ClimberSubsystem.getInstance().setLatch(false);
             m_isFinished = true;
         }
     }
