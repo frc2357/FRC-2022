@@ -222,6 +222,7 @@ public final class Constants {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
             
             config.m_rollerTopSpeed = 0.85;
+            config.m_rollerAxisMaxSpeed = 1.0;
 
             return config;
         }
