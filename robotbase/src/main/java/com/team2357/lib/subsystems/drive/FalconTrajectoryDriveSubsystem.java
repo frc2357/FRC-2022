@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.team2357.lib.util.RobotMath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,9 +14,10 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
 
-    private static final double[][] degreesToRPMsCurve = {
-            { 0, 0, 0 }, // Closest
-            { 0, 0, 0 }, // Furthest
+    // {Known velocity sensor units, turn adjustment in sensor units}
+    private static final double[][] turnAdjustmentCurve = {
+            { 0, 0 }, // min
+            { 0, 0 }, // max
     };
 
     public double m_distancePerPulse;
@@ -157,8 +159,22 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
         double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
         double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
-        double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits;
-        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
+
+        int curveSegmentIndex = RobotMath.getCurveSegmentIndex(turnAdjustmentCurve, speedSensorUnits);
+
+        double[] pointA = turnAdjustmentCurve[curveSegmentIndex];
+        double[] pointB = turnAdjustmentCurve[curveSegmentIndex + 1];
+
+        double highVel = pointA[0];
+        double lowVel = pointB[0];
+        double highTurnAdjustment = pointA[1];
+        double lowTurnAdjustment = pointB[1];
+
+        double adjustment = RobotMath.lineralyInterpolate(highVel, lowVel, highTurnAdjustment, lowTurnAdjustment,
+                speedSensorUnits);
+
+        double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits + adjustment;
+        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits - adjustment;
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);
     }
 
