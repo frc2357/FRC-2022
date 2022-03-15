@@ -157,7 +157,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void setClimberAxisSpeed(double axisSpeed) {
         setClosedLoopEnabled(false);
 
-        double motorSpeed = axisSpeed * m_config.m_climberAxisMaxSpeed;
+        double motorSpeed = (-axisSpeed) * m_config.m_climberAxisMaxSpeed;
 
         m_leftClimberMotor.set(motorSpeed);
         m_rightClimberMotor.set(motorSpeed);

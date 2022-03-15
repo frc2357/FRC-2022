@@ -9,6 +9,7 @@ import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberLatchCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberWinchAxisCommand;
+import com.team2357.frc2022.commands.human.panic.ClimberWinchResetCommand;
 import com.team2357.frc2022.commands.human.panic.FeederRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeArmsCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
@@ -120,6 +121,8 @@ public class GunnerControls {
 
         Trigger upDPadAndX = m_upDPad.and(m_xButton);
         Trigger upDPadAndY = m_upDPad.and(m_yButton);
+        Trigger upDPadAndB = m_upDPad.and(m_bButton);
+
         Trigger downDPadAndA = m_downDPad.and(m_aButton);
 
         Trigger aButton = m_aButton.and(noDPad);
@@ -144,5 +147,6 @@ public class GunnerControls {
         upDPadOnly.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
         upDPadAndX.whenActive(new ClimberLatchCommand());
         upDPadAndY.whenActive(new ClimberArmsCommand());
+        upDPadAndB.whenActive(new ClimberWinchResetCommand());
     }
 }
