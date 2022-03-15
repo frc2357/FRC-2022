@@ -233,6 +233,8 @@ public final class Constants {
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 
+            config.m_climberAxisMaxSpeed = 1.0;
+
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 35;
             config.m_climberMotorFreeLimitAmps = 35;
