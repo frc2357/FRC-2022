@@ -144,7 +144,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     public void setShooterMotorsPercent(double percentOutput) {
-        m_leftBottomMotor.set(percentOutput);
+        m_leftBottomMotor.set(percentOutput/2);
         m_topMotor.set(percentOutput);
     }
 
