@@ -265,15 +265,23 @@ public final class Constants {
 
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
-            /** Angle of the Limelight axis from horizontal (degrees) */
-            config.m_LimelightMountingAngle = 0;
-            /** Height of the Limelight lens center from the floor (inches) */
+            config.m_humanPipelineIndex = 0;
+            config.m_targetingPipelineIndex = 1;
 
-            config.m_LimelightMountingHeightInches = 0;
-            /** Target width in inches */
-            config.m_TargetWidth = 5;
-            /** Target height in inches */
+            config.m_isLimelightPrimaryStream = true;
+
+            /** Angle of the Limelight axis from horizontal (degrees) */
+            config.m_LimelightMountingAngle = 30;
+
+            /** Height of the Limelight lens center from the floor (inches), from CAD */
+            config.m_LimelightMountingHeightInches = 35.64;
+
+            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            config.m_TargetWidth = 36;
+
+            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
             config.m_TargetHeight = 2;
+
             return config;
         }
 

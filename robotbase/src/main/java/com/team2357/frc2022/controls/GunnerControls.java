@@ -133,7 +133,7 @@ public class GunnerControls {
         TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
 
         aButton.toggleWhenActive(new IntakeDeployToggleCommand());
-        bButton.toggleWhenActive(new TargetLockCommand());
+        bButton.whileActiveOnce(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         m_rightTrigger.whenActive(new FireCommand());
 

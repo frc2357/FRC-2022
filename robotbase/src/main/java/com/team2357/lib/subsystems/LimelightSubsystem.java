@@ -98,6 +98,12 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
   }
 
   public static class Configuration {
+    public int m_humanPipelineIndex = 0;
+
+    public int m_targetingPipelineIndex = 0;
+
+    public boolean m_isLimelightPrimaryStream = true;
+
     /** Angle of the Limelight axis from horizontal (degrees) */
     public double m_LimelightMountingAngle = 0;
 
@@ -117,8 +123,15 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     public double m_TargetHeight = 1;
   }
 
+  private static LimelightSubsystem instance = null;
+
+  public static LimelightSubsystem getInstance() {
+    return instance;
+  }
+
   protected NetworkTable m_Table = NetworkTableInstance.getDefault().getTable("limelight");
-  private NetworkTableEntry m_Pipeline = m_Table.getEntry("pipeline");
+  private NetworkTableEntry m_stream = m_Table.getEntry("stream");
+  private NetworkTableEntry m_pipeline = m_Table.getEntry("pipeline");
   private NetworkTableEntry m_Tv = m_Table.getEntry("tv");
   private NetworkTableEntry m_Tx = m_Table.getEntry("tx");
   private NetworkTableEntry m_Ty = m_Table.getEntry("ty");
@@ -132,8 +145,20 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
 
   private Configuration m_Configuration = new Configuration();
 
+  /**
+   * Sets the camera stream.
+   * 
+   * @param isLimelightPrimary True if the limelight is primary, false if not.
+   */
+  public LimelightSubsystem() {
+    instance = this;
+  }
+
   public void setConfiguration(Configuration configuration) {
     m_Configuration = configuration;
+
+    setHumanPipelineActive();
+    setStream(configuration.m_isLimelightPrimaryStream);
   }
 
   public VisionTarget getCurrentTarget() {
@@ -144,12 +169,16 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     return m_LastVisibleTarget;
   }
 
+  public boolean validTargetExists() {
+    return 0 < getTV();
+  }
+
   /**
    * Acquire a target. Returns null if no target is in view.
    * @param targetHeightFromFloor Height of the target from the floor. Used in distance calculation.
    */
   public VisionTarget acquireTarget(double targetHeightFromFloor) {
-    if (0 < getTV()) {
+    if (validTargetExists()) {
       m_CurrentTarget = new VisionTarget(m_Configuration, targetHeightFromFloor, getTS(), getTHOR(), getTVERT(), getTX(), getTY());
       m_LastVisibleTarget = m_CurrentTarget;
     } else {
@@ -158,13 +187,29 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     return m_CurrentTarget;
   }
 
-  public int getPipeline() {
-    double value = m_Pipeline.getDouble(Double.NaN);
+  public boolean isHumanPipelineActive() {
+    return getPipeline() == m_Configuration.m_humanPipelineIndex;
+  }
+
+  public void setHumanPipelineActive() {
+      m_pipeline.setDouble(m_Configuration.m_humanPipelineIndex);
+  }
+
+  public boolean isTargetingPipelineActive() {
+    return getPipeline() == m_Configuration.m_targetingPipelineIndex;
+  }
+
+  public void setTargetingPipelineActive() {
+      m_pipeline.setDouble(m_Configuration.m_targetingPipelineIndex);
+  }
+
+  private int getPipeline() {
+    double value = m_pipeline.getDouble(Double.NaN);
     return (int)Math.round(value);
   }
 
-  public void setPipeline(int index) {
-    m_Pipeline.setDouble((double)index);
+  public void setStream(boolean isLimelightPrimary) {
+      m_stream.setValue(isLimelightPrimary ? 1 : 2);
   }
 
   /**
