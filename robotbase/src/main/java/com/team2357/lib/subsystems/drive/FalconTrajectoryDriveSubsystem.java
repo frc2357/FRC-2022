@@ -48,7 +48,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         public double m_nominalOutput = 0;
         public double m_peakOutput = 1;
 
-        public double m_stickToPositionPer100Ms = 2000.0 * 2048.0 / 600.0;
+        // Example: 2000rpm * 2048cpr / (6000ms/100ms)
+        public double m_stickToPositionPer100Ms = 0;
 
         public int m_timeoutMs = 0;
     }
@@ -146,7 +147,7 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         double speedSensorUnits = speed * m_config.m_stickToPositionPer100Ms;
         double turnSensorUnits = turn * m_config.m_stickToPositionPer100Ms;
         double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits;
-		double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
+        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);
     }
 
