@@ -18,7 +18,7 @@ public class FeederRollerAxisCommand extends CommandLoggerBase {
 
         if (axisValue != 0) {
             FeederSubsystem feeder = FeederSubsystem.getInstance();
-            System.out.println("FeederRollerAxisCommand:" + axisValue);
+            feeder.setAxisRollerSpeed(axisValue);
         }
     }
 

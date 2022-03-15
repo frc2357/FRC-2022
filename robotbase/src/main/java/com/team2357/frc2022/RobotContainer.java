@@ -53,7 +53,7 @@ public class RobotContainer {
     subsystemFactory.CreateShooterSubsystem();
     subsystemFactory.createIntakeArmSubsystem();
     subsystemFactory.CreateIntakeRollerSubsystem();
-    subsystemFactory.CreateFeederSubsystem(feederIRSensor);
+    subsystemFactory.CreateFeederSubsystem();
     subsystemFactory.CreateVisionSubsystem();
     subsystemFactory.CreateClimberSubsystem();
     subsystemFactory.CreateTurretSubsystem();
