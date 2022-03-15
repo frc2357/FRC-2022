@@ -143,6 +143,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
+    public void setShooterMotorsPercent(double percentOutput) {
+        m_leftBottomMotor.set(percentOutput);
+        m_topMotor.set(percentOutput);
+    }
+
     public boolean hasTarget() {
         return m_currentTarget != null;
     }
