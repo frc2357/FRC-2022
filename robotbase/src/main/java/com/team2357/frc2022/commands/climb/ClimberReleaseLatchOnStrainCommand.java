@@ -23,7 +23,7 @@ public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase{
     @Override
     public void execute() {
         if(m_climbSub.isClimberGripped() && m_timeToBalanceAmps < System.currentTimeMillis()) {
-            m_climbSub.setHookPivot(false);
+            m_climbSub.setLatch(false);
             m_isFinished = true;
         }
     }

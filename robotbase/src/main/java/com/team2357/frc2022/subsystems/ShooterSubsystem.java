@@ -9,6 +9,11 @@ import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
 import com.team2357.lib.util.RobotMath;
 
 public class ShooterSubsystem extends ClosedLoopSubsystem {
+    private static ShooterSubsystem instance = null;
+
+    public static ShooterSubsystem getInstance() {
+        return instance;
+    }
 
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
@@ -55,6 +60,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @param topMotor           The motor on the top
      */
     public ShooterSubsystem(WPI_TalonFX leftBottomShooter, WPI_TalonFX rightBottomShooter, WPI_TalonFX topMotor) {
+        instance = this;
         m_leftBottomMotor = leftBottomShooter;
         m_rightBottomMotor = rightBottomShooter;
         m_topMotor = topMotor;

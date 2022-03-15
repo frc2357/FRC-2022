@@ -11,7 +11,6 @@ import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
  * @category Drive
  */
 public class InvertDriveCommand extends CommandLoggerBase {
-    private TogglableLimelightSubsystem m_visionSub;
     private InvertDriveControls m_controls;
 
     /**
@@ -21,16 +20,14 @@ public class InvertDriveCommand extends CommandLoggerBase {
      * @param controls The controls. The {@link InvertDriveControls} class extends off of 
      * {@link DriverControls} so these should be used instead of DriverControls.
      */
-    public InvertDriveCommand(TogglableLimelightSubsystem visionSub, InvertDriveControls controls) {
+    public InvertDriveCommand(InvertDriveControls controls) {
         m_controls = controls;
-        m_visionSub = visionSub;
     }
 
     @Override
     public void initialize() {
         super.initialize();
         m_controls.invert();
-        m_visionSub.toggleStream();
     }
     
     @Override

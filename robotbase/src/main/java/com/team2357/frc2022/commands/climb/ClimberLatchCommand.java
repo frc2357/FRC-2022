@@ -14,7 +14,7 @@ public class ClimberLatchCommand extends CommandLoggerBase{
     
         @Override
         public void initialize() {
-            m_climbSub.setHookPivot(m_openHook);
+            m_climbSub.setLatch(m_openHook);
         }
     
         @Override

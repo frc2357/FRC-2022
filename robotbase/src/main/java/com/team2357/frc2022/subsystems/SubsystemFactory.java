@@ -27,6 +27,10 @@ public class SubsystemFactory {
     public SubsystemFactory() {
     }
 
+    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
+        return new SensorSubsystem(intakeSensor, feederSensor);
+    }
+
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
 
         WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,
@@ -59,12 +63,20 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public IntakeSubsystem CreateIntakeSubsystem(SensorBooleanState intakeSensorState) {
+    public IntakeArmSubsystem createIntakeArmSubsystem() {
         DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(Constants.CAN_ID.PNEUMATICS_HUB_ID,
                 PneumaticsModuleType.REVPH, Constants.PH_ID.INTAKE_SOLENOID_FORWARD_CHANNEL,
                 Constants.PH_ID.INTAKE_SOLENOID_REVERSE_CHANNEL);
+        IntakeArmSubsystem subsystem = new IntakeArmSubsystem(intakeDoubleSolenoid);
+        subsystem.configure(Constants.INTAKE_ARM.GET_INTAKE_ARM_CONFIG());
+        return subsystem;
+    }
+
+    public IntakeRollerSubsystem CreateIntakeRollerSubsystem() {
         VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
-        return new IntakeSubsystem(intakeVictor, intakeDoubleSolenoid, intakeSensorState);
+        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(intakeVictor);
+        subsystem.configure(Constants.INTAKE_ROLLER.GET_INTAKE_ROLLER_CONFIG());
+        return subsystem;
     }
 
     public ShooterSubsystem CreateShooterSubsystem() {
@@ -79,33 +91,38 @@ public class SubsystemFactory {
     public ClimberSubsystem CreateClimberSubsystem() {
         CANSparkMax leftClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_LEFT_ID, MotorType.kBrushless);
         CANSparkMax rightClimberMotor = new CANSparkMax(Constants.CAN_ID.CLIMBER_MOTOR_RIGHT_ID, MotorType.kBrushless);
-        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(30, PneumaticsModuleType.REVPH,
-                Constants.PH_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL, Constants.PH_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL);
-        Solenoid hookSolenoid = new Solenoid(30, PneumaticsModuleType.REVPH,
-                Constants.PH_ID.CLIMBER_HOOK_SOLENOID_CHANNEL);
-        ClimberSubsystem subsystem = new ClimberSubsystem(leftClimberMotor, rightClimberMotor, climberDoubleSolenoid,
-                hookSolenoid);
+        DoubleSolenoid climberDoubleSolenoid = new DoubleSolenoid(
+                Constants.CAN_ID.PNEUMATICS_HUB_ID,
+                PneumaticsModuleType.REVPH,
+                Constants.PH_ID.CLIMBER_SOLENOID_FORWARD_CHANNEL,
+                Constants.PH_ID.CLIMBER_SOLENOID_REVERSE_CHANNEL
+        );
+        Solenoid hookSolenoid = new Solenoid(
+                Constants.CAN_ID.PNEUMATICS_HUB_ID,
+                PneumaticsModuleType.REVPH,
+                Constants.PH_ID.CLIMBER_HOOK_SOLENOID_CHANNEL
+        );
+        ClimberSubsystem subsystem = new ClimberSubsystem(
+                leftClimberMotor,
+                rightClimberMotor,
+                climberDoubleSolenoid,
+                hookSolenoid
+        );
 
         subsystem.configure(Constants.CLIMBER.GET_CLIMBER_CONFIG());
 
         return subsystem;
     }
 
-    public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
+    public FeederSubsystem CreateFeederSubsystem() {
         WPI_VictorSPX feederVictor = new WPI_VictorSPX((Constants.CAN_ID.FEEDER_MOTOR_ID));
-        feederVictor.setInverted(Constants.FEEDER.IS_INVERTED);
-        return new FeederSubsystem(feederVictor, feederSensorState);
+        FeederSubsystem subsystem = new FeederSubsystem(feederVictor);
+        subsystem.configure(Constants.FEEDER.GET_FEEDER_SUBSYSTEM_CONFIG());
+        return subsystem;
     }   
 
-    public KickerSubsystem CreateKickerSubsystem() {
-        CANSparkMax kickerMotor = new CANSparkMax(Constants.CAN_ID.KICKER_MOTOR_ID,
-                CANSparkMaxLowLevel.MotorType.kBrushless);
-        return new KickerSubsystem(kickerMotor);
-    }
-
     public TurretSubsystem CreateTurretSubsystem() {
-        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID,
-                CANSparkMaxLowLevel.MotorType.kBrushless);
+        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID, MotorType.kBrushless);
         TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
         subsystem.configure(Constants.TURRET.GET_TURRET_CONFIG());
         return subsystem;
