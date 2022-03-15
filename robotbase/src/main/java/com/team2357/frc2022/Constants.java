@@ -174,21 +174,14 @@ public final class Constants {
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
-        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.2;
-
-        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
-        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
-                * 2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
-                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
-
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_turretMotorStallLimitAmps = 15;
+            config.m_turretAxisMaxSpeed = 0.60;
+
+            config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
 
             config.m_turretMotorP = 0.00005;
