@@ -114,10 +114,9 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
+    public FeederSubsystem CreateFeederSubsystem() {
         WPI_VictorSPX feederVictor = new WPI_VictorSPX((Constants.CAN_ID.FEEDER_MOTOR_ID));
-        feederVictor.setInverted(Constants.FEEDER.IS_INVERTED);
-        return new FeederSubsystem(feederVictor, feederSensorState);
+        return new FeederSubsystem(feederVictor);
     }   
 
     public TurretSubsystem CreateTurretSubsystem() {
