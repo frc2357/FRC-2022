@@ -12,6 +12,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
+
+    private static final double[][] degreesToRPMsCurve = {
+            { 0, 0, 0 }, // Closest
+            { 0, 0, 0 }, // Furthest
+    };
+
     public double m_distancePerPulse;
 
     // The gyro sensor
@@ -48,8 +54,13 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         public double m_nominalOutput = 0;
         public double m_peakOutput = 1;
 
-        // Example: 2000rpm * 2048cpr / (6000ms/100ms)
-        public double m_stickToPositionPer100Ms = 0;
+        /**
+         * This represents the native max velocity for the drive sensor over 100 ms
+         * It should follow the following formula
+         * maxRpm * encoderCpr / 600
+         * 
+         */
+        public double m_sensorUnitsMaxVelocity = 0;
 
         public int m_timeoutMs = 0;
     }
@@ -144,8 +155,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     @Override
     public void driveVelocity(double speed, double turn) {
 
-        double speedSensorUnits = speed * m_config.m_stickToPositionPer100Ms;
-        double turnSensorUnits = turn * m_config.m_stickToPositionPer100Ms;
+        double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
+        double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
         double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits;
         double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);

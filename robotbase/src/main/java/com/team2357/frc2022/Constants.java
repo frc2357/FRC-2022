@@ -151,7 +151,7 @@ public final class Constants {
             config.m_nominalOutput = 0;
             config.m_peakOutput = 1;
 
-            config.m_stickToPositionPer100Ms = 2000.0 * 2048.0 / 600.0;
+            config.m_sensorUnitsMaxVelocity = 2000.0 * 2048.0 / 600.0;
 
             config.m_timeoutMs = 0;
             return config;
