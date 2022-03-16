@@ -180,6 +180,13 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
+            config.m_trackingP = 0.01;
+            config.m_trackingI = 0.0;
+            config.m_trackingD = 0.0;
+            config.m_trackingSetpoint = 0; // The center of the camera view is zero.
+            config.m_trackingToleranceDegrees = 1.0;
+            config.m_trackingMaxSpeed = 0.40;
+
             config.m_turretAxisMaxSpeed = 0.60;
 
             config.m_turretMotorStallLimitAmps = 30;
@@ -262,6 +269,7 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
+        public static long m_pipelineSwitchMillis = 1250;
 
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
@@ -281,6 +289,8 @@ public final class Constants {
 
             /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
             config.m_TargetHeight = 2;
+
+            config.m_targetHeightFromFloor = 103.5;
 
             return config;
         }

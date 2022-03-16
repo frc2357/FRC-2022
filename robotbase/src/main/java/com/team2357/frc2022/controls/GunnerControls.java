@@ -14,6 +14,7 @@ import com.team2357.frc2022.commands.human.panic.FeederRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeArmsCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
+import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -38,6 +39,7 @@ public class GunnerControls {
     public AxisThresholdTrigger m_rightTrigger;
 
     // Buttons
+    public JoystickButton m_leftStickButton;
     public JoystickButton m_backButton;
     public JoystickButton m_startButton;
     public JoystickButton m_leftBumper;
@@ -69,6 +71,7 @@ public class GunnerControls {
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
+        m_leftStickButton = new JoystickButton(controller, XboxRaw.StickPressLeft.value);
         m_backButton = new JoystickButton(controller, XboxRaw.Back.value);
         m_startButton = new JoystickButton(controller, XboxRaw.Start.value);
         m_leftBumper = new JoystickButton(controller, XboxRaw.BumperLeft.value);
@@ -131,9 +134,10 @@ public class GunnerControls {
 
         // Left stick is "always on" for turret movement.
         TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
+        m_leftStickButton.whenActive(new TurretResetCommand());
 
         aButton.toggleWhenActive(new IntakeDeployToggleCommand());
-        bButton.whileActiveOnce(new TargetLockCommand());
+        bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         m_rightTrigger.whenActive(new FireCommand());
 

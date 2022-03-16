@@ -121,6 +121,8 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
 
     /** Target height in inches */
     public double m_TargetHeight = 1;
+
+    public double m_targetHeightFromFloor = 0;
   }
 
   private static LimelightSubsystem instance = null;
@@ -177,14 +179,18 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
    * Acquire a target. Returns null if no target is in view.
    * @param targetHeightFromFloor Height of the target from the floor. Used in distance calculation.
    */
-  public VisionTarget acquireTarget(double targetHeightFromFloor) {
+  public VisionTarget acquireTarget() {
     if (validTargetExists()) {
-      m_CurrentTarget = new VisionTarget(m_Configuration, targetHeightFromFloor, getTS(), getTHOR(), getTVERT(), getTX(), getTY());
+      m_CurrentTarget = new VisionTarget(m_Configuration, m_Configuration.m_targetHeightFromFloor, getTS(), getTHOR(), getTVERT(), getTX(), getTY());
       m_LastVisibleTarget = m_CurrentTarget;
     } else {
       m_CurrentTarget = null;
     }
     return m_CurrentTarget;
+  }
+
+  public void clearTarget() {
+    m_CurrentTarget = null;
   }
 
   public boolean isHumanPipelineActive() {
