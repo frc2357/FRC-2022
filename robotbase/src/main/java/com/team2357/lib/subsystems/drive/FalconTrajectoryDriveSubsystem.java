@@ -13,6 +13,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
+    private static FalconTrajectoryDriveSubsystem instance = null;
+
+    public static FalconTrajectoryDriveSubsystem getInstance() {
+        return instance;
+    }
 
     public double m_distancePerPulse;
 
@@ -81,6 +86,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
             int leftEncoderChannelB, int rightEncoderChannelA, int rightEncoderChannelB) {
         super(leftFalconMaster, leftFalconSlaves, rightFalconMaster, rightFalconSlaves);
         m_distancePerPulse = encoderDistancePerPulse;
+
+        instance = this;
 
         m_leftEncoder = new Encoder(
                 leftEncoderChannelA,
