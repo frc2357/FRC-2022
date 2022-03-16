@@ -16,7 +16,7 @@ public class DriveProportionalCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_driveSub.driveProportional(m_driverController.getSpeed(), m_driverController.getTurn());
+        m_driveSub.driveVelocity(m_driverController.getSpeed(), m_driverController.getTurn());
     }
 
     @Override

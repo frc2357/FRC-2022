@@ -1,10 +1,12 @@
 package com.team2357.lib.subsystems.drive;
 
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -89,9 +91,18 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_rightEncoder = new Encoder(
                 rightEncoderChannelA,
                 rightEncoderChannelB);
-
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
+
+        for (WPI_TalonFX slave : leftFalconSlaves) {
+            slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
+        }
+        for (WPI_TalonFX slave : rightFalconSlaves) {
+            slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
+        }
+
+        m_leftFalconMaster.configClosedloopRamp(0.25);
+        m_rightFalconMaster.configClosedloopRamp(0.25);
 
         resetEncoders();
         m_gyro = gyro;
@@ -157,14 +168,16 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
         double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
         double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
-        double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits;
-        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
+        double leftSensorUnitsPer100Ms = speedSensorUnits - (turnSensorUnits * 0.5);
+        double rightSensorUnitsPer100Ms = speedSensorUnits + (turnSensorUnits * 0.5);
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);
     }
 
     protected void setVelocity(double leftSensorUnitsPer100Ms, double rightSensorUnitsPer100Ms) {
-        m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
-        m_rightFalconMaster.set(TalonFXControlMode.Velocity, rightSensorUnitsPer100Ms);
+        System.out.println("Left: "+leftSensorUnitsPer100Ms);
+        System.out.println("Right: "+rightSensorUnitsPer100Ms);
+      m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
+     m_rightFalconMaster.set(TalonFXControlMode.Velocity, -rightSensorUnitsPer100Ms);
     }
 
     /**

@@ -142,17 +142,18 @@ public final class Constants {
             // The deadband of output percentage on the motor controller
             config.m_falconOutputDeadband = 0.001;
 
+            config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
+
             // Velocity PID constants
             config.m_gainsSlot = 0;
-            config.m_velF = 0.0;
-            config.m_velP = 0.0;
+            config.m_velF =  (1023.0/20660.0)+0.03;
+            config.m_velP = 0.00069903;
             config.m_velI = 0.0;
             config.m_velD = 0.0;
 
             config.m_nominalOutput = 0;
             config.m_peakOutput = 1;
 
-            config.m_sensorUnitsMaxVelocity = 2000.0 * 2048.0 / 600.0;
 
             config.m_timeoutMs = 0;
             return config;
