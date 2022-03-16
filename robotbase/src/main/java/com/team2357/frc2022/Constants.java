@@ -6,6 +6,7 @@ package com.team2357.frc2022;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
+import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
@@ -191,21 +192,14 @@ public final class Constants {
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
-        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.2;
-
-        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
-        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
-                * 2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
-                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
-
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_turretMotorStallLimitAmps = 15;
+            config.m_turretAxisMaxSpeed = 0.60;
+
+            config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
 
             config.m_turretMotorP = 0.00005;
@@ -246,6 +240,7 @@ public final class Constants {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
             config.m_rollerTopSpeed = 0.85;
+            config.m_rollerAxisMaxSpeed = 1.0;
 
             return config;
         }
@@ -254,6 +249,8 @@ public final class Constants {
     public static final class CLIMBER {
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
+
+            config.m_climberAxisMaxSpeed = 1.0;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 35;
@@ -324,14 +321,12 @@ public final class Constants {
         public static final int MAX_PRESSURE_PSI = 120;
     }
 
-    public final class KICKER {
-        public static final double SPEED = 0;
-    }
-
-    public final class FEEDER {
-        public static final boolean IS_INVERTED = true;
-
-        public static final double UP_SPEED = 0.25;
-        public static final double DOWN_SPEED = -0.25;
+    public static final class FEEDER {
+        public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
+            FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
+            config.m_feederMotorAxisMaxSpeed = 1.0;
+            config.m_feederMotorRunSpeed = 0.25;
+            return config;
+        }
     }
 }

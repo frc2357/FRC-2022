@@ -1,6 +1,5 @@
 package com.team2357.frc2022.subsystems;
 
-import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -12,26 +11,36 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
         return instance;
     }
 
-    private WPI_VictorSPX m_feederMotor;
-    private SensorBooleanState m_feederSensor;
+    public static class Configuration {
+        public double m_feederMotorAxisMaxSpeed = 0;
+        public double m_feederMotorRunSpeed = 0;
+    }
 
-    public FeederSubsystem(WPI_VictorSPX feederMotor, SensorBooleanState feederSensor) {
+    private Configuration m_config;
+    private WPI_VictorSPX m_feederMotor;
+
+    public FeederSubsystem(WPI_VictorSPX feederMotor) {
         instance = this;
         m_feederMotor = feederMotor;
-        m_feederMotor.setInverted(true); // Does this still need to be inverted?
-        m_feederSensor = feederSensor;
 
         addChild("feederMotor", m_feederMotor);
     }
 
-    public void runFeedermotor(double speed) {
-        m_feederMotor.set(ControlMode.PercentOutput, speed);
+    public void configure(Configuration config) {
+        m_config = config;
+        m_feederMotor.setInverted(true);
     }
 
-    // Sensor state will return false when an object is too close. Function will
-    // flip that to true for reability
-    public boolean isCargoAtFeederWheel() {
-        return m_feederSensor.getState();
+    public void start() {
+        m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorRunSpeed);
     }
 
+    public void stop() {
+        m_feederMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void setAxisRollerSpeed(double axisSpeed) {
+        double motorSpeed = axisSpeed * m_config.m_feederMotorAxisMaxSpeed;
+        m_feederMotor.set(ControlMode.PercentOutput, motorSpeed);
+    }
 }

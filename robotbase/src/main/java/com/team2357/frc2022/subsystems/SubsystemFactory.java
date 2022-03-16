@@ -114,15 +114,15 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public FeederSubsystem CreateFeederSubsystem(SensorBooleanState feederSensorState) {
+    public FeederSubsystem CreateFeederSubsystem() {
         WPI_VictorSPX feederVictor = new WPI_VictorSPX((Constants.CAN_ID.FEEDER_MOTOR_ID));
-        feederVictor.setInverted(Constants.FEEDER.IS_INVERTED);
-        return new FeederSubsystem(feederVictor, feederSensorState);
+        FeederSubsystem subsystem = new FeederSubsystem(feederVictor);
+        subsystem.configure(Constants.FEEDER.GET_FEEDER_SUBSYSTEM_CONFIG());
+        return subsystem;
     }   
 
     public TurretSubsystem CreateTurretSubsystem() {
-        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID,
-                CANSparkMaxLowLevel.MotorType.kBrushless);
+        CANSparkMax turretMotor = new CANSparkMax(Constants.CAN_ID.TURRET_MOTOR_ID, MotorType.kBrushless);
         TurretSubsystem subsystem = new TurretSubsystem(turretMotor);
         subsystem.configure(Constants.TURRET.GET_TURRET_CONFIG());
         return subsystem;
