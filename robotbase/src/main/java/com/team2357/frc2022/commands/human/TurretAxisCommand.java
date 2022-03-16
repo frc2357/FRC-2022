@@ -15,14 +15,16 @@ public class TurretAxisCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         double axisValue = m_axis.getValue();
-
-        if (axisValue != 0) {
-            System.out.println("TurretAxisCommand: " + axisValue);
-        }
+        TurretSubsystem.getInstance().setTurretAxisSpeed(axisValue);
     }
 
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        TurretSubsystem.getInstance().stop();
     }
 }

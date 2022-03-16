@@ -20,7 +20,7 @@ public class ClimberGoToRotationsCommand extends CommandLoggerBase {
 
     @Override
     public void end(boolean interrupted) {
-        m_climbSub.StopClimberMotors();
+        m_climbSub.stopClimberMotors();
     }
 
     @Override

@@ -45,13 +45,22 @@ public class Utility {
 
   /**
    * 
-   * @param CANID         The CAN ID of the motor
-   * @param secondstoFull The number of seconds for the motors to reach 100%. Used
-   *                      for open-loop ramping
+   * @param CANID                     The CAN ID of the motor
+   * @param openLoopRampRateSeconds   The number of seconds for the motors to
+   *                                  reach
+   *                                  100%. Used
+   *                                  for open-loop ramping
+   * 
+   * @param closedLooprampRateSeconds The number of seconds for the motors to
+   *                                  reach
+   *                                  100%. Used
+   *                                  for closed-loop ramping
    */
-  public static WPI_TalonFX createDriveTalonFX(int CANID, double secondsToFull) {
+  public static WPI_TalonFX createDriveTalonFX(int CANID, double openLoopRampRateSeconds,
+      double closedLoopRampRateSeconds) {
     WPI_TalonFX talon = new WPI_TalonFX(CANID);
-    talon.configOpenloopRamp(secondsToFull);
+    talon.configOpenloopRamp(openLoopRampRateSeconds);
+    talon.configClosedloopRamp(closedLoopRampRateSeconds);
     talon.setNeutralMode(NeutralMode.Brake);
     return talon;
   }

@@ -8,7 +8,7 @@ import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
-import com.team2357.lib.commands.DriveProportionalCommand;
+import com.team2357.lib.commands.DriveVelocityCommand;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -53,7 +53,7 @@ public class RobotContainer {
     subsystemFactory.CreateShooterSubsystem();
     subsystemFactory.createIntakeArmSubsystem();
     subsystemFactory.CreateIntakeRollerSubsystem();
-    subsystemFactory.CreateFeederSubsystem(feederIRSensor);
+    subsystemFactory.CreateFeederSubsystem();
     subsystemFactory.CreateVisionSubsystem();
     subsystemFactory.CreateClimberSubsystem();
     subsystemFactory.CreateTurretSubsystem();
@@ -65,7 +65,7 @@ public class RobotContainer {
     m_driverControls = new IntakeDriveControls(driverXboxController, Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
     m_gunnerControls = new GunnerControls(gunnerXboxController);
 
-    driveSub.setDefaultCommand(new DriveProportionalCommand(driveSub, m_driverControls));
+    driveSub.setDefaultCommand(new DriveVelocityCommand(driveSub, m_driverControls));
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);

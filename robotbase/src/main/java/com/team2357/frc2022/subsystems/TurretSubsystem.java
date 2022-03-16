@@ -24,6 +24,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private double m_targetMotorRotations = Double.NaN;
 
     public static class Configuration {
+        public double m_turretAxisMaxSpeed = 0;
+
         public IdleMode turretMotorIdleMode = IdleMode.kBrake;
         public int m_turretMotorStallLimitAmps = 0;
         public int m_turretMotorFreeLimitAmps = 0;
@@ -55,6 +57,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     public void configure(Configuration config) {
         m_config = config;
 
+        m_turretMotor.setInverted(true);
         m_turretMotor.setIdleMode(m_config.turretMotorIdleMode);
         m_turretMotor.setSmartCurrentLimit(m_config.m_turretMotorStallLimitAmps, m_config.m_turretMotorFreeLimitAmps);
 
@@ -85,8 +88,13 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         }
     }
 
-    public void setTurretSpeed(double speed) {
-        setTurretSpeed(speed, false);
+    public void stop() {
+        setTurretSpeed(0, true);;
+    }
+
+    public void setTurretAxisSpeed(double axisSpeed) {
+        double motorSpeed = axisSpeed * m_config.m_turretAxisMaxSpeed;
+        setTurretSpeed(motorSpeed, true);
     }
 
     public void setTurretSpeed(double speed, boolean overrideClosedLoop) {
@@ -132,12 +140,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
             // We've reached our target, stop closed loop.
             setTurretSpeed(0, true);
         }
-
-        // For tuning
-        SmartDashboard.putNumber("Turret SetPoint", m_targetMotorRotations);
-        SmartDashboard.putNumber("Turret Motor Pos", m_turretMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("Turret Motor Vel", m_turretMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Turret Motor Output", m_turretMotor.getAppliedOutput());
     }
 
     /**
@@ -147,7 +149,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private void handleMotorStall() {
         if (m_turretMotor.getOutputCurrent() >= m_config.m_turretMotorStallLimitAmps) {
             System.err.println("TURRET: Motor stalled!");
-            setTurretSpeed(0);
+            setTurretSpeed(0, true);
             setClosedLoopEnabled(false);
         }
     }

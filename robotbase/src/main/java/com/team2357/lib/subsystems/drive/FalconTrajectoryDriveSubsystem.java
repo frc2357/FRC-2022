@@ -1,5 +1,6 @@
 package com.team2357.lib.subsystems.drive;
 
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -46,6 +47,9 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // The deadband of output percentage on the motor controller
         public double m_falconOutputDeadband = 0.001;
 
+        // Turn sensitivity multiplier for velocity control
+        public double m_turnSensitivity = 0.0;
+
         // Velocity PID constants
         public int m_gainsSlot = 0;
         public double m_velF = 0.0;
@@ -91,9 +95,15 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_rightEncoder = new Encoder(
                 rightEncoderChannelA,
                 rightEncoderChannelB);
-
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
+
+        for (WPI_TalonFX slave : leftFalconSlaves) {
+            slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
+        }
+        for (WPI_TalonFX slave : rightFalconSlaves) {
+            slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
+        }
 
         resetEncoders();
         m_gyro = gyro;
@@ -131,32 +141,24 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         super.m_rightFalconMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                 m_config.m_gainsSlot, m_config.m_timeoutMs);
 
-        /* Config the peak and nominal outputs */
-        super.m_leftFalconMaster.configNominalOutputForward(m_config.m_nominalOutput, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.configNominalOutputReverse(-m_config.m_nominalOutput, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.configPeakOutputForward(m_config.m_peakOutput, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.configPeakOutputReverse(-m_config.m_peakOutput, m_config.m_timeoutMs);
+        configFalconPID(super.m_leftFalconMaster);
+        configFalconPID(super.m_rightFalconMaster);
+    }
 
-        super.m_rightFalconMaster.configNominalOutputForward(m_config.m_nominalOutput, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.configNominalOutputReverse(-m_config.m_nominalOutput, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.configPeakOutputForward(m_config.m_peakOutput, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.configPeakOutputReverse(-m_config.m_peakOutput, m_config.m_timeoutMs);
+    private void configFalconPID(WPI_TalonFX falcon) {
+        falcon.configNominalOutputForward(m_config.m_nominalOutput, m_config.m_timeoutMs);
+        falcon.configNominalOutputReverse(-m_config.m_nominalOutput, m_config.m_timeoutMs);
+        falcon.configPeakOutputForward(m_config.m_peakOutput, m_config.m_timeoutMs);
+        falcon.configPeakOutputReverse(-m_config.m_peakOutput, m_config.m_timeoutMs);
 
-        /* Config the Velocity closed loop gains in slot0 */
-        super.m_leftFalconMaster.config_kF(m_config.m_gainsSlot, m_config.m_velF, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.config_kP(m_config.m_gainsSlot, m_config.m_velP, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.config_kI(m_config.m_gainsSlot, m_config.m_velI, m_config.m_timeoutMs);
-        super.m_leftFalconMaster.config_kD(m_config.m_gainsSlot, m_config.m_velD, m_config.m_timeoutMs);
-
-        super.m_rightFalconMaster.config_kF(m_config.m_gainsSlot, m_config.m_velF, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.config_kP(m_config.m_gainsSlot, m_config.m_velP, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.config_kI(m_config.m_gainsSlot, m_config.m_velI, m_config.m_timeoutMs);
-        super.m_rightFalconMaster.config_kD(m_config.m_gainsSlot, m_config.m_velD, m_config.m_timeoutMs);
+        falcon.config_kF(m_config.m_gainsSlot, m_config.m_velF, m_config.m_timeoutMs);
+        falcon.config_kP(m_config.m_gainsSlot, m_config.m_velP, m_config.m_timeoutMs);
+        falcon.config_kI(m_config.m_gainsSlot, m_config.m_velI, m_config.m_timeoutMs);
+        falcon.config_kD(m_config.m_gainsSlot, m_config.m_velD, m_config.m_timeoutMs);
     }
 
     @Override
     public void driveVelocity(double speed, double turn) {
-
         double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
         double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
 
@@ -173,14 +175,16 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         double adjustment = RobotMath.lineralyInterpolate(highVel, lowVel, highTurnAdjustment, lowTurnAdjustment,
                 speedSensorUnits);
 
-        double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits + adjustment;
-        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits - adjustment;
+        double leftSensorUnitsPer100Ms = speedSensorUnits - (turnSensorUnits * m_config.m_turnSensitivity) + adjustment;
+        double rightSensorUnitsPer100Ms = speedSensorUnits + (turnSensorUnits * m_config.m_turnSensitivity) - adjustment;
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);
     }
 
     protected void setVelocity(double leftSensorUnitsPer100Ms, double rightSensorUnitsPer100Ms) {
+        System.out.println("Left: " + leftSensorUnitsPer100Ms);
+        System.out.println("Right: " + rightSensorUnitsPer100Ms);
         m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
-        m_rightFalconMaster.set(TalonFXControlMode.Velocity, rightSensorUnitsPer100Ms);
+        m_rightFalconMaster.set(TalonFXControlMode.Velocity, -rightSensorUnitsPer100Ms);
     }
 
     /**

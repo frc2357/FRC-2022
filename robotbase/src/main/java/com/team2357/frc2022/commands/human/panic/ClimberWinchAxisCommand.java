@@ -15,16 +15,16 @@ public class ClimberWinchAxisCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         double axisValue = m_axis.getValue();
-
-        if (axisValue != 0) {
-            System.out.println("ClimberWinchAxisCommand:" + axisValue);
-            ClimberSubsystem climber = ClimberSubsystem.getInstance();
-            //climber.climberMotorSpeed(speed);
-        }
+        ClimberSubsystem.getInstance().setClimberAxisSpeed(axisValue);
     }
 
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        ClimberSubsystem.getInstance().stopClimberMotors();
     }
 }

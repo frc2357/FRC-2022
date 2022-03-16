@@ -3,8 +3,6 @@
 - IR Sensors need debouncing
 - Need to install feeder sensor and check code
 
-- Add `setRollerAxisSpeed` to subsystems for gunner panic controls
-
 - Climber: Set up pneumatics control in subsystem like Intake is, with delay and such
 - Climber: Use setClosedLoopEnabled() when seeking to a specific position
 

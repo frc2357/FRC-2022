@@ -15,15 +15,16 @@ public class FeederRollerAxisCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         double axisValue = m_axis.getValue();
-
-        if (axisValue != 0) {
-            FeederSubsystem feeder = FeederSubsystem.getInstance();
-            System.out.println("FeederRollerAxisCommand:" + axisValue);
-        }
+        FeederSubsystem.getInstance().setAxisRollerSpeed(axisValue);
     }
 
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        FeederSubsystem.getInstance().stop();
     }
 }
