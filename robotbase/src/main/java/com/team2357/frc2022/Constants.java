@@ -90,7 +90,7 @@ public final class Constants {
     // Encoder Constants
     public final static class DRIVE {
         public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.75;
-        public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.25;
+        public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
@@ -145,7 +145,7 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
-            config.m_turnSensitivity = 0.5;
+            config.m_turnSensitivity = 0.25;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
