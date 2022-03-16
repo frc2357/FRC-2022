@@ -1,14 +1,13 @@
 package com.team2357.lib.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.team2357.lib.controllers.DriverControls;
 import com.team2357.lib.subsystems.drive.SkidSteerDriveSubsystem;
 
-public class DriveProportionalCommand extends CommandBase {
+public class DriveVelocityCommand extends CommandLoggerBase {
     private SkidSteerDriveSubsystem m_driveSub;
     private DriverControls m_driverController;
 
-    public DriveProportionalCommand(SkidSteerDriveSubsystem driveSub, DriverControls driverController) {
+    public DriveVelocityCommand(SkidSteerDriveSubsystem driveSub, DriverControls driverController) {
         m_driveSub = driveSub;
         m_driverController = driverController;
         addRequirements(driveSub);
@@ -16,7 +15,7 @@ public class DriveProportionalCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_driveSub.driveProportional(m_driverController.getSpeed(), m_driverController.getTurn());
+        m_driveSub.driveVelocity(m_driverController.getSpeed(), m_driverController.getTurn());
     }
 
     @Override
