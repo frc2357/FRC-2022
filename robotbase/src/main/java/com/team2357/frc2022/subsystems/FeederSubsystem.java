@@ -28,7 +28,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     public void configure(Configuration config) {
         m_config = config;
-        m_feederMotor.setInverted(true);
+        m_feederMotor.setInverted(false);
     }
 
     public void start() {
