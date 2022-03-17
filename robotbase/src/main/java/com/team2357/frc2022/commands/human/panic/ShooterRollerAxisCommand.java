@@ -15,7 +15,7 @@ public class ShooterRollerAxisCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         double axisValue = m_axis.getValue();
-        ShooterSubsystem.getInstance().setShooterMotorsPercent(axisValue);
+        ShooterSubsystem.getInstance().setShooterMotorsAxisSpeed(axisValue);
     }
 
     @Override
