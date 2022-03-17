@@ -4,11 +4,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
-import com.team2357.lib.subsystems.LimelightSubsystem.VisionTarget;
+import com.team2357.lib.subsystems.LimelightSubsystem;
 
 import edu.wpi.first.math.controller.PIDController;
 
-import com.team2357.frc2022.subsystems.util.VisionTargetSupplier;
 import com.team2357.frc2022.util.Utility;
 
 public class TurretSubsystem extends ClosedLoopSubsystem {
@@ -24,8 +23,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     private PIDController m_trackingPidController;
 
-    private VisionTargetSupplier m_targetSupplier;
-
     private Configuration m_config;
 
     private double m_targetMotorRotations = Double.NaN;
@@ -34,7 +31,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     public static class Configuration {
         public double m_turretAxisMaxSpeed = 0;
 
-        public IdleMode turretMotorIdleMode = IdleMode.kBrake;
+        public IdleMode turretMotorIdleMode = IdleMode.kCoast;
         public int m_turretMotorStallLimitAmps = 0;
         public int m_turretMotorFreeLimitAmps = 0;
 
@@ -44,6 +41,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_trackingSetpoint = 0; // The center of the camera view is zero.
         public double m_trackingToleranceDegrees = 0;
         public double m_trackingMaxSpeed = 0;
+        public double m_trackingMinSpeed = 0;
 
         public double m_turretMotorP = 0;
         public double m_turretMotorI = 0;
@@ -73,7 +71,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     public void configure(Configuration config) {
         m_config = config;
 
-        m_turretMotor.setInverted(true);
+        m_turretMotor.setInverted(false);
         m_turretMotor.setIdleMode(m_config.turretMotorIdleMode);
         m_turretMotor.setSmartCurrentLimit(m_config.m_turretMotorStallLimitAmps, m_config.m_turretMotorFreeLimitAmps);
 
@@ -101,7 +99,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
         if (!closedLoopEnabled) {
             m_targetMotorRotations = Double.NaN;
-            m_targetSupplier = null;
+            m_trackingPidController = null;
         }
     }
 
@@ -114,7 +112,11 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public void setTurretAxisSpeed(double axisSpeed) {
-        double motorSpeed = axisSpeed * m_config.m_turretAxisMaxSpeed;
+        if (isTracking() && axisSpeed == 0) {
+            // If we're currently tracking and the axis is in its deadzone, don't interrupt tracking.
+            return;
+        }
+        double motorSpeed = (-axisSpeed) * m_config.m_turretAxisMaxSpeed;
         setTurretSpeed(motorSpeed, true, true);
     }
 
@@ -128,11 +130,10 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         }
 
         double rotation = getTurretRotation();
-        if (
-            overrideLimits || 
+        if (!overrideLimits && (
             speed < 0 && rotation <= m_config.m_turretRotationsCounterClockwiseSoftLimit ||
             speed > 0 && rotation >= m_config.m_turretRotationsClockwiseSoftLimit
-        ) {
+        )) {
             System.err.println("TURRET: setTurretSpeed at limit, cannot go further");
             return false;
         }
@@ -146,6 +147,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean setTurretRotation(double rotation) {
+        // TODO: Uncomment and test this code.
+        /*
         if (rotation < m_config.m_turretRotationsCounterClockwiseSoftLimit ||
             rotation > m_config.m_turretRotationsClockwiseSoftLimit) {
 
@@ -156,6 +159,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         setClosedLoopEnabled(true);
         m_targetMotorRotations = rotation * m_config.m_turretGearRatio;
         m_pidController.setReference(m_targetMotorRotations, CANSparkMax.ControlType.kSmartMotion);
+        */
         return true;
     }
 
@@ -163,11 +167,9 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         return !Double.isNaN(m_targetMotorRotations);
     }
 
-    public boolean isTracking() {
-        return m_targetSupplier != null;
-    }
-
     public void flip360() {
+        // TODO: Uncomment and test this code.
+        /*
         double rotation = getTurretRotation();
         if (rotation > 0) {
             rotation -= 1.0;
@@ -176,6 +178,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         }
 
         setTurretRotation(rotation);
+        */
     }
 
     public boolean isAtTarget() {
@@ -183,12 +186,15 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         return Utility.isWithinTolerance(currentMotorRotations, m_targetMotorRotations, m_config.m_turretMotorAllowedError);
     }
 
-    public void trackTarget(VisionTargetSupplier targetSupplier) {
-        m_targetSupplier = targetSupplier;
+    public void trackTarget() {
         m_trackingPidController = new PIDController(m_config.m_trackingP, m_config.m_trackingI, m_config.m_trackingD);
         m_trackingPidController.setSetpoint(m_config.m_trackingSetpoint);
         m_trackingPidController.setTolerance(m_config.m_trackingToleranceDegrees);
         setClosedLoopEnabled(true);
+    }
+
+    public boolean isTracking() {
+        return m_trackingPidController != null;
     }
 
     @Override
@@ -213,19 +219,21 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     private void trackingPeriodic() {
-        VisionTarget target = m_targetSupplier.getAsVisionTarget();
+        LimelightSubsystem limelight = LimelightSubsystem.getInstance();
 
-        if (target == null) {
-            // No target found. Just stop here, but keep tracking.
-            m_turretMotor.set(0);
+        if (!limelight.validTargetExists()) {
+            setClosedLoopEnabled(false);
             return;
         }
 
-        double errorDegrees = target.getX();
+        double errorDegrees = limelight.getTX();
         double motorSpeed = m_trackingPidController.calculate(errorDegrees);
         double clampedMotorSpeed = com.team2357.lib.util.Utility.clamp(motorSpeed, -m_config.m_trackingMaxSpeed, m_config.m_trackingMaxSpeed);
-        System.out.println("error: " + errorDegrees + ", speed:" + motorSpeed + ", clamped: " + clampedMotorSpeed);
-        //m_turretMotor.set(clampedMotorSpeed);
+        if (Math.abs(clampedMotorSpeed) > m_config.m_trackingMinSpeed) {
+            m_turretMotor.set(clampedMotorSpeed);
+        } else {
+            m_turretMotor.set(0);
+        }
     }
 
     /**

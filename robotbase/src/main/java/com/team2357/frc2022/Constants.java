@@ -180,14 +180,15 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.01;
+            config.m_trackingP = 0.03;
             config.m_trackingI = 0.0;
             config.m_trackingD = 0.0;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
-            config.m_trackingMaxSpeed = 0.40;
+            config.m_trackingMaxSpeed = 0.4;
+            config.m_trackingMinSpeed = 0.05;
 
-            config.m_turretAxisMaxSpeed = 0.60;
+            config.m_turretAxisMaxSpeed = 0.5;
 
             config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
@@ -207,8 +208,8 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
-            config.m_turretRotationsClockwiseSoftLimit = 0.75;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.60;
+            config.m_turretRotationsClockwiseSoftLimit = 0.60;
             config.m_turretGearRatio = 49.6;
             return config;
         }
@@ -269,7 +270,7 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
-        public static long m_pipelineSwitchMillis = 1250;
+        public static long m_pipelineSwitchMillis = 1000;
 
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();

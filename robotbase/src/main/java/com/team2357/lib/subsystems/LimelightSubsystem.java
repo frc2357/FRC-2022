@@ -15,88 +15,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  * Controls the limelight camera options.
  */
 public class LimelightSubsystem extends ClosedLoopSubsystem {
-  /**
-   * This class represents a snapshot of an acquired target.
-   */
-  public static class VisionTarget {
-    private final double m_Ts;
-    private final double m_Thor;
-    private final double m_Tvert;
-    private final double m_Tx;
-    private final double m_Ty;
-    private final Configuration m_Config;
-    private final double m_TargetHeightFromFloor;
-
-    protected VisionTarget(Configuration config, double targetHeightFromFloor, double ts, double thor, double tvert, double tx, double ty) {
-      m_Config = config;
-      m_TargetHeightFromFloor = targetHeightFromFloor;
-      m_Ts = ts;
-      m_Thor = thor;
-      m_Tvert = tvert;
-      m_Tx = tx;
-      m_Ty = ty;
-    }
-
-    public double getX() {
-      return m_Tx;
-    }
-
-    public double getY() {
-      return m_Ty;
-    }
-
-    /** Skew of target in degrees. Positive values are to the left, negative to the right */
-    public double getSkew() {
-      if(m_Ts < -45) {
-        return m_Ts + 90;
-      }
-      else
-      {
-        return m_Ts;
-      }
-    }
-
-    public boolean isHeadOn() {
-      double skew = getSkew();
-      return -m_Config.m_HeadOnTolerance <= skew && skew <= m_Config.m_HeadOnTolerance;
-    }
-
-    public boolean isToLeft() {
-      return getSkew() > m_Config.m_HeadOnTolerance;
-    }
-
-    public boolean isToRight() {
-      return getSkew() < m_Config.m_HeadOnTolerance;
-    }
-
-    public double getTargetRotationDegrees() {
-      if (isHeadOn()) {
-        return 0.0;
-      }
-      else if (isToLeft()) {
-        return -getRotationAngle();
-      }
-      else {
-        return getRotationAngle();
-      }
-    }
-
-    private double getRotationAngle() {
-      double proportion = m_Thor / m_Tvert;
-      double factor = proportion * m_Config.m_TargetHeight / m_Config.m_TargetWidth;
-      return 90.0 * (1 - factor);
-    }
-
-    public double getInchesFromTarget() {
-      double angleDegrees = Math.abs(m_Ty) + m_Config.m_LimelightMountingAngle;
-
-      double heightDifference = m_Config.m_LimelightMountingHeightInches - m_TargetHeightFromFloor;
-      double distance = heightDifference / Math.tan(Math.toRadians(angleDegrees));
-
-      return distance;
-    }
-  }
-
   public static class Configuration {
     public int m_humanPipelineIndex = 0;
 
@@ -142,9 +60,6 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
   private NetworkTableEntry m_Thor = m_Table.getEntry("thor");
   private NetworkTableEntry m_Tvert = m_Table.getEntry("tvert");
 
-  private VisionTarget m_CurrentTarget = null;
-  private VisionTarget m_LastVisibleTarget = null;
-
   private Configuration m_Configuration = new Configuration();
 
   /**
@@ -163,34 +78,8 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     setStream(configuration.m_isLimelightPrimaryStream);
   }
 
-  public VisionTarget getCurrentTarget() {
-    return m_CurrentTarget;
-  }
-
-  public VisionTarget getLastVisibleTarget() {
-    return m_LastVisibleTarget;
-  }
-
   public boolean validTargetExists() {
     return 0 < getTV();
-  }
-
-  /**
-   * Acquire a target. Returns null if no target is in view.
-   * @param targetHeightFromFloor Height of the target from the floor. Used in distance calculation.
-   */
-  public VisionTarget acquireTarget() {
-    if (validTargetExists()) {
-      m_CurrentTarget = new VisionTarget(m_Configuration, m_Configuration.m_targetHeightFromFloor, getTS(), getTHOR(), getTVERT(), getTX(), getTY());
-      m_LastVisibleTarget = m_CurrentTarget;
-    } else {
-      m_CurrentTarget = null;
-    }
-    return m_CurrentTarget;
-  }
-
-  public void clearTarget() {
-    m_CurrentTarget = null;
   }
 
   public boolean isHumanPipelineActive() {
@@ -254,5 +143,83 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
   /** Vertical sidelength of rough bounding box (0 - 320 pixels) */
   public double getTVERT() {
     return m_Tvert.getDouble(m_Configuration.m_DefaultReturnValue);
+  }
+
+  /** Skew of target in degrees. Positive values are to the left, negative to the right */
+  public double getSkew() {
+    if (!validTargetExists()) {
+      return Double.NaN;
+    }
+
+    double ts = getTS();
+    if(ts < -45) {
+      return ts + 90;
+    }
+    else
+    {
+      return ts;
+    }
+  }
+
+  public boolean isHeadOn() {
+    if (!validTargetExists()) {
+      return false;
+    }
+
+    double skew = getSkew();
+    return -m_Configuration.m_HeadOnTolerance <= skew && skew <= m_Configuration.m_HeadOnTolerance;
+  }
+
+  public boolean isToLeft() {
+    if (!validTargetExists()) {
+      return false;
+    }
+
+    return getSkew() > m_Configuration.m_HeadOnTolerance;
+  }
+
+  public boolean isToRight() {
+    if (!validTargetExists()) {
+      return false;
+    }
+
+    return getSkew() < m_Configuration.m_HeadOnTolerance;
+  }
+
+  public double getTargetRotationDegrees() {
+    if (!validTargetExists()) {
+      return Double.NaN;
+    }
+
+    if (isHeadOn()) {
+      return 0.0;
+    } else if (isToLeft()) {
+      return -getRotationAngle();
+    } else {
+      return getRotationAngle();
+    }
+  }
+
+  private double getRotationAngle() {
+    if (!validTargetExists()) {
+      return Double.NaN;
+    }
+
+    double proportion = getTHOR() / getTVERT();
+    double factor = proportion * m_Configuration.m_TargetHeight / m_Configuration.m_TargetWidth;
+    return 90.0 * (1 - factor);
+  }
+
+  public double getInchesFromTarget() {
+    if (!validTargetExists()) {
+      return Double.NaN;
+    }
+
+    double angleDegrees = Math.abs(getTY()) + m_Configuration.m_LimelightMountingAngle;
+
+    double heightDifference = m_Configuration.m_LimelightMountingHeightInches - m_Configuration.m_targetHeightFromFloor;
+    double distance = heightDifference / Math.tan(Math.toRadians(angleDegrees));
+
+    return distance;
   }
 }

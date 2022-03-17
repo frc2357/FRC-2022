@@ -2,7 +2,6 @@ package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
-import com.team2357.frc2022.subsystems.util.VisionTargetSupplier;
 import com.team2357.lib.commands.CommandLoggerBase;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 
@@ -14,7 +13,7 @@ public class TargetLockCommand extends CommandLoggerBase {
     }
 
     public boolean hasTargetAcquired() {
-        return LimelightSubsystem.getInstance().getCurrentTarget() != null;
+        return LimelightSubsystem.getInstance().validTargetExists();
     }
 
     public boolean isTurretFlipping() {
@@ -23,13 +22,8 @@ public class TargetLockCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        VisionTargetSupplier targetSupplier = () -> {
-            return LimelightSubsystem.getInstance().getCurrentTarget();
-        };
-
         LimelightSubsystem.getInstance().setTargetingPipelineActive();
         m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
-        TurretSubsystem.getInstance().trackTarget(targetSupplier);
     }
 
     @Override
@@ -38,21 +32,19 @@ public class TargetLockCommand extends CommandLoggerBase {
             long now = System.currentTimeMillis();
             if (now > m_pipelineSwitchMillis) {
                 m_pipelineSwitchMillis = 0;
+                TurretSubsystem.getInstance().trackTarget();
             }
-        } else {
-            LimelightSubsystem.getInstance().acquireTarget();
         }
     }
 
     @Override
     public boolean isFinished() {
-        return !isWaitingOnPipeline() && !hasTargetAcquired() && !isTurretFlipping();
+        return !isWaitingOnPipeline() && !TurretSubsystem.getInstance().isTracking();
     }
 
     @Override
     public void end(boolean interrupted) {
         TurretSubsystem.getInstance().stop();
-        LimelightSubsystem.getInstance().clearTarget();
         LimelightSubsystem.getInstance().setHumanPipelineActive();
     }
 }
