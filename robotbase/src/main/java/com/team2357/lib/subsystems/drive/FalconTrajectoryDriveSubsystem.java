@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
 
+    // At 50% ~14000 sensor units
     // {Known velocity sensor units, turn adjustment in sensor units}
     private static final double[][] turnAdjustmentCurve = {
-            { 0, 0 }, // min
-            { 5000, 0 }, // Threshold to start giving adjustment
-            { 20660, 1000 }, // max
+            { 20660,  500}, // max
+            {5000, 2500},
+            {2500, 20000},
+            { 0, 20000 }, // Threshold to start giving adjustment
     };
 
     public double m_distancePerPulse;
@@ -161,18 +163,23 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     @Override
     public void driveVelocity(double speed, double turn) {
         double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
-        double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
 
-        double turnAdjustment = calculateTurnAdjustment(speedSensorUnits);
+        double turnSensorUnits = ((turn * m_config.m_turnSensitivity) * calculateTurnAdjustment(speedSensorUnits));
+        //System.out.println("Turn adjustment: " + turnAdjustment);
         
-        double leftSensorUnitsPer100Ms = speedSensorUnits - (turnSensorUnits * m_config.m_turnSensitivity) + turnAdjustment;
-        double rightSensorUnitsPer100Ms = speedSensorUnits + (turnSensorUnits * m_config.m_turnSensitivity)
-                - turnAdjustment;
+        double leftSensorUnitsPer100Ms = speedSensorUnits - turnSensorUnits * m_config.m_turnSensitivity;
+        double rightSensorUnitsPer100Ms = speedSensorUnits + turnSensorUnits;
+
         this.setVelocity(leftSensorUnitsPer100Ms, rightSensorUnitsPer100Ms);
     }
 
     private double calculateTurnAdjustment(double speedSensorUnits) {
         int curveSegmentIndex = RobotMath.getCurveSegmentIndex(turnAdjustmentCurve, speedSensorUnits);
+
+        if(curveSegmentIndex == -1) {
+            //System.out.println("Invalid curve index");
+            return 0;
+        }
 
         double[] pointA = turnAdjustmentCurve[curveSegmentIndex];
         double[] pointB = turnAdjustmentCurve[curveSegmentIndex + 1];
@@ -182,7 +189,7 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         double highTurnAdjustment = pointA[1];
         double lowTurnAdjustment = pointB[1];
 
-        return RobotMath.lineralyInterpolate(highVel, lowVel, highTurnAdjustment, lowTurnAdjustment,
+        return RobotMath.lineralyInterpolate(highTurnAdjustment, lowTurnAdjustment, highVel, lowVel, 
                 speedSensorUnits);
 
     }

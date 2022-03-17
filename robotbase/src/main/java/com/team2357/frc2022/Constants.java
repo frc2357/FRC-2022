@@ -145,7 +145,7 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
-            config.m_turnSensitivity = 0.25;
+            config.m_turnSensitivity = 0.5;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
