@@ -183,9 +183,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         double highTopRPMs = pointA[1];
         double lowTopRPMs = pointB[1];
 
-        double bottomRpms = RobotMath.lineralyInterpolate(highAngle, lowAngle, highBottomRPMs, lowBottomRPMs, yAngle);
+        double bottomRpms = RobotMath.lineralyInterpolate(highBottomRPMs, lowBottomRPMs, highAngle, lowAngle, yAngle);
 
-        double topRpms = RobotMath.lineralyInterpolate(highAngle, lowAngle, highTopRPMs, lowTopRPMs, yAngle);
+        double topRpms = RobotMath.lineralyInterpolate(highTopRPMs, lowTopRPMs, highAngle, lowAngle, yAngle);
 
         if (bottomRpms == Double.NaN || topRpms == Double.NaN) {
             System.err.println("----- Invalid shooter rpms -----");

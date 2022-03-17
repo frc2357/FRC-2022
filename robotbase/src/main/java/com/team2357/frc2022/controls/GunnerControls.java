@@ -1,6 +1,7 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireCommand;
 import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
@@ -131,6 +132,7 @@ public class GunnerControls {
         Trigger aButton = m_aButton.and(noDPad);
         Trigger bButton = m_bButton.and(noDPad);
         Trigger yButton = m_yButton.and(noDPad);
+        Trigger xButton = m_xButton.and(noDPad);
 
         // Left stick is "always on" for turret movement.
         TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
@@ -139,6 +141,7 @@ public class GunnerControls {
         aButton.toggleWhenActive(new IntakeDeployToggleCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
+        xButton.whileActiveOnce(new ShooterSetRPMsCommand(100.0, 100.0));
         m_rightTrigger.whenActive(new FireCommand());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
