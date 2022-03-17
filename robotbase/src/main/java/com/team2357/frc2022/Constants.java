@@ -89,7 +89,8 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
-        public static final double DRIVE_MOTOR_RAMP_RATE_SECONDS = 0.75;
+        public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.75;
+        public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
@@ -138,6 +139,32 @@ public final class Constants {
             FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
             config.m_isRightInverted = true;
             config.m_isGyroReversed = true;
+
+            // The deadband of output percentage on the motor controller
+            config.m_falconOutputDeadband = 0.001;
+
+            config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
+
+            config.m_turnSensitivity = 0.25;
+
+            // Velocity PID constants
+            config.m_gainsSlot = 0;
+
+            /*
+             * Feedforward calculated by taking max theoratical gain and then manually
+             * tuning
+             */
+            config.m_velF = (1023.0 / 20660.0) + 0.03;
+
+            // PID calculated from SysID tool
+            config.m_velP = 0.00069903;
+            config.m_velI = 0.0;
+            config.m_velD = 0.0;
+
+            config.m_nominalOutput = 0;
+            config.m_peakOutput = 1;
+
+            config.m_timeoutMs = 0;
             return config;
         }
     }
@@ -151,8 +178,8 @@ public final class Constants {
                                                                                           */
             config.m_encoder_cpr = 2048;
 
-            config.m_bottomShooterGearingRatio = 24/18;
-            config.m_topShooterGearingRatio = 2/1;
+            config.m_bottomShooterGearingRatio = 24 / 18;
+            config.m_topShooterGearingRatio = 2 / 1;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
@@ -229,7 +256,7 @@ public final class Constants {
     public static final class INTAKE_ROLLER {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
-            
+
             config.m_rollerTopSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
@@ -249,8 +276,8 @@ public final class Constants {
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
-
-            // TODO: Tune climber smart motion constants, currently values from rev's example
+            // TODO: Tune climber smart motion constants, currently values from rev's
+            // example
             config.m_climberMotorP = 0.00005;
             config.m_climberMotorI = 0.0;
             config.m_climberMotorD = 0.0;
