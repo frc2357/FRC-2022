@@ -207,7 +207,15 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_turretAxisMaxSpeed = 0.60;
+            config.m_trackingP = 0.03;
+            config.m_trackingI = 0.0;
+            config.m_trackingD = 0.0;
+            config.m_trackingSetpoint = 0; // The center of the camera view is zero.
+            config.m_trackingToleranceDegrees = 1.0;
+            config.m_trackingMaxSpeed = 0.4;
+            config.m_trackingMinSpeed = 0.05;
+
+            config.m_turretAxisMaxSpeed = 0.5;
 
             config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
@@ -227,8 +235,8 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
-            config.m_turretRotationsClockwiseSoftLimit = 0.75;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.60;
+            config.m_turretRotationsClockwiseSoftLimit = 0.60;
             config.m_turretGearRatio = 49.6;
             return config;
         }
@@ -289,17 +297,29 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
+        public static long m_pipelineSwitchMillis = 1000;
 
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
-            /** Angle of the Limelight axis from horizontal (degrees) */
-            config.m_LimelightMountingAngle = 0;
-            /** Height of the Limelight lens center from the floor (inches) */
+            config.m_humanPipelineIndex = 0;
+            config.m_targetingPipelineIndex = 1;
 
-            config.m_LimelightMountingHeightInches = 0;
-            /** Target width in inches */
-            config.m_TargetWidth = 5;/** Target height in inches */
+            config.m_isLimelightPrimaryStream = true;
+
+            /** Angle of the Limelight axis from horizontal (degrees) */
+            config.m_LimelightMountingAngle = 30;
+
+            /** Height of the Limelight lens center from the floor (inches), from CAD */
+            config.m_LimelightMountingHeightInches = 35.64;
+
+            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            config.m_TargetWidth = 36;
+
+            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
             config.m_TargetHeight = 2;
+
+            config.m_targetHeightFromFloor = 103.5;
+
             return config;
         }
 

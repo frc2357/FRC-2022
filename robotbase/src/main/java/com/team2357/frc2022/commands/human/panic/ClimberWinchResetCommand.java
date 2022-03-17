@@ -10,6 +10,7 @@ public class ClimberWinchResetCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
+        ClimberSubsystem.getInstance().stopClimberMotors();
         ClimberSubsystem.getInstance().resetEncoders();
         System.out.println("---------- RESETTING CLIMBER ENCODERS ----------");
     }

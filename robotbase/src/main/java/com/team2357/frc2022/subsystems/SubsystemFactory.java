@@ -6,11 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
-import com.team2357.lib.subsystems.TogglableLimelightSubsystem.PipelineIndex;
+import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import com.team2357.lib.util.Utility;
 
@@ -134,10 +132,8 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public TogglableLimelightSubsystem CreateVisionSubsystem() {
-        TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
-        subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);
-        subsystem.setStream(false);
+    public LimelightSubsystem CreateVisionSubsystem() {
+        LimelightSubsystem subsystem = new LimelightSubsystem();
         subsystem.setConfiguration(Constants.LIMELIGHT.GET_LIMELIGHT_SUBSYSTEM_CONFIG());
         return subsystem;
     }
