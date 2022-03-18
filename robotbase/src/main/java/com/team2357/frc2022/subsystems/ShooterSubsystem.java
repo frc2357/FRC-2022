@@ -3,9 +3,12 @@ package com.team2357.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.util.RobotMath;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterSubsystem extends ClosedLoopSubsystem {
     private static ShooterSubsystem instance = null;
@@ -24,6 +27,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private WPI_TalonFX m_rightBottomMotor;
     private WPI_TalonFX m_topMotor;
 
+    private double m_bottomTargetRPMs = Double.NaN;
+    private double m_topTargetRPMs = Double.NaN;
+
     private static final double m_minutesTo100MS = 600;
 
     private Configuration m_config;
@@ -35,6 +41,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_bottomShooterGearingRatio = 0;
         public double m_topShooterGearingRatio = 0;
         public int m_timeoutMS = 0;
+
+        public double m_shooterAllowedErrorRPM = 0;
+        public int m_PIDSlot = 0;
 
         // bottom shooter motors
         public double m_bottomShooterP = 0;
@@ -76,7 +85,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_rightBottomMotor.setInverted(true);
         m_rightBottomMotor.follow(m_leftBottomMotor);
 
-        m_leftBottomMotor.configClosedloopRamp(1.0);
+        m_leftBottomMotor.configClosedloopRamp(0.25);
 
         m_leftBottomMotor
                 .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, m_config.m_timeoutMS);
@@ -90,10 +99,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
         m_leftBottomMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
 
-        m_leftBottomMotor.config_kP(0, m_config.m_bottomShooterP, m_config.m_timeoutMS);
-        m_leftBottomMotor.config_kI(0, m_config.m_bottomShooterI, m_config.m_timeoutMS);
-        m_leftBottomMotor.config_kD(0, m_config.m_bottomShooterD, m_config.m_timeoutMS);
-        m_leftBottomMotor.config_kF(0, m_config.m_bottomShooterF, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kP(m_config.m_PIDSlot, m_config.m_bottomShooterP, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kI(m_config.m_PIDSlot, m_config.m_bottomShooterI, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kD(m_config.m_PIDSlot, m_config.m_bottomShooterD, m_config.m_timeoutMS);
+        m_leftBottomMotor.config_kF(m_config.m_PIDSlot, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
         // Top motor config
         m_topMotor.setInverted(false);
@@ -117,12 +126,24 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.config_kF(0, m_config.m_topShooterF, m_config.m_timeoutMS);
     }
 
+    @Override
+    public void setClosedLoopEnabled(boolean closedLoopEnabled) {
+        super.setClosedLoopEnabled(closedLoopEnabled);
+
+        if (!closedLoopEnabled) {
+            m_bottomTargetRPMs = Double.NaN;
+            m_topTargetRPMs = Double.NaN;
+        }
+    }
+
+
     /**
      * Set the motor speed using closed-loop control
      * 
      * @param rpm rotations per minute of the shooter wheels
      */
     public void setRPMBottom(double rpm) {
+        m_bottomTargetRPMs = rpm;
         rpm /= m_config.m_bottomShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_leftBottomMotor.set(ControlMode.Velocity, nativeSpeed);
@@ -134,9 +155,16 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @param rpm rotations per minute of the shooter wheels
      */
     public void setRPMTop(double rpm) {
+        m_topTargetRPMs = rpm;
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
+    }
+
+    public void stop() {
+        m_leftBottomMotor.set(0.0);
+        m_rightBottomMotor.set(0.0);
+        setClosedLoopEnabled(false);
     }
 
     public void setShooterMotorsAxisSpeed(double axisSpeed) {
@@ -145,28 +173,44 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         m_leftBottomMotor.set(bottomSpeed);
         m_topMotor.set(topSpeed);
+        setClosedLoopEnabled(false);
     }
 
     public boolean hasTarget() {
         return LimelightSubsystem.getInstance().validTargetExists();
     }
 
+    public boolean atTargetSpeed() {
+        return Utility.isWithinTolerance(getBottomShooterRPMs(), m_bottomTargetRPMs, m_config.m_shooterAllowedErrorRPM) && Utility.isWithinTolerance(getTopShooterRPMs(), m_topTargetRPMs, m_config.m_shooterAllowedErrorRPM);
+    }
+
     @Override
     public void periodic() {
         if (isClosedLoopEnabled()) {
-            visionTargetPeriodic();
+            shootVisionPeriodic();
         }
+
+        SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
+        SmartDashboard.putNumber("top", getTopShooterRPMs());
     }
 
-    private void visionTargetPeriodic() {
-        if (LimelightSubsystem.getInstance().validTargetExists()) {
-            setClosedLoopRPMs(LimelightSubsystem.getInstance().getTY());
+    public boolean isVisionShooting() {
+        return !Double.isNaN(m_bottomTargetRPMs);
+    }
+
+    public void startVisionShooting() {
+        setClosedLoopEnabled(true);
+    }
+
+    private void shootVisionPeriodic() {
+        if (hasTarget()) {
+            setShootVisionRPMs(LimelightSubsystem.getInstance().getTY());
         } else {
-            setClosedLoopEnabled(false);
+            System.out.println("----- No vision target -----");
         }
     }
 
-    private void setClosedLoopRPMs(double yAngle) {
+    private void setShootVisionRPMs(double yAngle) {
         int curveSegmentIndex = RobotMath.getCurveSegmentIndex(degreesToRPMsCurve, yAngle);
         if (curveSegmentIndex == -1) {
             System.err.println("----- Curve segment index out of bounds -----");
@@ -187,8 +231,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         double topRpms = RobotMath.lineralyInterpolate(highTopRPMs, lowTopRPMs, highAngle, lowAngle, yAngle);
 
-        if (bottomRpms == Double.NaN || topRpms == Double.NaN) {
+        if (Double.isNaN(bottomRpms) || Double.isNaN(topRpms)) {
             System.err.println("----- Invalid shooter rpms -----");
+            return;
         }
 
         setRPMBottom(bottomRpms);

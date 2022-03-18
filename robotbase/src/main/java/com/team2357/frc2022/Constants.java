@@ -183,6 +183,9 @@ public final class Constants {
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_shooterAllowedErrorRPM = 100;
+            config.m_PIDSlot = 0;
+
             // Bottom
             config.m_bottomShooterP = 0.09;
             config.m_bottomShooterI = 0;
