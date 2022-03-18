@@ -19,7 +19,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
-            { 0, 0, 0 }, // Closest
+            { 19.5, 2750.0, 4000.0 }, // Closest
             { 0, 0, 0 }, // Furthest
     };
 
@@ -269,7 +269,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      * @return top Shooter rpms
      */
     public double getTopShooterRPMs() {
-        return getTopMotorSpeedRPMs() * m_config.m_bottomShooterGearingRatio;
+        return getTopMotorSpeedRPMs() * m_config.m_topShooterGearingRatio;
 
     }
 }

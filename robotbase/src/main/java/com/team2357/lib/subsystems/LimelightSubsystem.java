@@ -10,6 +10,7 @@ package com.team2357.lib.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controls the limelight camera options.
@@ -74,7 +75,8 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
   public void setConfiguration(Configuration configuration) {
     m_Configuration = configuration;
 
-    setHumanPipelineActive();
+  //  setHumanPipelineActive();
+  setTargetingPipelineActive();
     setStream(configuration.m_isLimelightPrimaryStream);
   }
 
@@ -221,5 +223,10 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     double distance = heightDifference / Math.tan(Math.toRadians(angleDegrees));
 
     return distance;
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Y", getTY());
   }
 }
