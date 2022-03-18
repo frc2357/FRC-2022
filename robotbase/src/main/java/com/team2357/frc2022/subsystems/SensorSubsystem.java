@@ -1,7 +1,6 @@
 package com.team2357.frc2022.subsystems;
 
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.frc2022.subsystems.ClimberSubsystem.Configuration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
