@@ -19,6 +19,11 @@ public class ShooterRollerAxisCommand extends CommandLoggerBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        ShooterSubsystem.getInstance().stop();
+    }
+
+    @Override
     public boolean isFinished() {
         return false;
     }

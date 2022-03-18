@@ -162,8 +162,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     public void stop() {
-        m_leftBottomMotor.set(0.0);
-        m_rightBottomMotor.set(0.0);
+        m_leftBottomMotor.set(ControlMode.PercentOutput, 0.0);
+        m_rightBottomMotor.set(ControlMode.PercentOutput, 0.0);
         setClosedLoopEnabled(false);
     }
 
