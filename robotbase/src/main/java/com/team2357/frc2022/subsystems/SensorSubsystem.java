@@ -1,6 +1,7 @@
 package com.team2357.frc2022.subsystems;
 
 import com.team2357.frc2022.sensors.SensorBooleanState;
+import com.team2357.frc2022.subsystems.ClimberSubsystem.Configuration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,6 +21,19 @@ public class SensorSubsystem extends SubsystemBase {
     private int m_cargoAcquired;
     private int m_cargoLaunched;
 
+    private int m_intakeDebounceCounter;
+    private int m_feederDebounceCounter;
+
+    private long m_nextReadMillis;
+
+    private Configuration m_config;
+
+    public static class Configuration {
+        public int m_feederDebounceCountMax = 0;
+        public int m_intakeDebounceCountMax = 0;
+        public int m_readIncrementMillis;
+    }
+
     /**
      * @param intakeVictor Victor SPX to use to control intake
      */
@@ -32,6 +46,15 @@ public class SensorSubsystem extends SubsystemBase {
         m_currentCargoCount = 0;
         m_cargoAcquired = 0;
         m_cargoLaunched = 0;
+
+        m_intakeDebounceCounter = 0;
+        m_feederDebounceCounter = 0;
+
+        m_nextReadMillis = 0;
+    }
+
+    public void configure(Configuration config) {
+        m_config = config;
     }
 
     @Override
@@ -39,20 +62,42 @@ public class SensorSubsystem extends SubsystemBase {
         boolean intakeState = m_intakeSensor.getState();
         boolean feederState = m_feederSensor.getState();
 
-        if (intakeState != m_lastIntakeState) {
-            if (intakeState) {
-                m_currentCargoCount++;
-                m_cargoAcquired++;
+        if (System.currentTimeMillis() > m_nextReadMillis) {
+            if (intakeState == m_lastIntakeState && m_intakeDebounceCounter > 0) {
+                m_intakeDebounceCounter--;
+            } else if (intakeState != m_lastIntakeState) {
+                m_intakeDebounceCounter++;
             }
-            m_lastIntakeState = intakeState;
-        }
 
-        if (feederState != m_lastFeederState) {
-            if (!feederState) {
-                m_currentCargoCount--;
-                m_cargoLaunched++;
+            if (m_intakeDebounceCounter >= m_config.m_intakeDebounceCountMax) {
+                m_intakeDebounceCounter = 0;
+
+                if (intakeState) {
+                    m_currentCargoCount++;
+                    m_cargoAcquired++;
+                }
+
+                m_lastIntakeState = intakeState;
             }
-            m_lastFeederState = feederState;
+
+            if (feederState == m_lastFeederState && m_feederDebounceCounter > 0) {
+                m_feederDebounceCounter--;
+            } else if (feederState != m_lastFeederState) {
+                m_feederDebounceCounter++;
+            }
+
+            if (m_feederDebounceCounter >= m_config.m_feederDebounceCountMax) {
+                m_feederDebounceCounter = 0;
+
+                if (!feederState) {
+                    m_currentCargoCount--;
+                    m_cargoLaunched++;
+                }
+
+                m_lastFeederState = feederState;
+            }
+
+            m_nextReadMillis = System.currentTimeMillis() + m_config.m_readIncrementMillis;
         }
     }
 

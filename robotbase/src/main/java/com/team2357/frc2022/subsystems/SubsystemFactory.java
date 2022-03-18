@@ -26,7 +26,9 @@ public class SubsystemFactory {
     }
 
     public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
-        return new SensorSubsystem(intakeSensor, feederSensor);
+        SensorSubsystem sensorSub = new SensorSubsystem(intakeSensor, feederSensor);
+        sensorSub.configure(Constants.CONFIG_SENSOR_SUBSYSTEM());
+        return sensorSub;
     }
 
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {

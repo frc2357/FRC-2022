@@ -9,6 +9,7 @@ import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -358,5 +359,15 @@ public final class Constants {
             config.m_feederMotorRunSpeed = 0.25;
             return config;
         }
+    }
+
+    public static final SensorSubsystem.Configuration CONFIG_SENSOR_SUBSYSTEM() {
+        SensorSubsystem.Configuration config = new SensorSubsystem.Configuration();
+
+        config.m_intakeDebounceCountMax = 20;
+        config.m_feederDebounceCountMax = 20;
+        config.m_readIncrementMillis = 5;
+
+        return config;
     }
 }
