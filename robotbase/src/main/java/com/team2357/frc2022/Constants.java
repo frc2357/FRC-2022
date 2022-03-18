@@ -364,8 +364,8 @@ public final class Constants {
     public static final SensorSubsystem.Configuration CONFIG_SENSOR_SUBSYSTEM() {
         SensorSubsystem.Configuration config = new SensorSubsystem.Configuration();
 
-        config.m_intakeDebounceCountMax = 20;
-        config.m_feederDebounceCountMax = 20;
+        config.m_intakeDebounceCountMax = 5;
+        config.m_feederDebounceCountMax = 5;
         config.m_readIncrementMillis = 5;
 
         return config;

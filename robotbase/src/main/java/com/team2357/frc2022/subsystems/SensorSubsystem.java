@@ -58,10 +58,12 @@ public class SensorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        boolean intakeState = m_intakeSensor.getState();
-        boolean feederState = m_feederSensor.getState();
-
+        
         if (System.currentTimeMillis() > m_nextReadMillis) {
+            boolean intakeState = m_intakeSensor.getState();
+            boolean feederState = m_feederSensor.getState();
+
+
             if (intakeState == m_lastIntakeState && m_intakeDebounceCounter > 0) {
                 m_intakeDebounceCounter--;
             } else if (intakeState != m_lastIntakeState) {
