@@ -6,11 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.lib.subsystems.TogglableLimelightSubsystem;
-import com.team2357.lib.subsystems.TogglableLimelightSubsystem.PipelineIndex;
+import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import com.team2357.lib.util.Utility;
 
@@ -34,22 +32,28 @@ public class SubsystemFactory {
     public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
 
         WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,
-                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
+                Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS);
 
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] {
                 Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
+                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS),
                 Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
+                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS) };
 
         WPI_TalonFX rightFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1,
-                Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS);
+                Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS);
 
         WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] {
                 Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS),
+                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS),
                 Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_RAMP_RATE_SECONDS) };
+                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
+                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS) };
 
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
 
@@ -128,10 +132,8 @@ public class SubsystemFactory {
         return subsystem;
     }
 
-    public TogglableLimelightSubsystem CreateVisionSubsystem() {
-        TogglableLimelightSubsystem subsystem = new TogglableLimelightSubsystem(false);
-        subsystem.setPipeline(PipelineIndex.HUMAN_VIEW);
-        subsystem.setStream(false);
+    public LimelightSubsystem CreateVisionSubsystem() {
+        LimelightSubsystem subsystem = new LimelightSubsystem();
         subsystem.setConfiguration(Constants.LIMELIGHT.GET_LIMELIGHT_SUBSYSTEM_CONFIG());
         return subsystem;
     }
