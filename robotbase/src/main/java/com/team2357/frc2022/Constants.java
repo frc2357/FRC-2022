@@ -145,7 +145,7 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
-            config.m_turnSensitivity = 0.25;
+            config.m_turnSensitivity = 0.5;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
@@ -187,16 +187,16 @@ public final class Constants {
             config.m_PIDSlot = 0;
 
             // Bottom
-            config.m_bottomShooterP = 0.09;
-            config.m_bottomShooterI = 0;
-            config.m_bottomShooterD = 0;
-            config.m_bottomShooterF = 0.01;
+            config.m_bottomShooterP = 0.1;
+            config.m_bottomShooterI = 0.0;
+            config.m_bottomShooterD = 0.001;
+            config.m_bottomShooterF = 0.047;
 
             // Top
-            config.m_topShooterP = 0.09;
-            config.m_topShooterI = 0;
-            config.m_topShooterD = 0;
-            config.m_topShooterF = 0.01;
+            config.m_topShooterP = 0.1;
+            config.m_topShooterI = 0.0;
+            config.m_topShooterD = 0.005;
+            config.m_topShooterF = 0.05;
 
             return config;
         }
@@ -358,7 +358,7 @@ public final class Constants {
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorRunSpeed = 0.25;
+            config.m_feederMotorRunSpeed = 0.75;
             return config;
         }
     }

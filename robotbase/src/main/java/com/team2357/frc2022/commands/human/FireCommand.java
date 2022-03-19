@@ -20,7 +20,7 @@ public class FireCommand extends CommandLoggerBase {
     }
 
     public FireCommand() {
-        addRequirements(ShooterSubsystem.getInstance());
+        addRequirements(ShooterSubsystem.getInstance(), IntakeRollerSubsystem.getInstance(), FeederSubsystem.getInstance());
     }
 
     @Override
@@ -39,10 +39,14 @@ public class FireCommand extends CommandLoggerBase {
             }
         }
 
+        if(ShooterSubsystem.getInstance().atTargetSpeed() ) {
             FeederSubsystem.getInstance().start();
             IntakeRollerSubsystem.getInstance().setAxisRollerSpeed(0.25);
+        } else {
             FeederSubsystem.getInstance().stop();
             IntakeRollerSubsystem.getInstance().stop();
+    
+        }
     }
 
     @Override

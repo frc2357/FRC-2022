@@ -50,4 +50,9 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
         double motorSpeed = (-axisSpeed) * m_config.m_rollerAxisMaxSpeed;
         m_intakeVictor.set(ControlMode.PercentOutput, motorSpeed);
     }
+
+    public void setIntakeRollerSpeed(double speed) {
+        double motorSpeed = speed * m_config.m_rollerTopSpeed;
+        m_intakeVictor.set(ControlMode.PercentOutput, motorSpeed);
+    }
 }

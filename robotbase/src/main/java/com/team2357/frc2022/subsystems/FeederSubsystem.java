@@ -32,7 +32,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
     }
 
     public void start() {
-        m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorRunSpeed);
+        m_feederMotor.set(ControlMode.PercentOutput, -m_config.m_feederMotorRunSpeed);
     }
 
     public void stop() {

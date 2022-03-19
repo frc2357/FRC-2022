@@ -29,7 +29,7 @@ public class ShooterSetRPMsCommand extends CommandLoggerBase {
         ShooterSubsystem.getInstance().setRPMTop(m_topRpms);
         ShooterSubsystem.getInstance().setRPMBottom(m_bottomRpms);
     }
-
+    
     @Override
     public void end(boolean isInterrupted) {
         ShooterSubsystem.getInstance().setRPMTop(0);
