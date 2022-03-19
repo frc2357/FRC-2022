@@ -8,6 +8,7 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /* * 
  * 
@@ -206,5 +207,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         if (isClosedLoopEnabled() && isClimberAtRotations()) {
             setClosedLoopEnabled(false);
         }
+
+        SmartDashboard.putNumber("Climber rotations", m_leftClimberMotor.getEncoder().getPosition());
     }
 }

@@ -2,6 +2,7 @@ package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.commands.climb.ClimberClimbToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberClimbToRungCommandGroup;
+import com.team2357.frc2022.commands.climb.ClimberPullToRungCommandGroup;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class ClimbProgressionCommand extends CommandLoggerBase {
     private SequentialCommandGroup climbCommands[] = {
             new ClimberClimbToReachableCommandGroup(),
+            new ClimberPullToRungCommandGroup(),
             new ClimberClimbToRungCommandGroup(),
             new ClimberClimbToRungCommandGroup()
     };
