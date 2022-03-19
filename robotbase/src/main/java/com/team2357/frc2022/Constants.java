@@ -267,11 +267,11 @@ public final class Constants {
     public static final class CLIMBER {
 
         //TODO: Tune timings and rotations
-        public static final double PULL_ONTO_RUNG_ROTATIONS = 5;
-        public static final double EXTEND_TO_RUNG_ROTATIONS = 120;
-        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0;
-        public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0;
-        public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 0;
+        public static final double PULL_ONTO_RUNG_ROTATIONS = 0;
+        public static final double EXTEND_TO_RUNG_ROTATIONS = 125;
+        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0.25;
+        public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
+        public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 500;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
@@ -282,22 +282,22 @@ public final class Constants {
             config.m_climberMotorStallLimitAmps = 35;
             config.m_climberMotorFreeLimitAmps = 35;
             config.m_isRightSideInverted = false;
-            config.m_climberGrippedAmps = 20;
+            config.m_climberGrippedAmps = 30;
 
             // TODO: Tune climber smart motion constants, currently values from rev's
             // example
-            config.m_climberMotorP = 0.00005;
+            config.m_climberMotorP = 0.0005;
             config.m_climberMotorI = 0.0;
             config.m_climberMotorD = 0.0;
             config.m_climberMotorIZone = 0.0;
-            config.m_climberMotorFF = 0.000156;
+            config.m_climberMotorFF = 0.0156;
             config.m_climberMotorMaxOutput = 0.4;
             config.m_climberMotorMinOutput = -0.2;
             config.m_climberMotorMaxRPM = 1000;
 
             config.m_climberMotorMaxVel = 500;
             config.m_climberMotorMinVel = 0;
-            config.m_climberMotorMaxAcc = 5;
+            config.m_climberMotorMaxAcc = 200;
             config.m_climberMotorAllowedError = 5;
 
             return config;

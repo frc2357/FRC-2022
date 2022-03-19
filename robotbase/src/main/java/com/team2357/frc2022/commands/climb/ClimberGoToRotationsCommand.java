@@ -14,11 +14,18 @@ public class ClimberGoToRotationsCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         ClimberSubsystem.getInstance().setClimberRotations(m_rotations);
+        System.out.println("Starting goo to rotations");
+    }
+
+    @Override
+    public void execute() {
+        System.out.println("Runngin go to rotations");
     }
 
     @Override
     public void end(boolean interrupted) {
         ClimberSubsystem.getInstance().stopClimberMotors();
+        System.out.println("Ening go to rotations");
     }
 
     @Override

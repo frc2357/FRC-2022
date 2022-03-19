@@ -2,15 +2,17 @@ package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.commands.climb.ClimberClimbToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberClimbToRungCommandGroup;
+import com.team2357.frc2022.commands.climb.ClimberExtendToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberPullToRungCommandGroup;
+import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ClimbProgressionCommand extends CommandLoggerBase {
     private SequentialCommandGroup climbCommands[] = {
+            new ClimberExtendToReachableCommandGroup(),
             new ClimberClimbToReachableCommandGroup(),
-            new ClimberPullToRungCommandGroup(),
             new ClimberClimbToRungCommandGroup(),
             new ClimberClimbToRungCommandGroup()
     };
@@ -20,6 +22,7 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
 
     public ClimbProgressionCommand() {
         commandIndex = -1;
+        ClimberSubsystem.getInstance().resetEncoders();
     }
 
     @Override
@@ -40,7 +43,16 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
         if (commandIndex == -1) {
             if (holdTimeMs < System.currentTimeMillis()) {
                 climbCommands[++commandIndex].schedule();
+                System.out.println("Schedling first command");
             }
+            System.out.println("Executing");
+        }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        if(commandIndex == 4) {
+            commandIndex = -1;
         }
     }
 

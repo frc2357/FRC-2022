@@ -10,7 +10,7 @@ public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase {
     public ClimberReleaseLatchOnStrainCommand(int timeToBalanceAmps) {
         m_isFinished = false;
         m_timeToBalanceAmps = timeToBalanceAmps;
-        addRequirements(ClimberSubsystem.getInstance());
+      //  addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase {
     @Override
     public void execute() {
         if (ClimberSubsystem.getInstance().isClimberGripped() && m_timeToBalanceAmps < System.currentTimeMillis()) {
-            ClimberSubsystem.getInstance().setLatch(false);
+            ClimberSubsystem.getInstance().setLatch(true);
             m_isFinished = true;
         }
     }

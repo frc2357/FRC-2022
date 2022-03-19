@@ -10,9 +10,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  */
 public class ClimberClimbToReachableCommandGroup extends SequentialCommandGroup{
     public ClimberClimbToReachableCommandGroup() {
-       // addCommands(new ClimberGoToRotationsCommand(Constants.CLIMBER.EXTEND_TO_RUNG_ROTATIONS));
-        //addCommands(new ClimberSetLatchCommand(true));
-System.out.println("Climbing to reachable");
+       // addCommands(new ClimberGoToRotationsCommand(Constants.CLIMBER.PULL_ONTO_RUNG_ROTATIONS));
+        //addCommands(new ClimberSetLatchCommand(false));
         addRequirements(ClimberSubsystem.getInstance());
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        System.out.println("Climbing to reachable");
+
     }
 }

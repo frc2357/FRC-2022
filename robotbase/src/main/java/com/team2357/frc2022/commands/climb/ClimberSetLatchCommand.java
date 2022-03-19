@@ -8,7 +8,7 @@ public class ClimberSetLatchCommand extends CommandLoggerBase{
     
         public ClimberSetLatchCommand(boolean openHook) {
             m_openHook = openHook;
-            addRequirements(ClimberSubsystem.getInstance());
+           // addRequirements(ClimberSubsystem.getInstance());
         }
     
         @Override

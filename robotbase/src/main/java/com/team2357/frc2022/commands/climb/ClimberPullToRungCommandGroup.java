@@ -17,8 +17,14 @@ public class ClimberPullToRungCommandGroup extends SequentialCommandGroup {
                 new ClimberGoToRotationsCommand(Constants.CLIMBER.PULL_ONTO_RUNG_ROTATIONS)));
 
         addCommands(new ClimberSetLatchCommand(false));*/
-        System.out.println("Pull to rung");
 
         addRequirements(ClimberSubsystem.getInstance());
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        System.out.println("Pull to rung");
+
     }
 }

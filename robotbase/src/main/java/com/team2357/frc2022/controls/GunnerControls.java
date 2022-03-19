@@ -138,7 +138,7 @@ public class GunnerControls {
 
         aButton.toggleWhenActive(new IntakeDeployToggleCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
-        yButton.toggleWhenActive(new ClimbProgressionCommand());
+        yButton.whileActiveOnce(new ClimbProgressionCommand());
         m_rightTrigger.whenActive(new FireCommand());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));

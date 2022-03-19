@@ -10,8 +10,14 @@ public class ClimberClimbToRungCommandGroup extends SequentialCommandGroup {
 
         addCommands(new ClimberPullToRungCommandGroup());*/
 
-        System.out.println("Climbing to next rung");
 
         addRequirements(ClimberSubsystem.getInstance());
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        System.out.println("Climbing to next rung");
+
     }
 }
