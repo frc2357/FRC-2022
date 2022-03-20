@@ -96,7 +96,7 @@ public abstract class SkidSteerDriveSubsystem extends ClosedLoopSubsystem {
 		setProportional(leftProportion, rightProportion);
 	}
 
-	public final void driveVelocity(double speedInchesPerSecond, double turnDegreesPerSecond) {
+	public void driveVelocity(double speedInchesPerSecond, double turnDegreesPerSecond) {
 		if (this.isClosedLoopEnabled()) {
 			System.err.println("Drive: Cannot driveVelocity while failsafe is active!");
 			return;
