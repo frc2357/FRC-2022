@@ -8,8 +8,6 @@ import com.team2357.frc2022.arduino.RobotArduino;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
-import com.team2357.frc2022.shuffleboard.DriveTab;
-import com.team2357.frc2022.shuffleboard.FailsafeButtonWidget;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeSubsystem;
@@ -44,26 +42,31 @@ public class RobotContainer {
   private KickerSubsystem m_kickerSub;
   private TogglableLimelightSubsystem m_visionSub;
   private Compressor m_compressor;
+  private AutoModeCommandChooser m_autoCommandChooser;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
 
-  private final RobotArduino m_arduinoSensor;
+  // private final RobotArduino m_arduinoSensor;
 
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     
-    m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
+    // m_arduinoSensor = new RobotArduino(Constants.ARDUINO.ARDUINO_SENSOR_DEVICE_NAME);
     SensorBooleanState intakeIRSensor = () -> {
-      return m_arduinoSensor.getIntakeValue();
+      // return m_arduinoSensor.getIntakeValue();
+      return false;
     };
     SensorBooleanState feederIRSensor = () -> {
-      return m_arduinoSensor.getFeederValue();
+      // return m_arduinoSensor.getFeederValue();
+      return false;
     };
     SensorBooleanState turretIRSensor = () -> {
-      return m_arduinoSensor.getTurretValue();
+      // return m_arduinoSensor.getTurretValue();
+      return false;
     };
 
     // Create subsystems
@@ -89,22 +92,19 @@ public class RobotContainer {
     m_driveSub.setDefaultCommand(new DriveProportionalCommand(m_driveSub, m_driverControls));
 
     configureShuffleboard();
+
+    // Setup compressor
+    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
+    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
+
+    configureShuffleboard();
   }
 
   /**
    * This method should set up the shuffleboard
    */
   public void configureShuffleboard() {
-    DriveTab driveTab = new DriveTab();
-
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Drive Failsafe", m_driveSub));
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Intake Failsafe", m_intakeSub));
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Feeder Failsafe", m_feederSub));
-
-    // Setup compressor
-    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
-    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
-
+    m_autoCommandChooser = new AutoModeCommandChooser();
   }
 
   /**
@@ -113,6 +113,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return m_autoCommandChooser.generateCommand();
   }
 }

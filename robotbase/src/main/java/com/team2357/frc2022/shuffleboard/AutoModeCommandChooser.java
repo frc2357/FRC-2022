@@ -1,10 +1,12 @@
 package com.team2357.frc2022.shuffleboard;
 
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -15,25 +17,22 @@ public class AutoModeCommandChooser {
     }
 
     private class AutoActionChooser {
-        protected NetworkTableEntry m_waitWidget;
         protected SendableChooser<AutomodeActions> m_chooser;
+        protected String m_waitCommandKey;
 
         protected AutoActionChooser(int index) {
-            ShuffleboardTab tab = Shuffleboard.getTab(m_tabTitle);
+            m_waitCommandKey = "wait " + index;
             m_chooser = new SendableChooser<>();
 
             m_chooser.setDefaultOption("None", AutomodeActions.NONE);
-            tab.add("Auto Action " + index, m_chooser);
 
-            NetworkTableEntry waitWidget = Shuffleboard.getTab(m_tabTitle)
-                .add("Wait Time " + index, 0)
-                .withWidget(BuiltInWidgets.kTextView).getEntry();
+            SmartDashboard.putNumber((m_waitCommandKey),0.0);
+            SmartDashboard.putData("Auto chooser "+index,m_chooser);
 
-            m_waitWidget = waitWidget;
         }
 
         public Command getWaitCommand() {
-            double waitTime = m_waitWidget.getDouble(0);
+            double waitTime = SmartDashboard.getNumber(m_waitCommandKey, 0.0);
             return new WaitCommand(waitTime);
         }
         
@@ -47,21 +46,16 @@ public class AutoModeCommandChooser {
         }
     }
 
-    private static String m_tabTitle;
     private AutoActionChooser[] choosers;
 
 
-    public AutoModeCommandChooser(String tabTitle) {
-        m_tabTitle = tabTitle;
+
+    public AutoModeCommandChooser() {
 
         choosers = new AutoActionChooser[3];
         choosers[0] = new AutoActionChooser(0);
         choosers[1] = new AutoActionChooser(1);
         choosers[2] = new AutoActionChooser(2);
-    }
-
-    public static void show() {
-        Shuffleboard.selectTab((m_tabTitle));
     }
 
     public Command generateCommand() {
