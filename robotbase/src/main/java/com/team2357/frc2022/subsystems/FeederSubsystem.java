@@ -13,7 +13,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     public static class Configuration {
         public double m_feederMotorAxisMaxSpeed = 0;
-        public double m_feederMotorRunSpeed = 0;
+        public double m_feederMotorShootSpeed = 0;
     }
 
     private Configuration m_config;
@@ -32,7 +32,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
     }
 
     public void shoot() {
-        m_feederMotor.set(ControlMode.PercentOutput, -m_config.m_feederMotorRunSpeed);
+        m_feederMotor.set(ControlMode.PercentOutput, -m_config.m_feederMotorShootSpeed);
     }
 
     public void stop() {

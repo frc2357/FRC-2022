@@ -2,8 +2,9 @@ package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
+import com.team2357.frc2022.commands.feeder.FeederToShooterCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
-import com.team2357.frc2022.commands.human.FireCommand;
+import com.team2357.frc2022.commands.human.ShootVisionCommand;
 import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
@@ -37,7 +38,8 @@ public class GunnerControls {
 
     // Triggers
     public AxisThresholdTrigger m_leftTrigger;
-    public AxisThresholdTrigger m_rightTrigger;
+    public AxisThresholdTrigger m_primeRightTrigger;
+    public AxisThresholdTrigger m_feedShooterRightTrigger;
 
     // Buttons
     public JoystickButton m_leftStickButton;
@@ -68,7 +70,8 @@ public class GunnerControls {
         m_controller = controller;
 
         // Triggers
-        m_rightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_primeRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_feedShooterRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .9);
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
@@ -142,7 +145,8 @@ public class GunnerControls {
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         xButton.whileActiveOnce(new ShooterSetRPMsCommand(2750.0, 4000));
-        m_rightTrigger.whenActive(new FireCommand());
+        m_primeRightTrigger.whileActiveOnce(new ShootVisionCommand());
+        m_feedShooterRightTrigger.whileActiveOnce(new FeederToShooterCommand());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

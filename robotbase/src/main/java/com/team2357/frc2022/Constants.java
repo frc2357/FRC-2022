@@ -399,7 +399,7 @@ public final class Constants {
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorRunSpeed = 0.75;
+            config.m_feederMotorShootSpeed = 1.0;
             return config;
         }
     }

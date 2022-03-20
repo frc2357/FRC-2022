@@ -1,6 +1,5 @@
 package com.team2357.frc2022.commands.feeder;
 
-import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
