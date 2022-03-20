@@ -260,6 +260,10 @@ public final class Constants {
             config.m_rollerTopSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
+            config.m_rollerContinousAmpLimit = 35;
+            config.m_rollerPeakAmpLimit = 50;
+            config.m_rollerSpeedUpMillis = 2000;
+
             return config;
         }
     }

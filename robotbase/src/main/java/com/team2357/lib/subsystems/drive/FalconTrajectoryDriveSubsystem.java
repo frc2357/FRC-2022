@@ -167,8 +167,6 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     }
 
     protected void setVelocity(double leftSensorUnitsPer100Ms, double rightSensorUnitsPer100Ms) {
-        //System.out.println("Left: " + leftSensorUnitsPer100Ms);
-        //System.out.println("Right: " + rightSensorUnitsPer100Ms);
         m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
         m_rightFalconMaster.set(TalonFXControlMode.Velocity, -rightSensorUnitsPer100Ms);
     }
