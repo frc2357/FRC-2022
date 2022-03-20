@@ -31,7 +31,7 @@ public class ShooterSetRPMsCommand extends CommandLoggerBase {
         ShooterSubsystem.getInstance().setRPMTop(m_topRpms);
         ShooterSubsystem.getInstance().setRPMBottom(m_bottomRpms);
         IntakeRollerSubsystem.getInstance().start();
-        FeederSubsystem.getInstance().start();
+        FeederSubsystem.getInstance().shoot();
     }
     
     @Override

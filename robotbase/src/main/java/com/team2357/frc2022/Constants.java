@@ -287,7 +287,6 @@ public final class Constants {
     }
 
     public static final class INTAKE_ROLLER {
-        public static final double INTAKE_TO_FEEDER_SPEED = 0.5;
 
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();

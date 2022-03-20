@@ -14,29 +14,15 @@ public class ShooterRollerAxisCommand extends CommandLoggerBase {
         addRequirements(ShooterSubsystem.getInstance(), FeederSubsystem.getInstance(), IntakeRollerSubsystem.getInstance());
     }
 
-    @Override 
-    public void initialize() {
-       }
     @Override
     public void execute() {
         double axisValue = m_axis.getValue();
         ShooterSubsystem.getInstance().setShooterMotorsAxisSpeed(axisValue);
-
-        if(axisValue > 0) {
-            FeederSubsystem.getInstance().start();
-            IntakeRollerSubsystem.getInstance().setIntakeRollerSpeed(0.5);    
-        } else {
-            FeederSubsystem.getInstance().stop();
-        IntakeRollerSubsystem.getInstance().stop();
-    
-        }
     }
 
     @Override
     public void end(boolean interrupted) {
         ShooterSubsystem.getInstance().stop();
-        FeederSubsystem.getInstance().stop();
-        IntakeRollerSubsystem.getInstance().stop();
     }
 
     @Override

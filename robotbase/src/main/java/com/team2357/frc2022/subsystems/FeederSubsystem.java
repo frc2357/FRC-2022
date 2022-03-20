@@ -31,7 +31,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
         m_feederMotor.setInverted(true);
     }
 
-    public void start() {
+    public void shoot() {
         m_feederMotor.set(ControlMode.PercentOutput, -m_config.m_feederMotorRunSpeed);
     }
 

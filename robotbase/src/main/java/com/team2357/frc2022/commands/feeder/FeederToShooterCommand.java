@@ -17,7 +17,7 @@ public class FeederToShooterCommand extends CommandLoggerBase{
 
         boolean hasCargo = (SensorSubsystem.getInstance().getCurrentCargoCount() > 0);
         if (hasCargo && ShooterSubsystem.getInstance().atTargetSpeed()) {
-            FeederSubsystem.getInstance().start();
+            FeederSubsystem.getInstance().shoot();
         } else {
             FeederSubsystem.getInstance().stop();
         }

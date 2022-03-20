@@ -1,8 +1,6 @@
 package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.Constants;
-import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 import com.team2357.lib.subsystems.LimelightSubsystem;
@@ -20,7 +18,7 @@ public class FireCommand extends CommandLoggerBase {
     }
 
     public FireCommand() {
-        addRequirements(ShooterSubsystem.getInstance(), IntakeRollerSubsystem.getInstance(), FeederSubsystem.getInstance());
+        addRequirements(ShooterSubsystem.getInstance());
     }
 
     @Override
@@ -38,15 +36,6 @@ public class FireCommand extends CommandLoggerBase {
                 ShooterSubsystem.getInstance().startVisionShooting();
             }
         }
-
-        if(ShooterSubsystem.getInstance().atTargetSpeed() ) {
-            FeederSubsystem.getInstance().start();
-            IntakeRollerSubsystem.getInstance().setAxisRollerSpeed(0.25);
-        } else {
-            FeederSubsystem.getInstance().stop();
-            IntakeRollerSubsystem.getInstance().stop();
-    
-        }
     }
 
     @Override
@@ -57,8 +46,6 @@ public class FireCommand extends CommandLoggerBase {
     @Override
     public void end(boolean interrupted) {
         ShooterSubsystem.getInstance().stop();
-        FeederSubsystem.getInstance().stop();
-        IntakeRollerSubsystem.getInstance().stop();
         LimelightSubsystem.getInstance().setHumanPipelineActive();
     }
 }
