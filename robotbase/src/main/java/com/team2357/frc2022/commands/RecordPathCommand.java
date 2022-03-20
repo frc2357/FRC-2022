@@ -18,18 +18,16 @@ public class RecordPathCommand extends CommandBase {
 
   private static final double TIME_STEP = 1.0;
 
-  private final FalconTrajectoryDriveSubsystem m_drive;
   private final Boolean m_shouldResetOdometry;
   private double m_timestamp;
   private ArrayList<Pose2d> m_path;
 
-  public RecordPathCommand(final FalconTrajectoryDriveSubsystem drive) {
-    this(drive, true);
+  public RecordPathCommand() {
+    this(true);
   }
 
   /** Creates a new RecordPath. */
-  public RecordPathCommand(final FalconTrajectoryDriveSubsystem drive, final Boolean shouldResetOdometry) {
-    m_drive = drive;
+  public RecordPathCommand(final Boolean shouldResetOdometry) {
     m_shouldResetOdometry = shouldResetOdometry;
     m_timestamp = 0.0;
     m_path = new ArrayList<Pose2d>();
@@ -38,35 +36,39 @@ public class RecordPathCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    FalconTrajectoryDriveSubsystem drive = FalconTrajectoryDriveSubsystem.getInstance();
+
     if (m_shouldResetOdometry) {
-      m_drive.zeroHeading();
-      m_drive.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
+      drive.zeroHeading();
+      drive.resetOdometry(new Pose2d(0.0, 0.0, new Rotation2d(0)));
     }
     m_timestamp = Timer.getFPGATimestamp();
     m_path.clear();
-    m_path.add(m_drive.getPose());
+    m_path.add(drive.getPose());
     System.out.println("Recording...");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    FalconTrajectoryDriveSubsystem drive = FalconTrajectoryDriveSubsystem.getInstance();
+
     final double currentTime = Timer.getFPGATimestamp();
     if (currentTime < m_timestamp + TIME_STEP) {
       return;
     }
-    if (Utility.isWithinTolerance(m_drive.getVelocityLeftEncoder(), 0, 0.1)
-        && Utility.isWithinTolerance(m_drive.getVelocityRightEncoder(), 0, 0.1)) {
+    if (Utility.isWithinTolerance(drive.getVelocityLeftEncoder(), 0, 0.1)
+        && Utility.isWithinTolerance(drive.getVelocityRightEncoder(), 0, 0.1)) {
       return;
     }
-    m_path.add(m_drive.getPose());
+    m_path.add(drive.getPose());
     m_timestamp = currentTime;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_path.add(m_drive.getPose());
+    m_path.add(FalconTrajectoryDriveSubsystem.getInstance().getPose());
     String lines = "";
     lines += "List.of(";
     for (Pose2d t : m_path) {

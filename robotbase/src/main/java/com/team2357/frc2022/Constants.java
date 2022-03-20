@@ -11,10 +11,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
+import com.team2357.frc2022.subsystems.FeederSubsystem;
+import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.LimelightSubsystem.Configuration;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -87,17 +89,14 @@ public final class Constants {
         public static final int GUNNER_CONTROLLER_PORT = 1;
 
         public static final double DRIVE_CONTROLLER_DEADBAND = 0.1;
-    }
-
-    public final class INTAKE {
-        public static final double FORWARD_SPEED = 0.5;
-        public static final double REVERSE_SPEED = -0.5;
+        public static final double GUNNER_CONTROLLER_DEADBAND = 0.1;
     }
 
     // Encoder Constants
     public final static class DRIVE {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
-        public static final double DRIVE_MOTOR_RAMP_RATE_SECONDS = 0.75;
+        public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.75;
+        public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
 
         public static final int ENCODER_PPR = 256;
 
@@ -167,6 +166,32 @@ public final class Constants {
             FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
             config.m_isRightInverted = true;
             config.m_isGyroReversed = true;
+
+            // The deadband of output percentage on the motor controller
+            config.m_falconOutputDeadband = 0.001;
+
+            config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
+
+            config.m_turnSensitivity = 0.25;
+
+            // Velocity PID constants
+            config.m_gainsSlot = 0;
+
+            /*
+             * Feedforward calculated by taking max theoratical gain and then manually
+             * tuning
+             */
+            config.m_velF = (1023.0 / 20660.0) + 0.03;
+
+            // PID calculated from SysID tool
+            config.m_velP = 0.00069903;
+            config.m_velI = 0.0;
+            config.m_velD = 0.0;
+
+            config.m_nominalOutput = 0;
+            config.m_peakOutput = 1;
+
+            config.m_timeoutMs = 0;
             return config;
         }
 
@@ -181,8 +206,8 @@ public final class Constants {
                                                                                           */
             config.m_encoder_cpr = 2048;
 
-            config.m_bottomShooterGearingRatio = 24/18;
-            config.m_topShooterGearingRatio = 2/1;
+            config.m_bottomShooterGearingRatio = 24 / 18;
+            config.m_topShooterGearingRatio = 2 / 1;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
@@ -205,21 +230,22 @@ public final class Constants {
     // Turret
     // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
-        public static final double MANUAL_TURRET_ROTATE_SPEED = 0.2;
-
-        public static final double TURRET_ZERO_CLOCKWISE_DURATION_SECONDS = 0.25;
-        public static final double TURRET_ZERO_CLOCKWISE_COMMAND_SPEED = 0.2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_DURATION_SECONDS = TURRET_ZERO_CLOCKWISE_DURATION_SECONDS
-                * 2;
-        public static final double TURRET_ZERO_COUNTER_CLOCKWISE_COMMAND_SPEED = -1
-                * TURRET_ZERO_CLOCKWISE_COMMAND_SPEED;
-
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_turretMotorStallLimitAmps = 15;
+            config.m_trackingP = 0.03;
+            config.m_trackingI = 0.0;
+            config.m_trackingD = 0.0;
+            config.m_trackingSetpoint = 0; // The center of the camera view is zero.
+            config.m_trackingToleranceDegrees = 1.0;
+            config.m_trackingMaxSpeed = 0.4;
+            config.m_trackingMinSpeed = 0.05;
+
+            config.m_turretAxisMaxSpeed = 0.5;
+
+            config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
 
             config.m_turretMotorP = 0.00005;
@@ -237,9 +263,35 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.75;
-            config.m_turretRotationsClockwiseSoftLimit = 0.75;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.60;
+            config.m_turretRotationsClockwiseSoftLimit = 0.60;
             config.m_turretGearRatio = 49.6;
+            return config;
+        }
+    }
+
+    public static final class INTAKE_ARM {
+        public static final IntakeArmSubsystem.Configuration GET_INTAKE_ARM_CONFIG() {
+            IntakeArmSubsystem.Configuration config = new IntakeArmSubsystem.Configuration();
+
+            config.m_deployMilliseconds = 1000;
+            config.m_stowMilliseconds = 1000;
+
+            return config;
+        }
+    }
+
+    public static final class INTAKE_ROLLER {
+        public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
+            IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
+
+            config.m_rollerTopSpeed = 0.85;
+            config.m_rollerAxisMaxSpeed = 1.0;
+
+            config.m_rollerContinousAmpLimit = 35;
+            config.m_rollerPeakAmpLimit = 50;
+            config.m_rollerSpeedUpMillis = 2000;
+
             return config;
         }
     }
@@ -248,14 +300,16 @@ public final class Constants {
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 
+            config.m_climberAxisMaxSpeed = 1.0;
+
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 35;
             config.m_climberMotorFreeLimitAmps = 35;
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
-
-            // TODO: Tune climber smart motion constants, currently values from rev's example
+            // TODO: Tune climber smart motion constants, currently values from rev's
+            // example
             config.m_climberMotorP = 0.00005;
             config.m_climberMotorI = 0.0;
             config.m_climberMotorD = 0.0;
@@ -275,18 +329,29 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
+        public static long m_pipelineSwitchMillis = 1000;
 
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
-            /** Angle of the Limelight axis from horizontal (degrees) */
-            config.m_LimelightMountingAngle = 0;
-            /** Height of the Limelight lens center from the floor (inches) */
+            config.m_humanPipelineIndex = 0;
+            config.m_targetingPipelineIndex = 1;
 
-            config.m_LimelightMountingHeightInches = 0;
-            /** Target width in inches */
-            config.m_TargetWidth = 5;
-            /** Target height in inches */
+            config.m_isLimelightPrimaryStream = true;
+
+            /** Angle of the Limelight axis from horizontal (degrees) */
+            config.m_LimelightMountingAngle = 30;
+
+            /** Height of the Limelight lens center from the floor (inches), from CAD */
+            config.m_LimelightMountingHeightInches = 35.64;
+
+            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            config.m_TargetWidth = 36;
+
+            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
             config.m_TargetHeight = 2;
+
+            config.m_targetHeightFromFloor = 103.5;
+
             return config;
         }
 
@@ -318,14 +383,12 @@ public final class Constants {
         public static final int MAX_PRESSURE_PSI = 120;
     }
 
-    public final class KICKER {
-        public static final double SPEED = 0;
-    }
-
-    public final class FEEDER {
-        public static final boolean IS_INVERTED = true;
-
-        public static final double UP_SPEED = 0.25;
-        public static final double DOWN_SPEED = -0.25;
+    public static final class FEEDER {
+        public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
+            FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
+            config.m_feederMotorAxisMaxSpeed = 1.0;
+            config.m_feederMotorRunSpeed = 0.25;
+            return config;
+        }
     }
 }

@@ -15,13 +15,13 @@ public class AvailableTrajectories {
     public static SequentialCommandGroup exampleTrajectory = null;
     public static SequentialCommandGroup exampleRecordPathTrajectory = null;
 
-    public static void generateTrajectories(FalconTrajectoryDriveSubsystem driveSub) {
-        exampleTrajectory = createExampleTrajectory(driveSub);
-        exampleRecordPathTrajectory = createExampleRecordPathTrajectory(driveSub);
+    public static void generateTrajectories() {
+        exampleTrajectory = createExampleTrajectory();
+        exampleRecordPathTrajectory = createExampleRecordPathTrajectory();
     }
 
-    private static SequentialCommandGroup createExampleTrajectory(FalconTrajectoryDriveSubsystem driveSub) {
-        return TrajectoryUtil.createTrajectoryPathCommand(driveSub,
+    private static SequentialCommandGroup createExampleTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem.getInstance(),
                 // Start at the origin facing the +X direction
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
@@ -30,8 +30,8 @@ public class AvailableTrajectories {
                 new Pose2d(3, 0, new Rotation2d(0)), false, true);
     }
 
-    private static SequentialCommandGroup createExampleRecordPathTrajectory(FalconTrajectoryDriveSubsystem driveSub) {
-        return TrajectoryUtil.createTrajectoryPathCommand(driveSub, List.of(
+    private static SequentialCommandGroup createExampleRecordPathTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem.getInstance(), List.of(
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             new Pose2d(0.005138387418834883, 2.2083707112308348E-4, Rotation2d.fromDegrees(2.4609375000000004)),
             new Pose2d(0.15288722766480822, 0.0069894771330836535, Rotation2d.fromDegrees(2.7685546875000004)),
