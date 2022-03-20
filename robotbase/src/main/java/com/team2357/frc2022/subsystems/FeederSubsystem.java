@@ -2,6 +2,7 @@ package com.team2357.frc2022.subsystems;
 
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 public class FeederSubsystem extends ClosedLoopSubsystem {
@@ -13,7 +14,8 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     public static class Configuration {
         public double m_feederMotorAxisMaxSpeed = 0;
-        public double m_feederMotorRunSpeed = 0;
+        public double m_feederMotorAdvanceSpeed = 0;
+        public double m_feederMotorShootSpeed = 0;
     }
 
     private Configuration m_config;
@@ -29,10 +31,15 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
     public void configure(Configuration config) {
         m_config = config;
         m_feederMotor.setInverted(true);
+        m_feederMotor.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void start() {
-        m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorRunSpeed);
+    public void advance() {
+        m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorAdvanceSpeed);
+    }
+
+    public void shoot() {
+        m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorShootSpeed);
     }
 
     public void stop() {

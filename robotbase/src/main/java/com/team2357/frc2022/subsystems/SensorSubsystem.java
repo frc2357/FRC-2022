@@ -16,7 +16,7 @@ public class SensorSubsystem extends SubsystemBase {
 
     private boolean m_lastIntakeState;
     private boolean m_lastFeederState;
-    private int m_currentCargoCount;
+    private boolean m_cargoInIndex;
     private int m_cargoAcquired;
     private int m_cargoLaunched;
 
@@ -29,7 +29,7 @@ public class SensorSubsystem extends SubsystemBase {
         m_feederSensor = feederSensor;
         m_lastIntakeState = false;
         m_lastFeederState = false;
-        m_currentCargoCount = 0;
+        m_cargoInIndex = false;
         m_cargoAcquired = 0;
         m_cargoLaunched = 0;
     }
@@ -41,7 +41,7 @@ public class SensorSubsystem extends SubsystemBase {
 
         if (intakeState != m_lastIntakeState) {
             if (intakeState) {
-                m_currentCargoCount++;
+                m_cargoInIndex = true;
                 m_cargoAcquired++;
             }
             m_lastIntakeState = intakeState;
@@ -49,23 +49,21 @@ public class SensorSubsystem extends SubsystemBase {
 
         if (feederState != m_lastFeederState) {
             if (feederState) {
-                m_currentCargoCount--;
+                m_cargoInIndex = false;
+            }
+            if (!feederState) {
                 m_cargoLaunched++;
             }
             m_lastFeederState = feederState;
         }
     }
 
-    public boolean isCargoInIntake() {
-        return m_lastIntakeState;
+    public boolean isCargoInIndex() {
+        return m_cargoInIndex;
     }
 
     public boolean isCargoInFeeder() {
         return m_lastFeederState;
-    }
-
-    public int getCurrentCargoCount() {
-        return m_currentCargoCount;
     }
 
     public int getCargoAcquired() {
