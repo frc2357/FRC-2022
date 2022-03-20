@@ -24,6 +24,7 @@ public class ClimberPullToRungCommandGroup extends SequentialCommandGroup {
     @Override
     public void initialize() {
         super.initialize();
+        ClimberSubsystem.getInstance().switchToLoadedClimberPID();
         System.out.println("Pull to rung");
 
     }

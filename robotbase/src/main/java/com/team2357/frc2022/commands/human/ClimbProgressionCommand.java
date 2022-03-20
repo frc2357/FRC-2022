@@ -3,7 +3,6 @@ package com.team2357.frc2022.commands.human;
 import com.team2357.frc2022.commands.climb.ClimberClimbToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberClimbToRungCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberExtendToReachableCommandGroup;
-import com.team2357.frc2022.commands.climb.ClimberPullToRungCommandGroup;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
@@ -28,7 +27,8 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         if (commandIndex > -1 && commandIndex < climbCommands.length) {
-            climbCommands[commandIndex++].schedule();
+            climbCommands[++commandIndex].schedule();
+            System.out.println("Scheduling command");
         }
 
         if (commandIndex == -1) {
@@ -43,7 +43,7 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
         if (commandIndex == -1) {
             if (holdTimeMs < System.currentTimeMillis()) {
                 climbCommands[++commandIndex].schedule();
-                System.out.println("Schedling first command");
+                System.out.println("Scheduling first command");
             }
             System.out.println("Executing");
         }

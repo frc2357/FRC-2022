@@ -12,4 +12,10 @@ public class ClimberExtendToRungCommandGroup extends SequentialCommandGroup{
 
         addRequirements(ClimberSubsystem.getInstance());
     }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        ClimberSubsystem.getInstance().switchToUnloadedClimberPID();
+    }
 }
