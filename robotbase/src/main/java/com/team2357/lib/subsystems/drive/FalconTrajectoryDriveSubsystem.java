@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
     private static FalconTrajectoryDriveSubsystem instance = null;
@@ -115,7 +116,15 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     public void periodic() {
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
-                -1 * m_rightEncoder.getDistance());
+                m_rightEncoder.getDistance());
+         //System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
+         //System.out.println(" Right encoder distance: " +
+        // m_rightEncoder.getDistance());
+        // System.out.println(getHeading());
+        //System.out.println("Pose: " + getPose().toString());
+        // System.out.println(m_leftControllers.get());
+        // System.out.println(m_rightControllers.get());
+
     }
 
     public void configure(Configuration config) {

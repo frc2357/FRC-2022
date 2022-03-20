@@ -4,6 +4,11 @@
 
 package com.team2357.frc2022;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
@@ -89,51 +94,73 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
+        public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
         public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.75;
         public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
 
-        public static final double WHEEL_DIAMETER_IN_METERS = 0.102;
         public static final int ENCODER_PPR = 256;
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
                 / (double) ENCODER_PPR;
 
+        public static final int LEFT_ENCODER_CHANNEL_A = 6;
+        public static final int LEFT_ENCODER_CHANNEL_B = 7;
+        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
+        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
+
+        public static final boolean INVERT_GYRO = true;
+        public static final boolean INVERT_RIGHT_SIDE = true;
+
         public static final double MAX_VOLTAGE = 10;
+
         // TODO: Run characterization on all below constants
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
-        public static final double kS_VOLTS = 0.0;
-        public static final double KV_VOLTS_SECONDS_PER_METER = 0.0;
-        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.0;
+        public static final double KS_VOLTS = 0.65717;
+        public static final double KV_VOLTS_SECONDS_PER_METER = 3.5385;
+        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 1.1685;
 
         /**
          * Differential Drive Kinematics Zeroes as place holder values
          */
-
-        public static final double TRACK_WIDTH_METERS = 0.0;
+        public static final double TRACK_WIDTH_METERS = 0.650875;
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
                 TRACK_WIDTH_METERS);
 
         /**
          * Max Trajectory acceleration and velocity Zeroes as place holder values
          */
-
-        public static final double MAX_SPEED_METERS_PER_SECOND = 0;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.5;
 
         /**
-         * Values from the ramsete example. Ramsete Parameters Reasonable baseline
-         * values for a RAMSETE follower in units of meters and seconds.
+         * Values from the ramsete example.
+         * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
+         * of meters and seconds.
          */
-        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_B = 1.5;
         public static final double RAMSETE_ZETA = 0.7;
-        public static final double KS_VOLTS = 0;
 
         /**
          * Proportional velocity value for Ramsete PID
          */
-        public static final double P_DRIVE_VEL = 0;
+        public static final double P_DRIVE_VEL = 3.0953;
+
+        public static final SimpleMotorFeedforward TRAJECTORY_FEEDFORWARD = new SimpleMotorFeedforward(
+                Constants.DRIVE.KS_VOLTS,
+                Constants.DRIVE.KV_VOLTS_SECONDS_PER_METER,
+                Constants.DRIVE.KA_VOLTS_SECONDS_SQUARED_PER_METER);
+
+        public static final RamseteController TRAJECTORY_RAMSETE_CONTROLLER = new RamseteController(
+                Constants.DRIVE.RAMSETE_B, Constants.DRIVE.RAMSETE_ZETA);
+
+        public static final PIDController TRAJECTORY_DRIVE_PID = new PIDController(Constants.DRIVE.P_DRIVE_VEL, 0, 0);
+
+        public static final DifferentialDriveVoltageConstraint TRAJECTORY_VOLTAGE_CONSTRAINT = new DifferentialDriveVoltageConstraint(
+                Constants.DRIVE.TRAJECTORY_FEEDFORWARD,
+                Constants.DRIVE.DRIVE_KINEMATICS,
+                Constants.DRIVE.MAX_VOLTAGE);
 
         public static final FalconTrajectoryDriveSubsystem.Configuration GET_FALCON_DRIVE_CONFIG() {
             FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
@@ -167,6 +194,7 @@ public final class Constants {
             config.m_timeoutMs = 0;
             return config;
         }
+
     }
 
     public static final class SHOOTER {
