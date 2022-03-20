@@ -288,8 +288,8 @@ public final class Constants {
             config.m_rollerTopSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
-            config.m_rollerContinousAmpLimit = 35;
-            config.m_rollerPeakAmpLimit = 50;
+            config.m_rollerContinousAmpLimit = 40;
+            config.m_rollerPeakAmpLimit = 60;
             config.m_rollerSpeedUpMillis = 2000;
 
             return config;
@@ -384,10 +384,13 @@ public final class Constants {
     }
 
     public static final class FEEDER {
+        public static final long EXTRA_ADVANCE_MILLIS = 100;
+
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorRunSpeed = 0.25;
+            config.m_feederMotorAdvanceSpeed = 0.25;
+            config.m_feederMotorShootSpeed = 1.0;
             return config;
         }
     }
