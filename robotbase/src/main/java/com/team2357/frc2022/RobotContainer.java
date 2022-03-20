@@ -8,8 +8,6 @@ import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
-import com.team2357.frc2022.shuffleboard.DriveTab;
-import com.team2357.frc2022.shuffleboard.FailsafeButtonWidget;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
@@ -31,6 +29,18 @@ import edu.wpi.first.wpilibj2.command.Command;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  public static final String SHUFFLEBOARD_TAB_ROBOT = "Robot";
+
+  // The robot's subsystems and commands are defined here...
+  private FalconTrajectoryDriveSubsystem m_driveSub;
+  private IntakeSubsystem m_intakeSub;
+  private ShooterSubsystem m_shooterSub;
+  private FeederSubsystem m_feederSub;
+  private KickerSubsystem m_kickerSub;
+  private TogglableLimelightSubsystem m_visionSub;
+  private Compressor m_compressor;
+  private AutoModeCommandChooser m_autoCommandChooser;
+
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
   private final Compressor m_compressor;
@@ -72,6 +82,12 @@ public class RobotContainer {
     m_gunnerControls = new GunnerControls(gunnerXboxController);
 
     driveSub.setDefaultCommand(new DriveVelocityCommand(driveSub, m_driverControls));
+
+    configureShuffleboard();
+
+    // Setup compressor
+    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
+    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
 
     configureShuffleboard();
   }
