@@ -1,7 +1,10 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
@@ -77,8 +80,8 @@ public class SubsystemFactory {
     }
 
     public IntakeRollerSubsystem CreateIntakeRollerSubsystem() {
-        VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
-        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(intakeVictor);
+        WPI_TalonSRX intakeTalon = new WPI_TalonSRX(Constants.CAN_ID.INTAKE_MOTOR_ID);
+        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(intakeTalon);
         subsystem.configure(Constants.INTAKE_ROLLER.GET_INTAKE_ROLLER_CONFIG());
         return subsystem;
     }

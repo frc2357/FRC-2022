@@ -28,7 +28,7 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     public void configure(Configuration config) {
         m_config = config;
-        m_feederMotor.setInverted(false);
+        m_feederMotor.setInverted(true);
     }
 
     public void start() {
@@ -41,6 +41,6 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     public void setAxisRollerSpeed(double axisSpeed) {
         double motorSpeed = axisSpeed * m_config.m_feederMotorAxisMaxSpeed;
-        m_feederMotor.set(ControlMode.PercentOutput, motorSpeed);
+        m_feederMotor.set(ControlMode.PercentOutput, -motorSpeed);
     }
 }

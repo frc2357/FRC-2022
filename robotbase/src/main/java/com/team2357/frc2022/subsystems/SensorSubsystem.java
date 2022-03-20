@@ -48,7 +48,7 @@ public class SensorSubsystem extends SubsystemBase {
         }
 
         if (feederState != m_lastFeederState) {
-            if (!feederState) {
+            if (feederState) {
                 m_currentCargoCount--;
                 m_cargoLaunched++;
             }
