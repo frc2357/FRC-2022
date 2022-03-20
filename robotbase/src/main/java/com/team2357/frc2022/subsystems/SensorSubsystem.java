@@ -48,7 +48,7 @@ public class SensorSubsystem extends SubsystemBase {
         }
 
         if (feederState != m_lastFeederState) {
-            if (!feederState) {
+            if (feederState) {
                 m_currentCargoCount--;
                 m_cargoLaunched++;
             }
@@ -56,8 +56,12 @@ public class SensorSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean isCargoInFeeder() {
+    public boolean isCargoInIntake() {
         return m_lastIntakeState;
+    }
+
+    public boolean isCargoInFeeder() {
+        return m_lastFeederState;
     }
 
     public int getCurrentCargoCount() {

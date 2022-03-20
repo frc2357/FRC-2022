@@ -6,28 +6,29 @@ import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 /**
  * Moves the intake by calling setPivot on the {@link IntakeSubsystem}.
  * 
  * @category Intake
  */
 public class IntakeDeployToggleCommand extends CommandLoggerBase {
+
     /**
      * @param intakeSubsystem The {@link IntakeSubsystem}.
      */
     public IntakeDeployToggleCommand() {
-        addRequirements(IntakeArmSubsystem.getInstance());
-        addRequirements(IntakeRollerSubsystem.getInstance());
-    }
+        }
 
     @Override
     public void initialize() {
         IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
 
         if (intakeArm.isStowed() || intakeArm.isStowing()) {
-            (new IntakeDeployCommand(1)).schedule();
+            new IntakeDeployCommand(1).schedule();
         } else {
-            (new IntakeStowCommand()).schedule();
+            new IntakeStowCommand().schedule();
         }
     }
 
