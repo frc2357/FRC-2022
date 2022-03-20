@@ -1,5 +1,6 @@
 package com.team2357.frc2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -38,18 +39,35 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public int m_climberGrippedAmps = 0;
 
         // smart motion config
-        public double m_climberMotorP = 0;
-        public double m_climberMotorI = 0;
-        public double m_climberMotorD = 0;
-        public double m_climberMotorIZone = 0;
-        public double m_climberMotorFF = 0;
+
+        // Both
         public double m_climberMotorMaxOutput = 0;
         public double m_climberMotorMinOutput = 0;
-        public double m_climberMotorMaxRPM = 0;
-        public double m_climberMotorMaxVel = 0;
-        public double m_climberMotorMinVel = 0;
-        public double m_climberMotorMaxAcc = 0;
         public double m_climberMotorAllowedError = 0;
+
+        // Unloaded
+        public double m_climberUnloadedMotorP = 0;
+        public double m_climberUnloadedMotorI = 0;
+        public double m_climberUnloadedMotorD = 0;
+        public double m_climberUnloadedMotorIZone = 0;
+        public double m_climberUnloadedMotorFF = 0;
+        public double m_climberUnloadedMotorMaxRPM = 0;
+        public double m_climberUnloadedMotorMaxVel = 0;
+        public double m_climberUnloadedMotorMinVel = 0;
+        public double m_climberUnloadedMotorMaxAcc = 0;
+
+        // Loaded
+        public double m_climberLoadedMotorP = 0;
+        public double m_climberLoadedMotorI = 0;
+        public double m_climberLoadedMotorD = 0;
+        public double m_climberLoadedMotorIZone = 0;
+        public double m_climberLoadedMotorFF = 0;
+        public double m_climberLoadedMotorMaxRPM = 0;
+        public double m_climberLoadedMotorMaxVel = 0;
+        public double m_climberLoadedMotorMinVel = 0;
+        public double m_climberLoadedMotorMaxAcc = 0;
+
+
     }
 
     private Configuration m_config;
@@ -59,8 +77,11 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     private Solenoid m_hookSolenoid;
     private SparkMaxPIDController m_leftPidController;
     private SparkMaxPIDController m_rightPidController;
-    
+
     private double m_targetRotations;
+
+    public boolean m_isLeftAtTarget;
+    public boolean m_isRightAtTarget;
 
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
             Solenoid hookSolenoid) {
@@ -78,14 +99,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_leftClimberMotor.restoreFactoryDefaults();
         m_rightClimberMotor.restoreFactoryDefaults();
 
-       configureClimberMotor(m_leftClimberMotor);
+        configureClimberMotor(m_leftClimberMotor);
         configureClimberMotor(m_rightClimberMotor);
 
         m_leftPidController = m_leftClimberMotor.getPIDController();
-       configureClimberPID(m_leftPidController);
-      
+
         m_rightPidController = m_rightClimberMotor.getPIDController();
-        configureClimberPID(m_rightPidController);
+
+        switchToUnloadedClimberPID();
 
         m_leftClimberMotor.setInverted(!m_config.m_isRightSideInverted);
         m_rightClimberMotor.setInverted(m_config.m_isRightSideInverted);
@@ -95,22 +116,49 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         motor.setIdleMode(m_config.m_climberMotorIdleMode);
         motor.setSmartCurrentLimit(m_config.m_climberMotorStallLimitAmps,
                 m_config.m_climberMotorFreeLimitAmps);
-                }
+    }
 
-    private void configureClimberPID(SparkMaxPIDController pidController) {
+    public void switchToUnloadedClimberPID() {
+        configureUnloadedClimberPID(m_leftPidController);
+        configureUnloadedClimberPID(m_rightPidController);
+    }
+
+    public void switchToLoadedClimberPID() {
+        configureLoadedClimberPID(m_leftPidController);
+        configureLoadedClimberPID(m_rightPidController);
+    }
+
+
+    private void configureUnloadedClimberPID(SparkMaxPIDController pidController) {
         // set PID coefficients
-        pidController.setP(m_config.m_climberMotorP);
-        pidController.setI(m_config.m_climberMotorI);
-        pidController.setD(m_config.m_climberMotorD);
-        pidController.setIZone(m_config.m_climberMotorIZone);
-        pidController.setFF(m_config.m_climberMotorFF);
+        pidController.setP(m_config.m_climberUnloadedMotorP);
+        pidController.setI(m_config.m_climberUnloadedMotorI);
+        pidController.setD(m_config.m_climberUnloadedMotorD);
+        pidController.setIZone(m_config.m_climberUnloadedMotorIZone);
+        pidController.setFF(m_config.m_climberUnloadedMotorFF);
         pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
 
         // Configure smart motion
         int smartMotionSlot = 0;
-        pidController.setSmartMotionMaxVelocity(m_config.m_climberMotorMaxVel, smartMotionSlot);
-        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberMotorMinVel, smartMotionSlot);
-        pidController.setSmartMotionMaxAccel(m_config.m_climberMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionMaxVelocity(m_config.m_climberUnloadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberUnloadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_climberUnloadedMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
+    }
+
+    private void configureLoadedClimberPID(SparkMaxPIDController pidController) {
+        pidController.setP(m_config.m_climberLoadedMotorP);
+        pidController.setI(m_config.m_climberLoadedMotorI);
+        pidController.setD(m_config.m_climberLoadedMotorD);
+        pidController.setIZone(m_config.m_climberLoadedMotorIZone);
+        pidController.setFF(m_config.m_climberLoadedMotorFF);
+        pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
+
+        // Configure smart motion
+        int smartMotionSlot = 0;
+        pidController.setSmartMotionMaxVelocity(m_config.m_climberLoadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberLoadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_climberLoadedMotorMaxAcc, smartMotionSlot);
         pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
     }
 
@@ -122,8 +170,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void setClimberRotations(double rotations) {
         setClosedLoopEnabled(true);
         m_targetRotations = rotations;
-       /// m_leftPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
+         m_leftPidController.setReference(m_targetRotations,
+         CANSparkMax.ControlType.kSmartMotion);
         m_rightPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
+
+        m_isLeftAtTarget = false;
+        m_isRightAtTarget = false;
     }
 
     /**
@@ -131,7 +183,25 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
      * @return Is the climber at the setpoint set by {@Link setClimberRotations}
      */
     public boolean isClimberAtRotations() {
-        return /*isLeftClimberAtRotations() &&*/ isRightClimberAtRotations();
+        return m_isRightAtTarget && m_isLeftAtTarget;
+    }
+
+    /**
+     * 
+     * @return If both motors are stopped at setpoint
+     */
+    public boolean handleClimberRotations() {
+        if(isLeftClimberAtRotations()) {
+            m_leftClimberMotor.set(0);
+            m_isLeftAtTarget = true;
+        }
+
+        if(isRightClimberAtRotations()) {
+            m_rightClimberMotor.set(0);
+            m_isRightAtTarget = true;
+        }
+
+        return m_isRightAtTarget && m_isLeftAtTarget;
     }
 
     /**
@@ -155,7 +225,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isClimberGripped() {
-        return (m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) && (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps);
+        return (m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps)
+                && (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps);
     }
 
     // Method to set climber speed from a joystick
@@ -164,7 +235,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
         double motorSpeed = (-axisSpeed) * m_config.m_climberAxisMaxSpeed;
 
-      //  m_leftClimberMotor.set(motorSpeed);
+        m_leftClimberMotor.set(motorSpeed);
         m_rightClimberMotor.set(motorSpeed);
     }
 
@@ -206,11 +277,14 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     @Override
     public void periodic() {
-        if (isClosedLoopEnabled() && isClimberAtRotations()) {
+        if (isClosedLoopEnabled() ) {
+            if(isClimberAtRotations()) {
             setClosedLoopEnabled(false);
+            }
         }
 
         SmartDashboard.putNumber("left rotations", m_leftClimberMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("right rotations", m_rightClimberMotor.getEncoder().getPosition());
+        //System.out.println("Speed: " + m_rightClimberMotor.getEncoder().getVelocity());
     }
 }

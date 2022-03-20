@@ -267,7 +267,7 @@ public final class Constants {
     public static final class CLIMBER {
 
         //TODO: Tune timings and rotations
-        public static final double PULL_ONTO_RUNG_ROTATIONS = 0;
+        public static final double PULL_ONTO_RUNG_ROTATIONS = 1;
         public static final double EXTEND_TO_RUNG_ROTATIONS = 120;//125
         public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0.25;
         public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
@@ -286,19 +286,32 @@ public final class Constants {
 
             // TODO: Tune climber smart motion constants, currently values from rev's
             // example
-            config.m_climberMotorP = 0.0004;
-            config.m_climberMotorI = 0.0;
-            config.m_climberMotorD = 0.0;
-            config.m_climberMotorIZone = 0.0156;
-            config.m_climberMotorFF = 0.0;
             config.m_climberMotorMaxOutput = 1;
             config.m_climberMotorMinOutput = -1;
-            config.m_climberMotorMaxRPM = 1000;
-
-            config.m_climberMotorMaxVel = 4000;
-            config.m_climberMotorMinVel = 0;
-            config.m_climberMotorMaxAcc = 2000;
             config.m_climberMotorAllowedError = 0.2;
+
+            config.m_climberUnloadedMotorP = 0.0004;
+            config.m_climberUnloadedMotorI = 0.0;
+            config.m_climberUnloadedMotorD = 0.0;
+            config.m_climberUnloadedMotorIZone = 0.01;
+            config.m_climberUnloadedMotorFF = 0.0;
+            config.m_climberUnloadedMotorMaxRPM = 1000;
+
+            config.m_climberUnloadedMotorMaxVel = 5700;
+            config.m_climberUnloadedMotorMinVel = 0;
+            config.m_climberUnloadedMotorMaxAcc = 20000;
+
+            config.m_climberLoadedMotorP = 0.0004;
+            config.m_climberLoadedMotorI = 0.0;
+            config.m_climberLoadedMotorD = 0.0;
+            config.m_climberLoadedMotorIZone = 0.0156;
+            config.m_climberLoadedMotorFF = 0.0;
+            config.m_climberLoadedMotorMaxRPM = 1000;
+
+            config.m_climberLoadedMotorMaxVel = 5000;
+            config.m_climberLoadedMotorMinVel = 0;
+            config.m_climberLoadedMotorMaxAcc = 3000;
+
 
             return config;
         }
