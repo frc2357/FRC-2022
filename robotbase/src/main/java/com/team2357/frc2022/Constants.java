@@ -199,11 +199,13 @@ public final class Constants {
 
     public static final class SHOOTER {
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
-            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();/**
-                                                                                          * Clicks per rotation for the
-                                                                                          * internal encoder in the
-                                                                                          * Falcon 500
-                                                                                          */
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+
+            /**
+             * Clicks per rotation for the
+             * internal encoder in the
+             * Falcon 500
+             */
             config.m_encoder_cpr = 2048;
 
             config.m_bottomShooterGearingRatio = 24 / 18;
@@ -285,10 +287,12 @@ public final class Constants {
     }
 
     public static final class INTAKE_ROLLER {
+        public static final double INTAKE_TO_FEEDER_SPEED = 0.5;
+
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerTopSpeed = 0.85;
+            config.m_rollerTopSpeed = 0.5;
             config.m_rollerAxisMaxSpeed = 1.0;
 
             config.m_rollerContinousAmpLimit = 35;
@@ -347,10 +351,16 @@ public final class Constants {
             /** Height of the Limelight lens center from the floor (inches), from CAD */
             config.m_LimelightMountingHeightInches = 35.64;
 
-            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            /**
+             * Target width in inches: This varies, but if we catch 4 stripes, it's about 3
+             * feet
+             */
             config.m_TargetWidth = 36;
 
-            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
+            /**
+             * Target height in inches: This also varies but the arc of stripes is about 5
+             * inches
+             */
             config.m_TargetHeight = 2;
 
             config.m_targetHeightFromFloor = 103.5;
