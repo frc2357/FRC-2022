@@ -3,10 +3,7 @@ package com.team2357.frc2022.commands.human;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.frc2022.commands.intake.IntakeStowCommand;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
-
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * Moves the intake by calling setPivot on the {@link IntakeSubsystem}.

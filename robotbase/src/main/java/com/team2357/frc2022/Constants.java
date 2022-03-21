@@ -285,7 +285,8 @@ public final class Constants {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerTopSpeed = 0.85;
+            config.m_rollerAdvanceSpeed = 0.40;
+            config.m_rollerCollectSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
             config.m_rollerContinousAmpLimit = 40;
@@ -384,13 +385,15 @@ public final class Constants {
     }
 
     public static final class FEEDER {
-        public static final long EXTRA_ADVANCE_MILLIS = 100;
+        public static final long EXTRA_ADVANCE_MILLIS = 120;
+        public static final long PACK_MILLIS = 160;
 
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
             config.m_feederMotorAdvanceSpeed = 0.25;
             config.m_feederMotorShootSpeed = 1.0;
+            config.m_feederMotorPackSpeed = -0.5;
             return config;
         }
     }
