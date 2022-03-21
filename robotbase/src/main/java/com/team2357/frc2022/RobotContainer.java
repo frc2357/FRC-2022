@@ -6,10 +6,12 @@ package com.team2357.frc2022;
 
 import com.team2357.frc2022.commands.RecordPathCommand;
 import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
+import com.team2357.frc2022.commands.intake.IntakeAdvanceCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
+import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveVelocityCommand;
@@ -72,6 +74,7 @@ public class RobotContainer {
 
     driveSub.setDefaultCommand(new DriveVelocityCommand(driveSub, m_driverControls));
     FeederSubsystem.getInstance().setDefaultCommand(new FeederAdvanceCommand());
+    IntakeRollerSubsystem.getInstance().setDefaultCommand(new IntakeAdvanceCommand());
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);

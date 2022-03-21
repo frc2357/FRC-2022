@@ -233,20 +233,21 @@ public final class Constants {
     }
 
     // Turret
-    // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.03;
-            config.m_trackingI = 0.0;
+            config.m_trackingP = 0.02;
+            config.m_trackingI = 0.01;
+            config.m_trackingIMin = -0.1;
+            config.m_trackingIMax = 0.1;
             config.m_trackingD = 0.0;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingMaxSpeed = 0.4;
-            config.m_trackingMinSpeed = 0.05;
+            config.m_trackingMinSpeed = 0.04;
 
             config.m_turretAxisMaxSpeed = 0.5;
 
@@ -291,11 +292,12 @@ public final class Constants {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerTopSpeed = 0.85;
+            config.m_rollerAdvanceSpeed = 0.40;
+            config.m_rollerCollectSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
-            config.m_rollerContinousAmpLimit = 40;
-            config.m_rollerPeakAmpLimit = 60;
+            config.m_rollerContinousAmpLimit = 45;
+            config.m_rollerPeakAmpLimit = 70;
             config.m_rollerSpeedUpMillis = 2000;
 
             return config;
@@ -396,13 +398,15 @@ public final class Constants {
     }
 
     public static final class FEEDER {
-        public static final long EXTRA_ADVANCE_MILLIS = 100;
+        public static final long EXTRA_ADVANCE_MILLIS = 120;
+        public static final long PACK_MILLIS = 160;
 
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
             config.m_feederMotorAdvanceSpeed = 0.25;
             config.m_feederMotorShootSpeed = 1.0;
+            config.m_feederMotorPackSpeed = -0.5;
             return config;
         }
     }

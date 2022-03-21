@@ -4,21 +4,21 @@ import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class FeederExtraAdvanceCommand extends CommandLoggerBase {
+public class FeederPackCommand extends CommandLoggerBase {
     private long m_endMillis = 0;
 
-    public FeederExtraAdvanceCommand() {
+    public FeederPackCommand() {
         addRequirements(FeederSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_endMillis = System.currentTimeMillis() + Constants.FEEDER.EXTRA_ADVANCE_MILLIS;
+        m_endMillis = System.currentTimeMillis() + Constants.FEEDER.PACK_MILLIS;
     }
 
     @Override
     public void execute() {
-        FeederSubsystem.getInstance().advance();
+        FeederSubsystem.getInstance().pack();
     }
 
     @Override
