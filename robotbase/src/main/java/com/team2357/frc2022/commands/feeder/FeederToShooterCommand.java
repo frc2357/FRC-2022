@@ -14,7 +14,7 @@ public class FeederToShooterCommand extends CommandLoggerBase{
     @Override
     public void execute() {
 
-        boolean hasCargo = (SensorSubsystem.getInstance().getCurrentCargoCount() > 0);
+        boolean hasCargo = (SensorSubsystem.getInstance().isCargoInIndex() || SensorSubsystem.getInstance().isCargoInFeeder());
         if (hasCargo && ShooterSubsystem.getInstance().atTargetSpeed()) {
             FeederSubsystem.getInstance().shoot();
         } else {

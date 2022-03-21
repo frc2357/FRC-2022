@@ -17,10 +17,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         return instance;
     }
 
+    // {low goal, 1000, 2000}
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
-            { 19.5, 2750.0, 4000.0 }, // Closest
-            { 0, 0, 0 }, // Furthest
+            {45, 2000, 3500},
+            { 22.5, 1750, 3500 }, // Closest
+            { -6.7, 3100, 10275 }, // Furthest
     };
 
     private WPI_TalonFX m_leftBottomMotor;
@@ -70,6 +72,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_rightBottomMotor = rightBottomShooter;
         m_topMotor = topMotor;
 
+        setClosedLoopEnabled(false);
     }
 
     public void configure(Configuration config) {
@@ -163,7 +166,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
     public void stop() {
         m_leftBottomMotor.set(ControlMode.PercentOutput, 0.0);
-        m_rightBottomMotor.set(ControlMode.PercentOutput, 0.0);
+        m_topMotor.set(ControlMode.PercentOutput, 0.0);
         setClosedLoopEnabled(false);
     }
 

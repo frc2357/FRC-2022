@@ -31,6 +31,8 @@ public class FeederAdvanceCommand extends CommandLoggerBase {
             FeederSubsystem.getInstance().stop();
         }
 
+        System.out.println("Executing feeder command");
+
         m_lastInFeeder = inFeeder;
     }
 

@@ -144,7 +144,7 @@ public class GunnerControls {
         aButton.toggleWhenActive(new IntakeDeployToggleCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
-        xButton.whileActiveOnce(new ShooterSetRPMsCommand(2750.0, 4000));
+        xButton.whileActiveOnce(new ShooterSetRPMsCommand(3100, 10275));
         m_primeRightTrigger.whileActiveOnce(new ShootVisionCommand());
         m_feedShooterRightTrigger.whileActiveOnce(new FeederToShooterCommand());
 

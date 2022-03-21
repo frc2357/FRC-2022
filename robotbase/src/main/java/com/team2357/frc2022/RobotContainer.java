@@ -75,7 +75,7 @@ public class RobotContainer {
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
-    m_compressor.enableAnalog(0, 1);
+    m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories();

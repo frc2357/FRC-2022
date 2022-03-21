@@ -220,13 +220,13 @@ public final class Constants {
             config.m_bottomShooterP = 0.1;
             config.m_bottomShooterI = 0.0;
             config.m_bottomShooterD = 0.001;
-            config.m_bottomShooterF = 0.047;
+            config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.1;
+            config.m_topShooterP = 0.12;
             config.m_topShooterI = 0.0;
             config.m_topShooterD = 0.005;
-            config.m_topShooterF = 0.05;
+            config.m_topShooterF = 0.054;
 
             return config;
         }
@@ -291,7 +291,7 @@ public final class Constants {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerTopSpeed = 0.5;
+            config.m_rollerTopSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
             config.m_rollerContinousAmpLimit = 40;
