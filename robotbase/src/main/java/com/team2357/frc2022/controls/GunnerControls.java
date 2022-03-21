@@ -3,7 +3,7 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
-import com.team2357.frc2022.commands.human.FireCommand;
+import com.team2357.frc2022.commands.human.FireLowHubCommand;
 import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
@@ -142,7 +142,8 @@ public class GunnerControls {
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         xButton.whileActiveOnce(new FeederExtraAdvanceCommand());
-        m_rightTrigger.whenActive(new FireCommand());
+        m_leftTrigger.whileActiveOnce(new FireLowHubCommand());
+        m_rightTrigger.whileActiveOnce(new FireLowHubCommand());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

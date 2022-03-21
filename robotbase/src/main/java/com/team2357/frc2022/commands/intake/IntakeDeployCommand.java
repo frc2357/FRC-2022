@@ -15,6 +15,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
     private int m_startingAcquireCount;
     private int m_acquireCount;
 
+
     /**
      * Deploys and runs the intake
      * 

@@ -1,6 +1,6 @@
 package com.team2357.frc2022.controls;
 
-import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
+import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.lib.commands.InvertDriveCommand;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
@@ -33,6 +33,6 @@ public class IntakeDriveControls extends InvertDriveControls {
 
     private void mapControls() {
         m_aButton.whenPressed(new InvertDriveCommand(this));
-        m_leftTrigger.toggleWhenActive(new IntakeDeployToggleCommand());
+        m_leftTrigger.whileActiveOnce(new IntakeDeployCommand(2));
     }
 }
