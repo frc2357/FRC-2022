@@ -6,6 +6,7 @@ import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireVisionCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.commands.human.FireLowHubCommandGroup;
+import com.team2357.frc2022.commands.human.FireTaxiLineCommandGroup;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
@@ -151,6 +152,7 @@ public class GunnerControls {
         m_feedShooterRightTrigger.whileActiveOnce(new FeederToShooterCommand());
         xButton.whileActiveOnce(new FeederExtraAdvanceCommand());
         m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
+        m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());
