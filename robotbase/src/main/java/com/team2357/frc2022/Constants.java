@@ -228,20 +228,21 @@ public final class Constants {
     }
 
     // Turret
-    // TODO: Tune Turret constants, currently values from rev's example
     public static final class TURRET {
         public static final TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.03;
-            config.m_trackingI = 0.0;
+            config.m_trackingP = 0.02;
+            config.m_trackingI = 0.01;
+            config.m_trackingIMin = -0.1;
+            config.m_trackingIMax = 0.1;
             config.m_trackingD = 0.0;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingMaxSpeed = 0.4;
-            config.m_trackingMinSpeed = 0.05;
+            config.m_trackingMinSpeed = 0.04;
 
             config.m_turretAxisMaxSpeed = 0.5;
 

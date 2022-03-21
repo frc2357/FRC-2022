@@ -38,6 +38,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_trackingP = 0;
         public double m_trackingI = 0;
         public double m_trackingD = 0;
+        public double m_trackingIMin = 0;
+        public double m_trackingIMax = 0;
         public double m_trackingSetpoint = 0; // The center of the camera view is zero.
         public double m_trackingToleranceDegrees = 0;
         public double m_trackingMaxSpeed = 0;
@@ -189,7 +191,8 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     public void trackTarget() {
         m_trackingPidController = new PIDController(m_config.m_trackingP, m_config.m_trackingI, m_config.m_trackingD);
         m_trackingPidController.setSetpoint(m_config.m_trackingSetpoint);
-        m_trackingPidController.setTolerance(m_config.m_trackingToleranceDegrees);
+        m_trackingPidController.setTolerance(m_config.m_trackingToleranceDegrees / 2);
+        m_trackingPidController.setIntegratorRange(m_config.m_trackingIMin, m_config.m_trackingIMax);
         setClosedLoopEnabled(true);
     }
 
@@ -221,19 +224,21 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     private void trackingPeriodic() {
         LimelightSubsystem limelight = LimelightSubsystem.getInstance();
 
+        // TODO: Add check to ensure Limelight is up and responsive if possible.
         if (!limelight.validTargetExists()) {
             setClosedLoopEnabled(false);
             return;
         }
 
         double errorDegrees = limelight.getTX();
+        if (Math.abs(errorDegrees) < m_config.m_trackingToleranceDegrees) {
+            return;
+        }
+
         double motorSpeed = m_trackingPidController.calculate(errorDegrees);
         double clampedMotorSpeed = com.team2357.lib.util.Utility.clamp(motorSpeed, -m_config.m_trackingMaxSpeed, m_config.m_trackingMaxSpeed);
-        if (Math.abs(clampedMotorSpeed) > m_config.m_trackingMinSpeed) {
-            m_turretMotor.set(clampedMotorSpeed);
-        } else {
-            m_turretMotor.set(0);
-        }
+        System.out.println("error: " + errorDegrees + ", motorSpeed: " + motorSpeed + " clamped: " + clampedMotorSpeed);
+        m_turretMotor.set(clampedMotorSpeed);
     }
 
     /**
