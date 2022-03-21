@@ -4,7 +4,6 @@ import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireLowHubCommand;
-import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
@@ -16,6 +15,7 @@ import com.team2357.frc2022.commands.human.panic.IntakeArmsCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
+import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -138,7 +138,7 @@ public class GunnerControls {
         TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
         m_leftStickButton.whenActive(new TurretResetCommand());
 
-        aButton.toggleWhenActive(new IntakeDeployToggleCommand());
+        aButton.whileActiveOnce(new IntakeDeployCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         xButton.whileActiveOnce(new FeederExtraAdvanceCommand());

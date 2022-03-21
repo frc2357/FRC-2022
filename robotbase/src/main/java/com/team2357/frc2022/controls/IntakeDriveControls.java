@@ -33,6 +33,6 @@ public class IntakeDriveControls extends InvertDriveControls {
 
     private void mapControls() {
         m_aButton.whenPressed(new InvertDriveCommand(this));
-        m_leftTrigger.whileActiveOnce(new IntakeDeployCommand(2));
+        m_leftTrigger.whileActiveOnce(new IntakeDeployCommand());
     }
 }
