@@ -1,12 +1,11 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
-import com.team2357.frc2022.commands.ShooterSetRPMsCommand;
 import com.team2357.frc2022.commands.feeder.FeederToShooterCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
-import com.team2357.frc2022.commands.human.ShootVisionCommand;
+import com.team2357.frc2022.commands.human.FireVisionCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
-import com.team2357.frc2022.commands.human.FireLowHubCommand;
+import com.team2357.frc2022.commands.human.FireLowHubCommandGroup;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
@@ -19,6 +18,7 @@ import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.shooter.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -147,10 +147,10 @@ public class GunnerControls {
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         //xButton.whileActiveOnce(new ShooterSetRPMsCommand(3100, 10275));
-        m_primeRightTrigger.whileActiveOnce(new ShootVisionCommand());
+        m_primeRightTrigger.whileActiveOnce(new FireVisionCommand());
         m_feedShooterRightTrigger.whileActiveOnce(new FeederToShooterCommand());
         xButton.whileActiveOnce(new FeederExtraAdvanceCommand());
-        m_leftTrigger.whileActiveOnce(new FireLowHubCommand());
+        m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

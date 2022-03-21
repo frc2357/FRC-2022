@@ -5,7 +5,7 @@ import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 
-public class ShootVisionCommand extends CommandLoggerBase {
+public class FireVisionCommand extends CommandLoggerBase {
 
     private long m_pipelineSwitchMillis = 0;
 
@@ -17,7 +17,7 @@ public class ShootVisionCommand extends CommandLoggerBase {
         return LimelightSubsystem.getInstance().validTargetExists();
     }
 
-    public ShootVisionCommand() {
+    public FireVisionCommand() {
         addRequirements(ShooterSubsystem.getInstance());
     }
 

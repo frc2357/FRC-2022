@@ -20,7 +20,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {low goal, 1000, 2000}
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
-            {45, 2000, 3500},
+            { 45, 2000, 3500 },
             { 22.5, 1750, 3500 }, // Closest
             { -6.7, 3100, 10275 }, // Furthest
     };
@@ -38,6 +38,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
     public static class Configuration {
         public int m_encoder_cpr = 0;
+
+        // Shots
+        public double m_bottomLowHubRPM = 0;
+        public double m_topLowHubRPM = 0;
+
+        public double m_bottomTaxiLineRPM = 0;
+        public double m_topTaxiLineRPM = 0;
 
         public double m_shooterMotorPeakOutput = 1.0;
         public double m_bottomShooterGearingRatio = 0;
@@ -139,7 +146,6 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         }
     }
 
-
     /**
      * Set the motor speed using closed-loop control
      * 
@@ -164,6 +170,16 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
+    public void shootTaxiLine() {
+        setRPMBottom(m_config.m_bottomTaxiLineRPM);
+        setRPMTop(m_config.m_bottomTaxiLineRPM);
+    }
+
+    public void shootLowHub() {
+        setRPMBottom(m_config.m_bottomLowHubRPM);
+        setRPMTop(m_config.m_topLowHubRPM);
+    }
+
     public void stop() {
         m_leftBottomMotor.set(ControlMode.PercentOutput, 0.0);
         m_topMotor.set(ControlMode.PercentOutput, 0.0);
@@ -184,7 +200,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean atTargetSpeed() {
-        return Utility.isWithinTolerance(getBottomShooterRPMs(), m_bottomTargetRPMs, m_config.m_shooterAllowedErrorRPM) && Utility.isWithinTolerance(getTopShooterRPMs(), m_topTargetRPMs, m_config.m_shooterAllowedErrorRPM);
+        return Utility.isWithinTolerance(getBottomShooterRPMs(), m_bottomTargetRPMs, m_config.m_shooterAllowedErrorRPM)
+                && Utility.isWithinTolerance(getTopShooterRPMs(), m_topTargetRPMs, m_config.m_shooterAllowedErrorRPM);
     }
 
     @Override
