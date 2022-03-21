@@ -19,7 +19,8 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
     }
 
     public static class Configuration {
-        public double m_rollerTopSpeed = 0;
+        public double m_rollerAdvanceSpeed = 0;
+        public double m_rollerCollectSpeed = 0;
         public double m_rollerAxisMaxSpeed = 0;
 
         public int m_rollerContinousAmpLimit = 35;
@@ -51,9 +52,14 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
         m_intakeTalon.configContinuousCurrentLimit(0);
     }
 
-    public void start() {
+    public void collect() {
         // Just set top speed for now, we'll do ramping later.
-        m_intakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerTopSpeed);
+        m_intakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerCollectSpeed);
+        m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
+    }
+
+    public void advance() {
+        m_intakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerAdvanceSpeed);
         m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
     }
 

@@ -47,7 +47,7 @@ public class SensorSubsystem extends SubsystemBase {
             m_lastIntakeState = intakeState;
         }
 
-        if (feederState != m_lastFeederState) {
+        if (feederState != m_lastFeederState && !FeederSubsystem.getInstance().isPacking()) {
             if (feederState) {
                 m_cargoInIndex = false;
             }

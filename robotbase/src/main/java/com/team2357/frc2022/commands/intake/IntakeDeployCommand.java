@@ -1,5 +1,6 @@
 package com.team2357.frc2022.commands.intake;
 
+import com.team2357.frc2022.commands.feeder.FeederPackCommand;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
@@ -32,7 +33,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
         SensorSubsystem sensors = SensorSubsystem.getInstance();
 
         intakeArm.deploy();
-        intakeRoller.start();
+        intakeRoller.collect();
         m_startingAcquireCount = sensors.getCargoAcquired();
     }
 
@@ -50,10 +51,11 @@ public class IntakeDeployCommand extends CommandLoggerBase {
 
     @Override
     public void end(boolean interrupted) {
-        IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-        IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
+        if (SensorSubsystem.getInstance().isCargoInFeeder()) {
+            new FeederPackCommand().schedule();
+        }
 
-        intakeArm.stow();
-        intakeRoller.stop();
+        IntakeArmSubsystem.getInstance().stow();
+        IntakeRollerSubsystem.getInstance().stop();
     }
 }
