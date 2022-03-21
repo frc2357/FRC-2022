@@ -33,12 +33,6 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private FalconTrajectoryDriveSubsystem m_driveSub;
-  private IntakeSubsystem m_intakeSub;
-  private ShooterSubsystem m_shooterSub;
-  private FeederSubsystem m_feederSub;
-  private KickerSubsystem m_kickerSub;
-  private TogglableLimelightSubsystem m_visionSub;
-  private Compressor m_compressor;
   private AutoModeCommandChooser m_autoCommandChooser;
 
   private final IntakeDriveControls m_driverControls;
@@ -96,15 +90,7 @@ public class RobotContainer {
    * This method should set up the shuffleboard
    */
   public void configureShuffleboard() {
-    DriveTab driveTab = new DriveTab();
-
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Drive Failsafe", m_driveSub));
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Intake Failsafe", m_intakeSub));
-    driveTab.addWidget(new FailsafeButtonWidget(SHUFFLEBOARD_TAB_ROBOT, "Feeder Failsafe", m_feederSub));
-
-    // Setup compressor
-    m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
-    m_compressor.enableAnalog(0, 1);
+    m_autoCommandChooser = new AutoModeCommandChooser();
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories();
