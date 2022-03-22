@@ -27,49 +27,57 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
         public int m_rollerPeakAmpLimit = 50;
 
         public int m_rollerSpeedUpMillis = 0;
+
+        public boolean invertFollowerIntakeMotor = false;
     }
 
     private Configuration m_config;
-    private WPI_TalonSRX m_intakeTalon;
+    private WPI_TalonSRX m_masterIntakeTalon;
+    private WPI_TalonSRX m_followerIntakeTalon;
 
     private double m_startupTime;
 
     /**
-     * @param intakeVictor Victor SPX to use to control intake
+     * @param masterIntakeTalon Victor SPX to use to control intake
      */
-    public IntakeRollerSubsystem(WPI_TalonSRX intakeVictor) {
+    public IntakeRollerSubsystem(WPI_TalonSRX masterIntakeTalon, WPI_TalonSRX followerIntakeTalon) {
         instance = this;
-        m_intakeTalon = intakeVictor;
+        m_masterIntakeTalon = masterIntakeTalon;
     }
 
     public void configure(Configuration config) {
         m_config = config;
 
-        m_intakeTalon.setNeutralMode(NeutralMode.Coast);
-        m_intakeTalon.enableCurrentLimit(true);
-        m_intakeTalon.configPeakCurrentLimit(m_config.m_rollerPeakAmpLimit);
-        m_intakeTalon.configPeakCurrentDuration(0);
-        m_intakeTalon.configContinuousCurrentLimit(0);
+        m_followerIntakeTalon.setInverted(m_config.invertFollowerIntakeMotor);
+        m_masterIntakeTalon.setInverted(!m_config.invertFollowerIntakeMotor);
+
+        m_followerIntakeTalon.follow(m_masterIntakeTalon);
+
+        m_masterIntakeTalon.setNeutralMode(NeutralMode.Coast);
+        m_masterIntakeTalon.enableCurrentLimit(true);
+        m_masterIntakeTalon.configPeakCurrentLimit(m_config.m_rollerPeakAmpLimit);
+        m_masterIntakeTalon.configPeakCurrentDuration(0);
+        m_masterIntakeTalon.configContinuousCurrentLimit(0);
     }
 
     public void collect() {
         // Just set top speed for now, we'll do ramping later.
-        m_intakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerCollectSpeed);
+        m_masterIntakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerCollectSpeed);
         m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
     }
 
     public void advance() {
-        m_intakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerAdvanceSpeed);
+        m_masterIntakeTalon.set(ControlMode.PercentOutput, m_config.m_rollerAdvanceSpeed);
         m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
     }
 
     public void stop() {
-        m_intakeTalon.set(ControlMode.PercentOutput, 0);
+        m_masterIntakeTalon.set(ControlMode.PercentOutput, 0);
     }
 
     public void setAxisRollerSpeed(double axisSpeed) {
         double motorSpeed = (-axisSpeed) * m_config.m_rollerAxisMaxSpeed;
-        m_intakeTalon.set(ControlMode.PercentOutput, motorSpeed);
+        m_masterIntakeTalon.set(ControlMode.PercentOutput, motorSpeed);
         m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
 
     }
@@ -84,9 +92,9 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
      * @return True is stalling
      */
     public boolean handleStall() {
-        if ((Math.abs(m_intakeTalon.getStatorCurrent()) > m_config.m_rollerContinousAmpLimit
+        if ((Math.abs(m_masterIntakeTalon.getStatorCurrent()) > m_config.m_rollerContinousAmpLimit
                 && m_startupTime < System.currentTimeMillis())
-                || m_intakeTalon.getStatorCurrent() > m_config.m_rollerPeakAmpLimit) {
+                || m_masterIntakeTalon.getStatorCurrent() > m_config.m_rollerPeakAmpLimit) {
             stop();
             return true;
         }

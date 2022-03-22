@@ -54,7 +54,8 @@ public final class Constants {
         public static final int GYRO_ID = 5;
 
         // Intake
-        public static final int INTAKE_MOTOR_ID = 21;
+        public static final int MASTER_INTAKE_MOTOR_ID = 21;
+        public static final int FOLLOWER_INTAKE_MOTOR_ID = 29;
 
         // Climber
         public static final int CLIMBER_MOTOR_LEFT_ID = 22;
@@ -70,9 +71,6 @@ public final class Constants {
 
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
-
-        // Kicker
-        public static final int KICKER_MOTOR_ID = 29;
     }
 
     public final class PH_ID {
@@ -325,8 +323,8 @@ public final class Constants {
             config.m_climberAxisMaxSpeed = 1.0;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
-            config.m_climberMotorStallLimitAmps = 35;
-            config.m_climberMotorFreeLimitAmps = 35;
+            config.m_climberMotorStallLimitAmps = 40;
+            config.m_climberMotorFreeLimitAmps = 50;
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
