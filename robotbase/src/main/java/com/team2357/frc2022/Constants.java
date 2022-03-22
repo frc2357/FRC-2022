@@ -208,6 +208,10 @@ public final class Constants {
              */
             config.m_encoder_cpr = 2048;
 
+            config.m_isRightInverted = true;
+            config.m_isTopInverted = false;
+            config.m_closeLoopRampRate = 0.1;
+
             config.m_bottomShooterGearingRatio = 24 / 18;
             config.m_topShooterGearingRatio = 2 / 1;
             config.m_timeoutMS = TIMEOUT_MS;

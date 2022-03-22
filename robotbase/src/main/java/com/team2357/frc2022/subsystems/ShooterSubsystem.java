@@ -39,6 +39,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public static class Configuration {
         public int m_encoder_cpr = 0;
 
+        public boolean m_isRightInverted = false;
+        public boolean m_isTopInverted = false;
+        public double m_closeLoopRampRate = 0.0;
+
         // Shots
         public double m_bottomLowHubRPM = 0;
         public double m_topLowHubRPM = 0;
@@ -91,11 +95,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_rightBottomMotor.configFactoryDefault(m_config.m_timeoutMS);
         m_topMotor.configFactoryDefault(m_config.m_timeoutMS);
 
-        // Bottom motor config
-        m_rightBottomMotor.setInverted(true);
+        // motor config
+        m_rightBottomMotor.setInverted(m_config.m_isRightInverted);
+        m_leftBottomMotor.setInverted(!m_config.m_isRightInverted);
+
         m_rightBottomMotor.follow(m_leftBottomMotor);
 
-        m_leftBottomMotor.configClosedloopRamp(0.25);
+        m_leftBottomMotor.configClosedloopRamp(m_config.m_closeLoopRampRate);
 
         m_leftBottomMotor
                 .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, m_config.m_timeoutMS);
@@ -115,8 +121,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.config_kF(m_config.m_PIDSlot, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
         // Top motor config
-        m_topMotor.setInverted(false);
-        m_topMotor.configClosedloopRamp(1.0);
+        m_topMotor.setInverted(config.m_isTopInverted);
+        m_topMotor.configClosedloopRamp(config.m_closeLoopRampRate);
 
         m_topMotor
                 .configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, m_config.m_timeoutMS);
@@ -134,16 +140,6 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.config_kI(0, m_config.m_topShooterI, m_config.m_timeoutMS);
         m_topMotor.config_kD(0, m_config.m_topShooterD, m_config.m_timeoutMS);
         m_topMotor.config_kF(0, m_config.m_topShooterF, m_config.m_timeoutMS);
-    }
-
-    @Override
-    public void setClosedLoopEnabled(boolean closedLoopEnabled) {
-        super.setClosedLoopEnabled(closedLoopEnabled);
-
-        if (!closedLoopEnabled) {
-            m_bottomTargetRPMs = Double.NaN;
-            m_topTargetRPMs = Double.NaN;
-        }
     }
 
     /**
@@ -215,7 +211,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isVisionShooting() {
-        return !Double.isNaN(m_bottomTargetRPMs);
+        return isClosedLoopEnabled();
     }
 
     public void startVisionShooting() {
