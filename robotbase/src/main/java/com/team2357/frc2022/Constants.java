@@ -212,31 +212,31 @@ public final class Constants {
             config.m_isTopInverted = false;
             config.m_closeLoopRampRate = 0.1;
 
-            config.m_bottomShooterGearingRatio = 24 / 18;
-            config.m_topShooterGearingRatio = 2 / 1;
+            config.m_bottomShooterGearingRatio = 24.0 / 18.0;
+            config.m_topShooterGearingRatio = 2.0 / 1.0;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
-            config.m_bottomTaxiLineRPM = 2000;
-            config.m_topTaxiLineRPM = 3500;
+            config.m_bottomTaxiLineRPM = 0;
+            config.m_topTaxiLineRPM = 2000;
 
             config.m_shooterAllowedErrorRPM = 100;
             config.m_PIDSlot = 0;
 
             // Bottom
-            config.m_bottomShooterP = 0.1;
+            config.m_bottomShooterP = 0.16;
             config.m_bottomShooterI = 0.0;
-            config.m_bottomShooterD = 0.001;
+            config.m_bottomShooterD = 0.0;
             config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.12;
-            config.m_topShooterI = 0.0;
-            config.m_topShooterD = 0.005;
-            config.m_topShooterF = 0.054;
+            config.m_topShooterP = 0.18;
+            config.m_topShooterI = 0.00;
+            config.m_topShooterD = 0.0025;
+            config.m_topShooterF = 0.05;
 
             return config;
         }
