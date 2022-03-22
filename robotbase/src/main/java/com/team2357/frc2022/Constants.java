@@ -172,7 +172,7 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
-            config.m_turnSensitivity = 0.25;
+            config.m_turnSensitivity = 0.5;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
@@ -199,29 +199,44 @@ public final class Constants {
 
     public static final class SHOOTER {
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
-            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();/**
-                                                                                          * Clicks per rotation for the
-                                                                                          * internal encoder in the
-                                                                                          * Falcon 500
-                                                                                          */
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+
+            /**
+             * Clicks per rotation for the
+             * internal encoder in the
+             * Falcon 500
+             */
             config.m_encoder_cpr = 2048;
+
+            config.m_isRightInverted = true;
+            config.m_isTopInverted = false;
+            config.m_closeLoopRampRate = 0.1;
 
             config.m_bottomShooterGearingRatio = 24 / 18;
             config.m_topShooterGearingRatio = 2 / 1;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_bottomLowHubRPM = 1500;
+            config.m_topLowHubRPM = 3000;
+
+            config.m_bottomTaxiLineRPM = 2000;
+            config.m_topTaxiLineRPM = 3500;
+
+            config.m_shooterAllowedErrorRPM = 100;
+            config.m_PIDSlot = 0;
+
             // Bottom
-            config.m_bottomShooterP = 0.09;
-            config.m_bottomShooterI = 0;
-            config.m_bottomShooterD = 0;
-            config.m_bottomShooterF = 0.01;
+            config.m_bottomShooterP = 0.1;
+            config.m_bottomShooterI = 0.0;
+            config.m_bottomShooterD = 0.001;
+            config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.09;
-            config.m_topShooterI = 0;
-            config.m_topShooterD = 0;
-            config.m_topShooterF = 0.01;
+            config.m_topShooterP = 0.12;
+            config.m_topShooterI = 0.0;
+            config.m_topShooterD = 0.005;
+            config.m_topShooterF = 0.054;
 
             return config;
         }
@@ -283,6 +298,7 @@ public final class Constants {
     }
 
     public static final class INTAKE_ROLLER {
+
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
@@ -346,10 +362,16 @@ public final class Constants {
             /** Height of the Limelight lens center from the floor (inches), from CAD */
             config.m_LimelightMountingHeightInches = 35.64;
 
-            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            /**
+             * Target width in inches: This varies, but if we catch 4 stripes, it's about 3
+             * feet
+             */
             config.m_TargetWidth = 36;
 
-            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
+            /**
+             * Target height in inches: This also varies but the arc of stripes is about 5
+             * inches
+             */
             config.m_TargetHeight = 2;
 
             config.m_targetHeightFromFloor = 103.5;

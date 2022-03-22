@@ -1,9 +1,12 @@
 package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
-import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
+import com.team2357.frc2022.commands.feeder.FeederToShooterCommand;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
-import com.team2357.frc2022.commands.human.FireLowHubCommand;
+import com.team2357.frc2022.commands.human.FireVisionCommand;
+import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
+import com.team2357.frc2022.commands.human.FireLowHubCommandGroup;
+import com.team2357.frc2022.commands.human.FireTaxiLineCommandGroup;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
@@ -16,6 +19,7 @@ import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.shooter.ShooterSetRPMsCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -37,7 +41,8 @@ public class GunnerControls {
 
     // Triggers
     public AxisThresholdTrigger m_leftTrigger;
-    public AxisThresholdTrigger m_rightTrigger;
+    public AxisThresholdTrigger m_primeRightTrigger;
+    public AxisThresholdTrigger m_feedShooterRightTrigger;
 
     // Buttons
     public JoystickButton m_leftStickButton;
@@ -68,7 +73,8 @@ public class GunnerControls {
         m_controller = controller;
 
         // Triggers
-        m_rightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_primeRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_feedShooterRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .9);
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
@@ -141,9 +147,12 @@ public class GunnerControls {
         aButton.whileActiveOnce(new IntakeDeployCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
+        //xButton.whileActiveOnce(new ShooterSetRPMsCommand(3100, 10275));
+        m_primeRightTrigger.whileActiveOnce(new FireVisionCommand());
+        m_feedShooterRightTrigger.whileActiveOnce(new FeederToShooterCommand());
         xButton.whileActiveOnce(new FeederExtraAdvanceCommand());
-        m_leftTrigger.whileActiveOnce(new FireLowHubCommand());
-        m_rightTrigger.whileActiveOnce(new FireLowHubCommand());
+        m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
+        m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

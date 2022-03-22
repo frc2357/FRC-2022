@@ -30,7 +30,7 @@ public class FeederAdvanceCommand extends CommandLoggerBase {
             }
             FeederSubsystem.getInstance().stop();
         }
-
+        
         m_lastInFeeder = inFeeder;
     }
 
