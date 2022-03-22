@@ -121,7 +121,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.config_kF(m_config.m_PIDSlot, m_config.m_bottomShooterF, m_config.m_timeoutMS);
 
         // Top motor config
-        m_topMotor.setInverted(config.m_isTopInverted);
+        //m_topMotor.setInverted(config.m_isTopInverted);
         m_topMotor.configClosedloopRamp(config.m_closeLoopRampRate);
 
         m_topMotor
@@ -129,6 +129,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         // >>> Change this if positive motor output gives negative encoder feedback <<<
         m_topMotor.setSensorPhase(true);
+        m_topMotor.setInverted(false);
 
         // Configure output range
         m_topMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
@@ -163,12 +164,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topTargetRPMs = rpm;
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
+        SmartDashboard.putNumber("target native speed", nativeSpeed);
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
     public void shootTaxiLine() {
         setRPMBottom(m_config.m_bottomTaxiLineRPM);
-        setRPMTop(m_config.m_bottomTaxiLineRPM);
+        setRPMTop(m_config.m_topTaxiLineRPM);
     }
 
     public void shootLowHub() {
@@ -208,6 +210,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
         SmartDashboard.putNumber("top", getTopShooterRPMs());
+        SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
+        SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
+        SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
+        SmartDashboard.putNumber("top rpm", m_topMotor.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("error", m_topMotor.getClosedLoopError());
     }
 
     public boolean isVisionShooting() {
