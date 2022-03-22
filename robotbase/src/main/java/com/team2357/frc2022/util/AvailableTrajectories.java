@@ -14,10 +14,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class AvailableTrajectories {
     public static SequentialCommandGroup exampleTrajectory = null;
     public static SequentialCommandGroup exampleRecordPathTrajectory = null;
+    public static SequentialCommandGroup leaveTarmacTrajectory = null;
+    public static SequentialCommandGroup threeBallTrajectory = null;
 
     public static void generateTrajectories() {
         exampleTrajectory = createExampleTrajectory();
         exampleRecordPathTrajectory = createExampleRecordPathTrajectory();
+        leaveTarmacTrajectory = createLeaveTarmacTrajectory();
+        threeBallTrajectory = createThreeBallTrajectory();
     }
 
     private static SequentialCommandGroup createExampleTrajectory() {
@@ -39,6 +43,19 @@ public class AvailableTrajectories {
             new Pose2d(0.8999156245081863, 0.0654740166046273, Rotation2d.fromDegrees(6.723632812500001)),
             new Pose2d(1.2990866064155986, 0.12095506925746803, Rotation2d.fromDegrees(9.052734375000002)),
             new Pose2d(1.5115189031964178, 0.15741951993424935, Rotation2d.fromDegrees(90.107421875))),
+            false, true);
+    }
+
+    private static SequentialCommandGroup createLeaveTarmacTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem.getInstance(),  // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(0.5715, 0)),
+        new Pose2d(1.143, 0, new Rotation2d(0)), false, true);
+    }
+
+    public static SequentialCommandGroup createThreeBallTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem.getInstance(), List.of(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0))),
             false, true);
     }
 
