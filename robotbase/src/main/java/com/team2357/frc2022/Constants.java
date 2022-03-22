@@ -220,8 +220,12 @@ public final class Constants {
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
-            config.m_bottomTaxiLineRPM = 0;
-            config.m_topTaxiLineRPM = 2000;
+            // Works but is too high for our light fixtures
+            //config.m_bottomTaxiLineRPM = 2250;
+            //config.m_topTaxiLineRPM = 6500;
+
+            config.m_bottomTaxiLineRPM = 1600;
+            config.m_topTaxiLineRPM = 7500;
 
             config.m_shooterAllowedErrorRPM = 100;
             config.m_PIDSlot = 0;
@@ -302,7 +306,7 @@ public final class Constants {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerAdvanceSpeed = 0.40;
+            config.m_rollerAdvanceSpeed = 0.50;
             config.m_rollerCollectSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
