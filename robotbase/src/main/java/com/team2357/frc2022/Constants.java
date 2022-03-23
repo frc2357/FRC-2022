@@ -255,15 +255,13 @@ public final class Constants {
 
             config.m_trackingP = 0.02;
             config.m_trackingI = 0.01;
-            config.m_trackingIMin = -0.1;
-            config.m_trackingIMax = 0.1;
-            config.m_trackingD = 0.0;
+            config.m_trackingD = 0.0002;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingMaxSpeed = 0.4;
             config.m_trackingMinSpeed = 0.04;
 
-            config.m_turretAxisMaxSpeed = 0.5;
+            config.m_turretAxisMaxSpeed = 0.4;
 
             config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
@@ -283,9 +281,9 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.60;
-            config.m_turretRotationsClockwiseSoftLimit = 0.60;
-            config.m_turretGearRatio = 49.6;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.3;
+            config.m_turretRotationsClockwiseSoftLimit = 0.3;
+            config.m_turretGearRatio = 63.8;
             return config;
         }
     }
