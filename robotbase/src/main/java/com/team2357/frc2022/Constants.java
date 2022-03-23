@@ -223,13 +223,25 @@ public final class Constants {
             // Bottom: 1000 - 8500
             // Top:    1500 - 12000
 
-            // Works but is too high for our light fixtures
-            //config.m_bottomTaxiLineRPM = 2250;
-            //config.m_topTaxiLineRPM = 6000;
+            // Close Shot (ty = +22.2) (not super accurate)
+            //config.m_bottomTaxiLineRPM = 2500;
+            //config.m_topTaxiLineRPM = 3000;
 
-            // ty = 3.69
+            // Not as close Shot (ty = +15.5)
+            //config.m_bottomTaxiLineRPM = 2600;
+            //config.m_topTaxiLineRPM = 3500;
+
+            // Taxi Line Shot (ty = 3.69)
             config.m_bottomTaxiLineRPM = 3000;
             config.m_topTaxiLineRPM = 7500;
+
+            // Mid Shot (ty = -11.06)
+            //config.m_bottomTaxiLineRPM = 3750;
+            //config.m_topTaxiLineRPM = 8900;
+
+            // Far Shot (ty = -17.31) Still hitting ceiling barely in shop field
+            //config.m_bottomTaxiLineRPM = 4400;
+            //config.m_topTaxiLineRPM = 11800;
 
             config.m_targetRPMTriggerPercent = 0.03;
             config.m_PIDSlot = 0;
