@@ -54,7 +54,8 @@ public final class Constants {
         public static final int GYRO_ID = 5;
 
         // Intake
-        public static final int INTAKE_MOTOR_ID = 21;
+        public static final int MASTER_INTAKE_MOTOR_ID = 21;
+        public static final int FOLLOWER_INTAKE_MOTOR_ID = 29;
 
         // Climber
         public static final int CLIMBER_MOTOR_LEFT_ID = 22;
@@ -70,9 +71,6 @@ public final class Constants {
 
         // Feeder
         public static final int FEEDER_MOTOR_ID = 28;
-
-        // Kicker
-        public static final int KICKER_MOTOR_ID = 29;
     }
 
     public final class PH_ID {
@@ -172,7 +170,7 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
-            config.m_turnSensitivity = 0.25;
+            config.m_turnSensitivity = 0.5;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
@@ -199,29 +197,48 @@ public final class Constants {
 
     public static final class SHOOTER {
         public static final ShooterSubsystem.Configuration CONFIG_SHOOTER() {
-            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();/**
-                                                                                          * Clicks per rotation for the
-                                                                                          * internal encoder in the
-                                                                                          * Falcon 500
-                                                                                          */
+            ShooterSubsystem.Configuration config = new ShooterSubsystem.Configuration();
+
+            /**
+             * Clicks per rotation for the
+             * internal encoder in the
+             * Falcon 500
+             */
             config.m_encoder_cpr = 2048;
 
-            config.m_bottomShooterGearingRatio = 24 / 18;
-            config.m_topShooterGearingRatio = 2 / 1;
+            config.m_isRightInverted = true;
+            config.m_isTopInverted = false;
+            config.m_closeLoopRampRate = 0.1;
+
+            config.m_bottomShooterGearingRatio = 24.0 / 18.0;
+            config.m_topShooterGearingRatio = 2.0 / 1.0;
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_bottomLowHubRPM = 1500;
+            config.m_topLowHubRPM = 3000;
+
+            // Works but is too high for our light fixtures
+            //config.m_bottomTaxiLineRPM = 2250;
+            //config.m_topTaxiLineRPM = 6500;
+
+            config.m_bottomTaxiLineRPM = 1600;
+            config.m_topTaxiLineRPM = 7500;
+
+            config.m_shooterAllowedErrorRPM = 100;
+            config.m_PIDSlot = 0;
+
             // Bottom
-            config.m_bottomShooterP = 0.09;
-            config.m_bottomShooterI = 0;
-            config.m_bottomShooterD = 0;
-            config.m_bottomShooterF = 0.01;
+            config.m_bottomShooterP = 0.16;
+            config.m_bottomShooterI = 0.0;
+            config.m_bottomShooterD = 0.0;
+            config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.09;
-            config.m_topShooterI = 0;
-            config.m_topShooterD = 0;
-            config.m_topShooterF = 0.01;
+            config.m_topShooterP = 0.18;
+            config.m_topShooterI = 0.00;
+            config.m_topShooterD = 0.0025;
+            config.m_topShooterF = 0.05;
 
             return config;
         }
@@ -236,15 +253,13 @@ public final class Constants {
 
             config.m_trackingP = 0.02;
             config.m_trackingI = 0.01;
-            config.m_trackingIMin = -0.1;
-            config.m_trackingIMax = 0.1;
-            config.m_trackingD = 0.0;
+            config.m_trackingD = 0.0002;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingMaxSpeed = 0.4;
             config.m_trackingMinSpeed = 0.04;
 
-            config.m_turretAxisMaxSpeed = 0.5;
+            config.m_turretAxisMaxSpeed = 0.4;
 
             config.m_turretMotorStallLimitAmps = 30;
             config.m_turretMotorFreeLimitAmps = 3;
@@ -264,9 +279,9 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.60;
-            config.m_turretRotationsClockwiseSoftLimit = 0.60;
-            config.m_turretGearRatio = 49.6;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.3;
+            config.m_turretRotationsClockwiseSoftLimit = 0.3;
+            config.m_turretGearRatio = 63.8;
             return config;
         }
     }
@@ -283,10 +298,11 @@ public final class Constants {
     }
 
     public static final class INTAKE_ROLLER {
+
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerAdvanceSpeed = 0.40;
+            config.m_rollerAdvanceSpeed = 0.50;
             config.m_rollerCollectSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
@@ -305,8 +321,8 @@ public final class Constants {
             config.m_climberAxisMaxSpeed = 1.0;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
-            config.m_climberMotorStallLimitAmps = 35;
-            config.m_climberMotorFreeLimitAmps = 35;
+            config.m_climberMotorStallLimitAmps = 40;
+            config.m_climberMotorFreeLimitAmps = 50;
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
@@ -346,10 +362,16 @@ public final class Constants {
             /** Height of the Limelight lens center from the floor (inches), from CAD */
             config.m_LimelightMountingHeightInches = 35.64;
 
-            /** Target width in inches: This varies, but if we catch 4 stripes, it's about 3 feet */
+            /**
+             * Target width in inches: This varies, but if we catch 4 stripes, it's about 3
+             * feet
+             */
             config.m_TargetWidth = 36;
 
-            /** Target height in inches: This also varies but the arc of stripes is about 5 inches */
+            /**
+             * Target height in inches: This also varies but the arc of stripes is about 5
+             * inches
+             */
             config.m_TargetHeight = 2;
 
             config.m_targetHeightFromFloor = 103.5;
