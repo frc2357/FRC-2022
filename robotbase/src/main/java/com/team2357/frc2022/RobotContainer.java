@@ -33,15 +33,12 @@ import edu.wpi.first.wpilibj2.command.Command;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public static final String SHUFFLEBOARD_TAB_ROBOT = "Robot";
-
-  // The robot's subsystems and commands are defined here...
-  private FalconTrajectoryDriveSubsystem m_driveSub;
-  private AutoModeCommandChooser m_autoCommandChooser;
 
   private final IntakeDriveControls m_driverControls;
   private final GunnerControls m_gunnerControls;
   private final Compressor m_compressor;
+
+  private AutoModeCommandChooser m_autoCommandChooser;
 
   private final DigitalInput m_intakeSensor;
   private final DigitalInput m_feederSensor;
@@ -83,13 +80,17 @@ public class RobotContainer {
     FeederSubsystem.getInstance().setDefaultCommand(new FeederAdvanceCommand());
     IntakeRollerSubsystem.getInstance().setDefaultCommand(new IntakeAdvanceCommand());
 
-    configureShuffleboard();
-
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
     m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
 
     configureShuffleboard();
+
+    // Build trajectories
+    AvailableTrajectories.generateTrajectories();
+
+    // SmartDashboard.putData("Record Path", new RecordPathCommand());
+    // SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
   }
 
   /**
@@ -97,12 +98,6 @@ public class RobotContainer {
    */
   public void configureShuffleboard() {
     m_autoCommandChooser = new AutoModeCommandChooser();
-
-    // Build trajectories
-    AvailableTrajectories.generateTrajectories();
-
-    SmartDashboard.putData("Record Path", new RecordPathCommand());
-    SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
   }
 
   /**
@@ -111,14 +106,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    int auto = 2;
-    switch (auto) {
-      case 1:
-        return AvailableTrajectories.exampleTrajectory;
-      case 2:
-        return AvailableTrajectories.exampleRecordPathTrajectory;
-      default:
-        return null;
-    }
+    return m_autoCommandChooser.generateCommand();
   }
 }

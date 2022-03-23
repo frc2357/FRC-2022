@@ -1,10 +1,5 @@
 package com.team2357.frc2022.shuffleboard;
 
-
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +9,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class AutoModeCommandChooser {
     public enum AutomodeActions {
         NONE,
+        ONE_BALL,
+        TWO_BALL,
+        THREE_BALL
     }
 
     private class AutoActionChooser {
@@ -25,9 +23,12 @@ public class AutoModeCommandChooser {
             m_chooser = new SendableChooser<>();
 
             m_chooser.setDefaultOption("None", AutomodeActions.NONE);
+            m_chooser.addOption("One Ball", AutomodeActions.ONE_BALL);
+            m_chooser.addOption("Two Ball", AutomodeActions.TWO_BALL);
+            m_chooser.addOption("Three Ball", AutomodeActions.THREE_BALL);
 
-            SmartDashboard.putNumber((m_waitCommandKey),0.0);
-            SmartDashboard.putData("Auto chooser "+index,m_chooser);
+            SmartDashboard.putNumber((m_waitCommandKey), 0.0);
+            SmartDashboard.putData("Auto chooser " + index, m_chooser);
 
         }
 
@@ -35,9 +36,12 @@ public class AutoModeCommandChooser {
             double waitTime = SmartDashboard.getNumber(m_waitCommandKey, 0.0);
             return new WaitCommand(waitTime);
         }
-        
+
         public Command getActionCommand() {
-            switch(m_chooser.getSelected()) {
+            switch (m_chooser.getSelected()) {
+                case ONE_BALL:
+                case TWO_BALL:
+                case THREE_BALL:
                 case NONE:
                 default:
                     System.out.println("ACTION: NONE");
@@ -48,28 +52,15 @@ public class AutoModeCommandChooser {
 
     private AutoActionChooser[] choosers;
 
-
-
     public AutoModeCommandChooser() {
 
         choosers = new AutoActionChooser[3];
         choosers[0] = new AutoActionChooser(0);
-        choosers[1] = new AutoActionChooser(1);
-        choosers[2] = new AutoActionChooser(2);
     }
 
     public Command generateCommand() {
         return new SequentialCommandGroup(
-        choosers[0].getWaitCommand(),
-        choosers[0].getActionCommand(),
-
-        choosers[1].getWaitCommand(),
-        choosers[1].getActionCommand(),
-
-        choosers[2].getWaitCommand(),
-        choosers[2].getActionCommand()
-
-        );
-
+                choosers[0].getWaitCommand(),
+                choosers[0].getActionCommand());
     }
 }
