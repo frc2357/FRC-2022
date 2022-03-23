@@ -20,9 +20,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {low goal, 1000, 2000}
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
-            { 45, 2000, 3500 },
-            { 22.5, 1750, 3500 }, // Closest
-            { -6.7, 3100, 10275 }, // Furthest
+            { 45,     2500, 3000  },    // End (same as close shot)
+            { 22.2,   2500, 3000  },    // Close shot (iffy)
+            { 15.5,   2500, 3500  },    // Not as close shot
+            { 3.69,   3000, 7500  },    // Taxi line shot
+            { -11.06, 3750, 8300  },    // Mid shot
+            { -17.31, 4400, 11800 },    // Farthest (touching ceiling in shop)
     };
 
     private WPI_TalonFX m_leftBottomMotor;
@@ -55,7 +58,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_topShooterGearingRatio = 0;
         public int m_timeoutMS = 0;
 
-        public double m_shooterAllowedErrorRPM = 0;
+        public double m_targetRPMTriggerPercent = 0.02;
         public int m_PIDSlot = 0;
 
         // bottom shooter motors
@@ -164,7 +167,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topTargetRPMs = rpm;
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
-        SmartDashboard.putNumber("target native speed", nativeSpeed);
+        //SmartDashboard.putNumber("target native speed", nativeSpeed);
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -197,9 +200,22 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         return LimelightSubsystem.getInstance().validTargetExists();
     }
 
-    public boolean atTargetSpeed() {
-        return Utility.isWithinTolerance(getBottomShooterRPMs(), m_bottomTargetRPMs, m_config.m_shooterAllowedErrorRPM)
-                && Utility.isWithinTolerance(getTopShooterRPMs(), m_topTargetRPMs, m_config.m_shooterAllowedErrorRPM);
+    public boolean isAtTargetSpeed() {
+        return isBottomAtTargetSpeed() && isTopAtTargetSpeed();
+    }
+
+    public boolean isTopAtTargetSpeed() {
+        double current = getTopShooterRPMs();
+        double error = m_topTargetRPMs - current;
+        double errorPercent = error / m_topTargetRPMs;
+        return Math.abs(errorPercent) < m_config.m_targetRPMTriggerPercent;
+    }
+
+    public boolean isBottomAtTargetSpeed() {
+        double current = getBottomShooterRPMs();
+        double error = m_bottomTargetRPMs - current;
+        double errorPercent = error / m_bottomTargetRPMs;
+        return Math.abs(errorPercent) < m_config.m_targetRPMTriggerPercent;
     }
 
     @Override
@@ -208,13 +224,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
             shootVisionPeriodic();
         }
 
-        SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
-        SmartDashboard.putNumber("top", getTopShooterRPMs());
-        SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
-        SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
-        SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
-        SmartDashboard.putNumber("top rpm", m_topMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("error", m_topMotor.getClosedLoopError());
+        //SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
+        //SmartDashboard.putNumber("top", getTopShooterRPMs());
+        //SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
+        //SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
+        //SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
+        //SmartDashboard.putNumber("top rpm", m_topMotor.getSelectedSensorVelocity());
+        //SmartDashboard.putNumber("error", m_topMotor.getClosedLoopError());
     }
 
     public boolean isVisionShooting() {

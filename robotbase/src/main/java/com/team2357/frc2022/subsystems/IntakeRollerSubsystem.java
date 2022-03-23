@@ -28,7 +28,7 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
 
         public int m_rollerSpeedUpMillis = 0;
 
-        public boolean invertFollowerIntakeMotor = false;
+        public boolean invertFollowerIntakeMotor = true;
     }
 
     private Configuration m_config;
@@ -43,6 +43,7 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
     public IntakeRollerSubsystem(WPI_TalonSRX masterIntakeTalon, WPI_TalonSRX followerIntakeTalon) {
         instance = this;
         m_masterIntakeTalon = masterIntakeTalon;
+        m_followerIntakeTalon = followerIntakeTalon;
     }
 
     public void configure(Configuration config) {

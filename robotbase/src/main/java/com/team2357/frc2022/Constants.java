@@ -218,14 +218,32 @@ public final class Constants {
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
-            // Works but is too high for our light fixtures
-            //config.m_bottomTaxiLineRPM = 2250;
-            //config.m_topTaxiLineRPM = 6500;
 
-            config.m_bottomTaxiLineRPM = 1600;
+            // RPM Ranges
+            // Bottom: 1000 - 8500
+            // Top:    1500 - 12000
+
+            // Close Shot (ty = +22.2) (not super accurate)
+            //config.m_bottomTaxiLineRPM = 2500;
+            //config.m_topTaxiLineRPM = 3000;
+
+            // Not as close Shot (ty = +15.5)
+            //config.m_bottomTaxiLineRPM = 2600;
+            //config.m_topTaxiLineRPM = 3500;
+
+            // Taxi Line Shot (ty = 3.69)
+            config.m_bottomTaxiLineRPM = 3000;
             config.m_topTaxiLineRPM = 7500;
 
-            config.m_shooterAllowedErrorRPM = 100;
+            // Mid Shot (ty = -11.06)
+            //config.m_bottomTaxiLineRPM = 3750;
+            //config.m_topTaxiLineRPM = 8900;
+
+            // Far Shot (ty = -17.31) Still hitting ceiling barely in shop field
+            //config.m_bottomTaxiLineRPM = 4400;
+            //config.m_topTaxiLineRPM = 11800;
+
+            config.m_targetRPMTriggerPercent = 0.03;
             config.m_PIDSlot = 0;
 
             // Bottom
@@ -235,10 +253,10 @@ public final class Constants {
             config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.18;
-            config.m_topShooterI = 0.00;
-            config.m_topShooterD = 0.0025;
-            config.m_topShooterF = 0.05;
+            config.m_topShooterP = 0.077;
+            config.m_topShooterI = 0.0;
+            config.m_topShooterD = 0.0;
+            config.m_topShooterF = 0.053;
 
             return config;
         }
