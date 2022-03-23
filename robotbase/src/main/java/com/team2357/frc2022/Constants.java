@@ -279,8 +279,8 @@ public final class Constants {
             config.m_turretMotorAllowedError = (10 / 360); // Max error is 10 degrees of motor rotation (0.20 degrees
                                                            // turret rotation)
 
-            config.m_turretRotationsCounterClockwiseSoftLimit = -0.3;
-            config.m_turretRotationsClockwiseSoftLimit = 0.3;
+            config.m_turretRotationsCounterClockwiseSoftLimit = -0.5;
+            config.m_turretRotationsClockwiseSoftLimit = 0.5;
             config.m_turretGearRatio = 63.8;
             return config;
         }
