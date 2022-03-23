@@ -55,7 +55,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_topShooterGearingRatio = 0;
         public int m_timeoutMS = 0;
 
-        public double m_shooterAllowedErrorRPM = 0;
+        public double m_targetRPMTriggerPercent = 0.02;
         public int m_PIDSlot = 0;
 
         // bottom shooter motors
@@ -164,7 +164,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topTargetRPMs = rpm;
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
-        SmartDashboard.putNumber("target native speed", nativeSpeed);
+        //SmartDashboard.putNumber("target native speed", nativeSpeed);
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -197,9 +197,22 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         return LimelightSubsystem.getInstance().validTargetExists();
     }
 
-    public boolean atTargetSpeed() {
-        return Utility.isWithinTolerance(getBottomShooterRPMs(), m_bottomTargetRPMs, m_config.m_shooterAllowedErrorRPM)
-                && Utility.isWithinTolerance(getTopShooterRPMs(), m_topTargetRPMs, m_config.m_shooterAllowedErrorRPM);
+    public boolean isAtTargetSpeed() {
+        return isBottomAtTargetSpeed() && isTopAtTargetSpeed();
+    }
+
+    public boolean isTopAtTargetSpeed() {
+        double current = getTopShooterRPMs();
+        double error = m_topTargetRPMs - current;
+        double errorPercent = error / m_topTargetRPMs;
+        return Math.abs(errorPercent) < m_config.m_targetRPMTriggerPercent;
+    }
+
+    public boolean isBottomAtTargetSpeed() {
+        double current = getBottomShooterRPMs();
+        double error = m_bottomTargetRPMs - current;
+        double errorPercent = error / m_bottomTargetRPMs;
+        return Math.abs(errorPercent) < m_config.m_targetRPMTriggerPercent;
     }
 
     @Override
@@ -208,13 +221,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
             shootVisionPeriodic();
         }
 
-        SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
-        SmartDashboard.putNumber("top", getTopShooterRPMs());
-        SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
-        SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
-        SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
-        SmartDashboard.putNumber("top rpm", m_topMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("error", m_topMotor.getClosedLoopError());
+        //SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
+        //SmartDashboard.putNumber("top", getTopShooterRPMs());
+        //SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
+        //SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
+        //SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
+        //SmartDashboard.putNumber("top rpm", m_topMotor.getSelectedSensorVelocity());
+        //SmartDashboard.putNumber("error", m_topMotor.getClosedLoopError());
     }
 
     public boolean isVisionShooting() {

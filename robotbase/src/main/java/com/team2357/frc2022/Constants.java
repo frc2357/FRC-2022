@@ -218,14 +218,20 @@ public final class Constants {
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
+
+            // RPM Ranges
+            // Bottom: 1000 - 8500
+            // Top:    1500 - 12000
+
             // Works but is too high for our light fixtures
             //config.m_bottomTaxiLineRPM = 2250;
-            //config.m_topTaxiLineRPM = 6500;
+            //config.m_topTaxiLineRPM = 6000;
 
-            config.m_bottomTaxiLineRPM = 1600;
+            // ty = 3.69
+            config.m_bottomTaxiLineRPM = 3000;
             config.m_topTaxiLineRPM = 7500;
 
-            config.m_shooterAllowedErrorRPM = 100;
+            config.m_targetRPMTriggerPercent = 0.03;
             config.m_PIDSlot = 0;
 
             // Bottom
@@ -235,10 +241,10 @@ public final class Constants {
             config.m_bottomShooterF = 0.0485;
 
             // Top
-            config.m_topShooterP = 0.18;
-            config.m_topShooterI = 0.00;
-            config.m_topShooterD = 0.0025;
-            config.m_topShooterF = 0.05;
+            config.m_topShooterP = 0.077;
+            config.m_topShooterI = 0.0;
+            config.m_topShooterD = 0.0;
+            config.m_topShooterF = 0.053;
 
             return config;
         }

@@ -87,8 +87,8 @@ public class RobotContainer {
     // Start USB camera capture
     CameraServer.startAutomaticCapture();
 
-    SmartDashboard.putData("Record Path", new RecordPathCommand());
-    SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
+    //SmartDashboard.putData("Record Path", new RecordPathCommand());
+    //SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
   }
 
   /**
