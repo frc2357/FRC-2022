@@ -17,6 +17,7 @@ import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveVelocityCommand;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -82,6 +83,9 @@ public class RobotContainer {
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories();
+
+    // Start USB camera capture
+    CameraServer.startAutomaticCapture();
 
     SmartDashboard.putData("Record Path", new RecordPathCommand());
     SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
