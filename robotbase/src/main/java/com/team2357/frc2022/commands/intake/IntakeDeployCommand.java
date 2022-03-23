@@ -26,12 +26,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
         addRequirements(IntakeRollerSubsystem.getInstance());
     }
 
-    public boolean isRobotFilled() {
-        SensorSubsystem sensors = SensorSubsystem.getInstance();
-        return sensors.isCargoInFeeder() && sensors.isCargoInIndex();
-    }
-
-    @Override 
+    @Override
     public void initialize() {
         IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
         IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
@@ -44,21 +39,22 @@ public class IntakeDeployCommand extends CommandLoggerBase {
 
     @Override
     public boolean isFinished() {
+        SensorSubsystem sensors = SensorSubsystem.getInstance();
 
-        if(m_fillRobot) {
-            return isRobotFilled();
+        if (m_fillRobot) {
+            return sensors.isRobotFilled();
         } else {
-            if(m_hasACargo) {
-                return isRobotFilled();
+            if (m_hasACargo) {
+                return sensors.isRobotFilled();
             } else {
                 return SensorSubsystem.getInstance().isCargoInFeeder();
             }
         }
-    } 
+    }
 
     @Override
     public void end(boolean interrupted) {
-        if (isRobotFilled()) {
+        if (SensorSubsystem.getInstance().isRobotFilled()) {
             new FeederPackCommand().schedule();
         }
 

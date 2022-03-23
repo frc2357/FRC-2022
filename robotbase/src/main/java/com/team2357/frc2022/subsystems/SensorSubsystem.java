@@ -73,4 +73,8 @@ public class SensorSubsystem extends SubsystemBase {
     public int getCargoLaunched() {
         return m_cargoLaunched;
     }
+
+    public boolean isRobotFilled() {
+        return isCargoInFeeder() && isCargoInIndex();
+    }
 }
