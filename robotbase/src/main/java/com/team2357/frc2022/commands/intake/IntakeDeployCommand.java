@@ -12,9 +12,23 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * @category Intake
  */
 public class IntakeDeployCommand extends CommandLoggerBase {
+    private boolean m_fillRobot;
+    private boolean m_hasACargo;
+
     public IntakeDeployCommand() {
+        this(true);
+    }
+
+    public IntakeDeployCommand(boolean fillRobot) {
+        m_fillRobot = fillRobot;
+
         addRequirements(IntakeArmSubsystem.getInstance());
         addRequirements(IntakeRollerSubsystem.getInstance());
+    }
+
+    public boolean isRobotFilled() {
+        SensorSubsystem sensors = SensorSubsystem.getInstance();
+        return sensors.isCargoInFeeder() && sensors.isCargoInIndex();
     }
 
     @Override 
@@ -24,17 +38,27 @@ public class IntakeDeployCommand extends CommandLoggerBase {
 
         intakeArm.deploy();
         intakeRoller.collect();
+
+        m_hasACargo = SensorSubsystem.getInstance().isCargoInFeeder();
     }
 
     @Override
     public boolean isFinished() {
-        SensorSubsystem sensors = SensorSubsystem.getInstance();
-        return sensors.isCargoInFeeder() && sensors.isCargoInIndex();
+
+        if(m_fillRobot) {
+            return isRobotFilled();
+        } else {
+            if(m_hasACargo) {
+                return isRobotFilled();
+            } else {
+                return SensorSubsystem.getInstance().isCargoInFeeder();
+            }
+        }
     } 
 
     @Override
     public void end(boolean interrupted) {
-        if (isFinished()) {
+        if (isRobotFilled()) {
             new FeederPackCommand().schedule();
         }
 
