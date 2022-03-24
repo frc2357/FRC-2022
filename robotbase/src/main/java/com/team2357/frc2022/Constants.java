@@ -40,6 +40,10 @@ public final class Constants {
     public static final int TIMEOUT_MS = 30;
 
     public final class CAN_ID {
+
+        // Power Distribution Hub
+        public static final int POWER_DISTRIBUTION_HUB_ID = 1;
+
         // Pneumatic hub
         public static final int PNEUMATICS_HUB_ID = 2;
 

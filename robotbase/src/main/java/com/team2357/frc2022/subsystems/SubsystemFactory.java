@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
+import com.team2357.lib.subsystems.PDHSubsystem;
 import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import com.team2357.lib.util.Utility;
 
@@ -23,6 +24,10 @@ import edu.wpi.first.wpilibj.Solenoid;
  */
 public class SubsystemFactory {
     public SubsystemFactory() {
+    }
+
+    public PDHSubsystem CreatePDHSubsystem() {
+        return new PDHSubsystem(Constants.CAN_ID.POWER_DISTRIBUTION_HUB_ID);
     }
 
     public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {

@@ -5,6 +5,7 @@ import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
+import com.team2357.lib.subsystems.PDHSubsystem;
 
 /**
  * Deploys the intake arm.
@@ -24,6 +25,8 @@ public class IntakeDeployCommand extends CommandLoggerBase {
 
         intakeArm.deploy();
         intakeRoller.collect();
+
+        PDHSubsystem.getInstance().setSwitchableChannel(true);
     }
 
     @Override
@@ -40,5 +43,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
 
         IntakeArmSubsystem.getInstance().stow();
         IntakeRollerSubsystem.getInstance().stop();
+
+        PDHSubsystem.getInstance().setSwitchableChannel(false);
     }
 }
