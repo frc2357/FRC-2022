@@ -97,7 +97,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    int auto = 2;
+    int auto = 3;
     switch (auto) {
       case 1:
         return AvailableTrajectories.exampleTrajectory;
