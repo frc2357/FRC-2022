@@ -1,6 +1,7 @@
 package com.team2357.lib.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -99,11 +100,17 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
 
+        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration(true, 10, 10, 0);
+        super.m_leftFalconMaster.configSupplyCurrentLimit(currentConfig);
+        super.m_rightFalconMaster.configSupplyCurrentLimit(currentConfig);
+
         for (WPI_TalonFX slave : leftFalconSlaves) {
             slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
+            slave.configSupplyCurrentLimit(currentConfig);
         }
         for (WPI_TalonFX slave : rightFalconSlaves) {
             slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
+            slave.configSupplyCurrentLimit(currentConfig);
         }
 
         resetEncoders();
