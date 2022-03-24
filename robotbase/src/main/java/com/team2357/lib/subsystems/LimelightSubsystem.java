@@ -225,8 +225,10 @@ public class LimelightSubsystem extends ClosedLoopSubsystem {
     return distance;
   }
 
+  /*
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Y", getTY());
   }
+  */
 }

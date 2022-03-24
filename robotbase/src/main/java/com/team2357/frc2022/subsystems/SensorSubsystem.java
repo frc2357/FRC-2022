@@ -77,4 +77,10 @@ public class SensorSubsystem extends SubsystemBase {
     public boolean isRobotFilled() {
         return isCargoInFeeder() && isCargoInIndex();
     }
+    
+    public void clear() {
+        m_cargoInIndex = false;
+        m_lastIntakeState = false;
+        m_lastFeederState = false;
+    }
 }
