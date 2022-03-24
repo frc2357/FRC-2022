@@ -97,6 +97,7 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
                 && m_startupTime < System.currentTimeMillis())
                 || m_masterIntakeTalon.getStatorCurrent() > m_config.m_rollerPeakAmpLimit) {
             stop();
+            System.err.println("INTAKE STALLED");
             return true;
         }
         return false;
