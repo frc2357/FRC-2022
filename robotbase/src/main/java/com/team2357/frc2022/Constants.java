@@ -339,8 +339,8 @@ public final class Constants {
             config.m_climberAxisMaxSpeed = 1.0;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
-            config.m_climberMotorStallLimitAmps = 40;
-            config.m_climberMotorFreeLimitAmps = 50;
+            config.m_climberMotorStallLimitAmps = 30;
+            config.m_climberMotorFreeLimitAmps = 30;
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
