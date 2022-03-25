@@ -100,7 +100,7 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
 
-        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration(true, 30, 40, 0);
+        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration(true, 25, 30, 0);
         super.m_leftFalconMaster.configSupplyCurrentLimit(currentConfig);
         super.m_rightFalconMaster.configSupplyCurrentLimit(currentConfig);
 

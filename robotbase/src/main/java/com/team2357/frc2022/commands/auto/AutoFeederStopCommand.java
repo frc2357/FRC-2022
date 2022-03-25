@@ -1,6 +1,9 @@
 package com.team2357.frc2022.commands.auto;
 
-public class AutoFeederStopCommand {
+import com.team2357.frc2022.subsystems.FeederSubsystem;
+import com.team2357.lib.commands.CommandLoggerBase;
+
+public class AutoFeederStopCommand extends CommandLoggerBase{
     public AutoFeederStartCommand() {
         addRequirements(FeederSubsystem.getInstance());
     }
