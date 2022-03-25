@@ -2,6 +2,8 @@ package com.team2357.frc2022.commands.auto;
 
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.intake.IntakeStowCommand;
+import com.team2357.frc2022.commands.shooter.ShootAutoStartCommand;
 import com.team2357.frc2022.commands.shooter.ShootTaxiLineCommand;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
@@ -14,24 +16,44 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class twoBallAutoCommand extends SequentialCommandGroup{
-     
+public class twoBallAutoCommand extends SequentialCommandGroup {
+
     public twoBallAutoCommand() {
-        addCommands(new AutoStartShotCommand());
+
+        // Shoot at starting configuration
+        addCommands(new ParallelDeadlineGroup(
+                new WaitCommand(3),
+                new ShootAutoStartCommand(),
+                new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
         addCommands(new AutoStopShootCommand());
-        addCommands(new ParallelCommandGroup(
-                new IntakeDeployCommand(false),
-                new AutoDriveCommand(2000)));
+
+        // Start intake
+        addCommands(new AutoStartIntakeCommand());
+
+        // Move
+        addCommands(new AutoDriveCommand(2000));
         addCommands(new AutoStopShootCommand());
         addCommands(new WaitCommand(1));
 
+        // Taxi shot
         addCommands(new ParallelDeadlineGroup(
-            new WaitCommand(3),
-            new ShootTaxiLineCommand(),
-            new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())
-        ));
-        addCommands(new AutoStopShootCommand());
+                new WaitCommand(3),
+                new ShootTaxiLineCommand(),
+                new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
 
-        addRequirements(ShooterSubsystem.getInstance(), FalconTrajectoryDriveSubsystem.getInstance(), IntakeRollerSubsystem.getInstance(),  FeederSubsystem.getInstance(), IntakeArmSubsystem.getInstance());
+        // Cleanup
+        addCommands(new AutoStopShootCommand());
+        addCommands(new IntakeStowCommand());
+
+        addRequirements(ShooterSubsystem.getInstance(), FalconTrajectoryDriveSubsystem.getInstance(),
+                IntakeRollerSubsystem.getInstance(), FeederSubsystem.getInstance(), IntakeArmSubsystem.getInstance());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        ShooterSubsystem.getInstance().stop();
+        IntakeRollerSubsystem.getInstance().stop();
+        FeederSubsystem.getInstance().stop();
     }
 }
