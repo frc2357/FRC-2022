@@ -21,7 +21,7 @@ public class twoBallAutoCommand extends SequentialCommandGroup{
         addCommands(new AutoStopShootCommand());
         addCommands(new ParallelCommandGroup(
                 new IntakeDeployCommand(false),
-                new AutoDriveCommand(2000)));
+                new AutoDriveCommand(2500)));
         addCommands(new AutoStopShootCommand());
         addCommands(new WaitCommand(1));
 
