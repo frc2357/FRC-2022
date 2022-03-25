@@ -6,7 +6,6 @@ import com.team2357.frc2022.commands.shooter.ShooterWaitForRPMsCommand;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
-import com.team2357.lib.commands.CommandLoggerBase;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
