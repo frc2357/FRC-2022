@@ -232,7 +232,7 @@ public final class Constants {
             //config.m_topTaxiLineRPM = 3500;
 
             // Taxi Line Shot (ty = 3.69)
-            config.m_bottomTaxiLineRPM = 3000;
+            config.m_bottomTaxiLineRPM = 3150;
             config.m_topTaxiLineRPM = 7500;
 
             // Mid Shot (ty = -11.06)
