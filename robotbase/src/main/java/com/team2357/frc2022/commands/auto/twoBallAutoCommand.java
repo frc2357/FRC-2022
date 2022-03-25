@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class TwoBallAutoCommand extends SequentialCommandGroup{
-    public TwoBallAutoCommand() {
+public class twoBallAutoCommand extends SequentialCommandGroup{
+     
+    public twoBallAutoCommand() {
         addCommands(new AutoStartShotCommand());
         addCommands(new AutoStopShootCommand());
         addCommands(new ParallelCommandGroup(

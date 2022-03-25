@@ -1,7 +1,7 @@
 package com.team2357.frc2022.shuffleboard;
 
-import com.team2357.frc2022.commands.auto.OneBallAutoCommand;
-import com.team2357.frc2022.commands.auto.TwoBallAutoCommand;
+import com.team2357.frc2022.commands.auto.oneBallAutoCommand;
+import com.team2357.frc2022.commands.auto.twoBallAutoCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,10 +44,10 @@ public class AutoModeCommandChooser {
             switch (m_chooser.getSelected()) {
                 case ONE_BALL:
                     System.out.println("ONE BALL");
-                    return new OneBallAutoCommand();
+                    return new oneBallAutoCommand();
                 case TWO_BALL:
                     System.out.println("TWO BALL");
-                    return new TwoBallAutoCommand();
+                    return new twoBallAutoCommand();
                 case THREE_BALL:
                 case NONE:
                 default:
