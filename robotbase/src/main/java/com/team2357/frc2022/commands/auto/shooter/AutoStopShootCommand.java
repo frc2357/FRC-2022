@@ -1,4 +1,4 @@
-package com.team2357.frc2022.commands.auto;
+package com.team2357.frc2022.commands.auto.shooter;
 
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;

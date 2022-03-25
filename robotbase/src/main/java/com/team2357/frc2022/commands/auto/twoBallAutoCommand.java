@@ -1,5 +1,8 @@
 package com.team2357.frc2022.commands.auto;
 
+import com.team2357.frc2022.commands.auto.shooter.AutoStartPosShotCommand;
+import com.team2357.frc2022.commands.auto.shooter.AutoStopShootCommand;
+import com.team2357.frc2022.commands.auto.shooter.TaxiStartShotCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.frc2022.commands.intake.IntakeStowCommand;
@@ -20,26 +23,50 @@ public class twoBallAutoCommand extends SequentialCommandGroup {
 
     public twoBallAutoCommand() {
 
-        // Shoot at starting configuration
-        addCommands(new ParallelDeadlineGroup(
-                new WaitCommand(3),
-                new ShootAutoStartCommand(),
-                new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
+
+        //First ball
+        addCommands(new AutoStartPosShotCommand());
+        addCommands(new WaitCommand(2));
+        addCommands(new FeederShootCommand());
+        addCommands(new WaitCommand(1));
         addCommands(new AutoStopShootCommand());
 
         // Start intake
         addCommands(new AutoStartIntakeCommand());
 
         // Move
-        addCommands(new AutoDriveCommand(2000));
+        addCommands(new AutoDriveCommand(2500));
         addCommands(new AutoStopShootCommand());
         addCommands(new WaitCommand(1));
 
-        // Taxi shot
-        addCommands(new ParallelDeadlineGroup(
-                new WaitCommand(3),
-                new ShootTaxiLineCommand(),
-                new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
+        // Second ball
+        addCommands(new TaxiStartShotCommand());
+        addCommands(new WaitCommand(2));
+        addCommands(new FeederShootCommand());
+        addCommands(new WaitCommand(1));
+        addCommands(new AutoStopShootCommand());
+
+
+        // Shoot at starting configuration
+        // addCommands(new ParallelDeadlineGroup(
+        //         new WaitCommand(3),
+        //         new ShootAutoStartCommand(),
+        //         new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
+        // addCommands(new AutoStopShootCommand());
+
+        // Start intake
+        // addCommands(new AutoStartIntakeCommand());
+
+        // // Move
+        // addCommands(new AutoDriveCommand(2500));
+        // addCommands(new AutoStopShootCommand());
+        // addCommands(new WaitCommand(1));
+
+        // // Taxi shot
+        // addCommands(new ParallelDeadlineGroup(
+        //         new WaitCommand(3),
+        //         new ShootTaxiLineCommand(),
+        //         new SequentialCommandGroup(new WaitCommand(2), new FeederShootCommand())));
 
         // Cleanup
         addCommands(new AutoStopShootCommand());
