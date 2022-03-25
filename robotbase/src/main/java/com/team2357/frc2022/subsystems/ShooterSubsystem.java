@@ -22,9 +22,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
             { 22.2,   2500, 3000  },    // Close shot (iffy)
-            { 15.5,   2500, 3500  },    // Not as close shot
-            { 3.69,   3000, 7500  },    // Taxi line shot
-            { -11.06, 3750, 8300  },    // Mid shot
+            { 15.5,   2250, 3500  },    // Not as close shot
+            { 3.69,   2700, 7500  },    // Taxi line shot
+            { -11.06, 3650, 8300  },    // Mid shot
             { -17.31, 4400, 11800 },    // Farthest (touching ceiling in shop)
     };
 

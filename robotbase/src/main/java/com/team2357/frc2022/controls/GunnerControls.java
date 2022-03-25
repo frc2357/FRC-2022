@@ -3,6 +3,7 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireVisionCommand;
+import com.team2357.frc2022.commands.SensorClearCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.human.FireLowHubCommandGroup;
@@ -21,6 +22,7 @@ import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.frc2022.commands.shooter.ShooterSetRPMsCommand;
 import com.team2357.frc2022.commands.shooter.ShooterWaitForRPMsCommand;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -28,6 +30,7 @@ import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -163,6 +166,7 @@ public class GunnerControls {
         m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
         m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
 
+        downDPadOnly.whileActiveOnce(new SensorClearCommand());
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());
 

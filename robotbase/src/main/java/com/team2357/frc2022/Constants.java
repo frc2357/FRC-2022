@@ -243,7 +243,7 @@ public final class Constants {
             //config.m_bottomTaxiLineRPM = 4400;
             //config.m_topTaxiLineRPM = 11800;
 
-            config.m_targetRPMTriggerPercent = 0.03;
+            config.m_targetRPMTriggerPercent = 0.04;
             config.m_PIDSlot = 0;
 
             // Bottom
