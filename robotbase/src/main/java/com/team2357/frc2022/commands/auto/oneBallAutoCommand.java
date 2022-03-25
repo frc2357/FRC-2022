@@ -1,5 +1,6 @@
 package com.team2357.frc2022.commands.auto;
 
+import com.team2357.frc2022.commands.auto.shooter.AutoStopShootCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
 import com.team2357.frc2022.commands.intake.IntakeStowCommand;

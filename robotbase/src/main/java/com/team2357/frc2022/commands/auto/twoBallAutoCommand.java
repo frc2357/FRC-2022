@@ -27,9 +27,10 @@ public class twoBallAutoCommand extends SequentialCommandGroup {
         //First ball
         addCommands(new AutoStartPosShotCommand());
         addCommands(new WaitCommand(2));
-        addCommands(new FeederShootCommand());
+        addCommands(new AutoFeederStartCommand());
         addCommands(new WaitCommand(1));
         addCommands(new AutoStopShootCommand());
+        addCommands(new AutoFeederStopCommand());
 
         // Start intake
         addCommands(new AutoStartIntakeCommand());
@@ -42,9 +43,15 @@ public class twoBallAutoCommand extends SequentialCommandGroup {
         // Second ball
         addCommands(new TaxiStartShotCommand());
         addCommands(new WaitCommand(2));
-        addCommands(new FeederShootCommand());
+        addCommands(new AutoFeederStartCommand());
         addCommands(new WaitCommand(1));
+
+        // Cleanup
         addCommands(new AutoStopShootCommand());
+        addCommands(new AutoFeederStopCommand());
+        addCommands(new AutoStopIntake());
+
+
 
 
         // Shoot at starting configuration

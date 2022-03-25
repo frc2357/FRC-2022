@@ -15,6 +15,6 @@ public class TaxiStartShotCommand extends CommandLoggerBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

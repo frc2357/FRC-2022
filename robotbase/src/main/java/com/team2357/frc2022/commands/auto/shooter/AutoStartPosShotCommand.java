@@ -16,6 +16,6 @@ public class AutoStartPosShotCommand extends CommandLoggerBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 }

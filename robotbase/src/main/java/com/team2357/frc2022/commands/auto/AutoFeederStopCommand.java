@@ -4,13 +4,13 @@ import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class AutoFeederStopCommand extends CommandLoggerBase{
-    public AutoFeederStartCommand() {
+    public AutoFeederStopCommand() {
         addRequirements(FeederSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        FeederSubsystem.getInstance().shoot();
+        FeederSubsystem.getInstance().stop();
     }
 
     @Override
