@@ -3,6 +3,7 @@ package com.team2357.frc2022.controls;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
 import com.team2357.frc2022.commands.human.FireVisionCommand;
+import com.team2357.frc2022.commands.human.LockAndPrimeCommandGroup;
 import com.team2357.frc2022.commands.SensorClearCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
@@ -79,7 +80,7 @@ public class GunnerControls {
 
         // Triggers
         m_primeRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
-        m_feedShooterRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .9);
+        m_feedShooterRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .6);
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
@@ -150,6 +151,7 @@ public class GunnerControls {
         m_leftStickButton.whenActive(new TurretResetCommand());
 
         aButton.whileActiveOnce(new IntakeDeployCommand());
+        //bButton.toggleWhenActive(new LockAndPrimeCommandGroup());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
         //xButton.whileActiveOnce(new ShooterSetRPMsCommand(3100, 10275));

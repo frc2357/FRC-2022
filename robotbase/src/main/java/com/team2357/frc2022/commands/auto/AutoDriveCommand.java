@@ -7,17 +7,19 @@ public class AutoDriveCommand extends CommandLoggerBase {
     double m_timeMillis;
     double m_timeTotal;
     double m_turn;
+    double m_speed;
 
-    public AutoDriveCommand (double timeMillis, double turn) {
+    public AutoDriveCommand (double timeMillis, double speed, double turn) {
 
         addRequirements(FalconTrajectoryDriveSubsystem.getInstance());
         m_timeMillis = timeMillis;
         m_turn = turn;
+        m_speed = speed;
     }
 
     @Override
     public void initialize() {
-        FalconTrajectoryDriveSubsystem.getInstance().driveVelocity(0.1, m_turn);
+        FalconTrajectoryDriveSubsystem.getInstance().driveVelocity(m_speed, m_turn);
         m_timeTotal = System.currentTimeMillis() + m_timeMillis;
     }
 

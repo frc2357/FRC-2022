@@ -23,8 +23,8 @@ public class FireVisionCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        LimelightSubsystem.getInstance().setTargetingPipelineActive();
-        m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
+            LimelightSubsystem.getInstance().setTargetingPipelineActive();
+            m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
     }
 
     @Override
@@ -36,6 +36,7 @@ public class FireVisionCommand extends CommandLoggerBase {
                 ShooterSubsystem.getInstance().startVisionShooting();
             }
         }
+        System.err.println("RSHOOTING");
     }
 
     @Override

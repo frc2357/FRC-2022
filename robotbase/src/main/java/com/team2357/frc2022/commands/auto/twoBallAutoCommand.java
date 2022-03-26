@@ -1,5 +1,6 @@
 package com.team2357.frc2022.commands.auto;
 
+import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.auto.shooter.AutoStartPosShotCommand;
 import com.team2357.frc2022.commands.auto.shooter.AutoStopShootCommand;
 import com.team2357.frc2022.commands.auto.shooter.TaxiStartShotCommand;
@@ -29,7 +30,7 @@ public class twoBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoStartIntakeCommand());
 
         // Move
-        addCommands(new AutoDriveCommand(2500, 0.0));
+        addCommands(new AutoDriveCommand(2500, Constants.DRIVE.AUTO_SPEED, 0.0));
         addCommands(new AutoStopShootCommand());
         addCommands(new WaitCommand(1));
 

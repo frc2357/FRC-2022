@@ -22,8 +22,8 @@ public class TargetLockCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        LimelightSubsystem.getInstance().setTargetingPipelineActive();
-        m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
+            LimelightSubsystem.getInstance().setTargetingPipelineActive();
+            m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
     }
 
     @Override
