@@ -13,9 +13,9 @@ import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class twoBallAutoCommand extends SequentialCommandGroup {
+public class TwoBallAutoCommand extends SequentialCommandGroup {
 
-    public twoBallAutoCommand() {
+    public TwoBallAutoCommand() {
 
 
         //First ball
