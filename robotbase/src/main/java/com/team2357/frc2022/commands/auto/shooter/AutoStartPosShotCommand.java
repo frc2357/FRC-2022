@@ -10,8 +10,7 @@ public class AutoStartPosShotCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        ShooterSubsystem.getInstance().setRPMBottom(3000);
-        ShooterSubsystem.getInstance().setRPMTop(3000);
+        ShooterSubsystem.getInstance().shootAutoStartPos();
     }
 
     @Override

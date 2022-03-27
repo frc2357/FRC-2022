@@ -50,6 +50,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_bottomLowHubRPM = 0;
         public double m_topLowHubRPM = 0;
 
+        public double m_bottomAutoStartRPM = 0;
+        public double m_topAutoStartRPM = 0;
+
         public double m_bottomTaxiLineRPM = 0;
         public double m_topTaxiLineRPM = 0;
 
@@ -174,6 +177,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void shootTaxiLine() {
         setRPMBottom(m_config.m_bottomTaxiLineRPM);
         setRPMTop(m_config.m_topTaxiLineRPM);
+    }
+
+    public void shootAutoStartPos() {
+        setRPMBottom(m_config.m_bottomAutoStartRPM);
+        setRPMTop(m_config.m_topAutoStartRPM);
     }
 
     public void shootLowHub() {

@@ -220,6 +220,8 @@ public final class Constants {
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
+            config.m_bottomAutoStartRPM = 3000;
+            config.m_topAutoStartRPM = 3000;
 
             // RPM Ranges
             // Bottom: 1000 - 8500

@@ -43,7 +43,7 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
         // Cleanup
         addCommands(new AutoStopShootCommand());
         addCommands(new AutoFeederStopCommand());
-        addCommands(new AutoStopIntake());
+        addCommands(new AutoStopIntakeCommand());
 
         addRequirements(ShooterSubsystem.getInstance(), FalconTrajectoryDriveSubsystem.getInstance(),
                 IntakeRollerSubsystem.getInstance(), FeederSubsystem.getInstance(), IntakeArmSubsystem.getInstance());

@@ -4,8 +4,8 @@ import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class AutoStopIntake extends CommandLoggerBase{
-    public AutoStopIntake() {
+public class AutoStopIntakeCommand extends CommandLoggerBase{
+    public AutoStopIntakeCommand() {
         addRequirements(IntakeRollerSubsystem.getInstance(), IntakeArmSubsystem.getInstance());
     }
 
