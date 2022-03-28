@@ -3,7 +3,7 @@ package com.team2357.frc2022.util;
 import java.util.List;
 
 import com.team2357.frc2022.Constants;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -26,7 +26,7 @@ public class TrajectoryUtil {
                         .setReversed(isReversed);
     }
 
-    public static SequentialCommandGroup createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem driveSub,
+    public static SequentialCommandGroup createTrajectoryPathCommand(FalconDriveSubsystem driveSub,
             List<Pose2d> waypoints, boolean reversed, boolean resetOdometry) {
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints,
@@ -35,7 +35,7 @@ public class TrajectoryUtil {
     }
 
 
-    public static SequentialCommandGroup createTrajectoryPathCommand(FalconTrajectoryDriveSubsystem driveSub,
+    public static SequentialCommandGroup createTrajectoryPathCommand(FalconDriveSubsystem driveSub,
             Pose2d start, List<Translation2d> middle, Pose2d end, boolean reversed, boolean resetOdometry) {
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(start, middle, end,
@@ -43,7 +43,7 @@ public class TrajectoryUtil {
         return createDrivePathCommand(driveSub, trajectory, resetOdometry);
     }
 
-    public static SequentialCommandGroup createDrivePathCommand(FalconTrajectoryDriveSubsystem driveSub,
+    public static SequentialCommandGroup createDrivePathCommand(FalconDriveSubsystem driveSub,
             Trajectory trajectory, boolean resetOdometry) {
         SequentialCommandGroup pathCommand = new SequentialCommandGroup();
 
@@ -62,7 +62,7 @@ public class TrajectoryUtil {
         return pathCommand;
     }
 
-    public static RamseteCommand createRamseteCommand(FalconTrajectoryDriveSubsystem driveSub, Trajectory trajectory) {
+    public static RamseteCommand createRamseteCommand(FalconDriveSubsystem driveSub, Trajectory trajectory) {
         return new RamseteCommand(trajectory,
                 driveSub::getPose,
                 Constants.DRIVE.TRAJECTORY_RAMSETE_CONTROLLER,

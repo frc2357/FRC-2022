@@ -7,7 +7,7 @@ package com.team2357.frc2022.commands;
 import java.util.ArrayList;
 
 import com.team2357.frc2022.util.Utility;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,7 +36,7 @@ public class RecordPathCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    FalconTrajectoryDriveSubsystem drive = FalconTrajectoryDriveSubsystem.getInstance();
+    FalconDriveSubsystem drive = FalconDriveSubsystem.getInstance();
 
     if (m_shouldResetOdometry) {
       drive.zeroHeading();
@@ -51,7 +51,7 @@ public class RecordPathCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    FalconTrajectoryDriveSubsystem drive = FalconTrajectoryDriveSubsystem.getInstance();
+    FalconDriveSubsystem drive = FalconDriveSubsystem.getInstance();
 
     final double currentTime = Timer.getFPGATimestamp();
     if (currentTime < m_timestamp + TIME_STEP) {
@@ -68,7 +68,7 @@ public class RecordPathCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_path.add(FalconTrajectoryDriveSubsystem.getInstance().getPose());
+    m_path.add(FalconDriveSubsystem.getInstance().getPose());
     String lines = "";
     lines += "List.of(";
     for (Pose2d t : m_path) {

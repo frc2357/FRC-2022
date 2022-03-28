@@ -16,7 +16,7 @@ import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveVelocityCommand;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -60,7 +60,7 @@ public class RobotContainer {
 
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
-    FalconTrajectoryDriveSubsystem driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
+    FalconDriveSubsystem driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
     subsystemFactory.CreatePDHSubsystem();
     subsystemFactory.CreateShooterSubsystem();
