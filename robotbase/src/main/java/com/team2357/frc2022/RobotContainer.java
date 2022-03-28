@@ -62,6 +62,7 @@ public class RobotContainer {
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     FalconTrajectoryDriveSubsystem driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
+    subsystemFactory.CreatePDHSubsystem();
     subsystemFactory.CreateShooterSubsystem();
     subsystemFactory.createIntakeArmSubsystem();
     subsystemFactory.CreateIntakeRollerSubsystem();
