@@ -92,6 +92,8 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
+        public static final double AUTO_SPEED = 0.1;
+
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
         public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.25;
         public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
@@ -218,6 +220,8 @@ public final class Constants {
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
+            config.m_bottomAutoStartRPM = 3000;
+            config.m_topAutoStartRPM = 3000;
 
             // RPM Ranges
             // Bottom: 1000 - 8500
@@ -232,7 +236,7 @@ public final class Constants {
             //config.m_topTaxiLineRPM = 3500;
 
             // Taxi Line Shot (ty = 3.69)
-            config.m_bottomTaxiLineRPM = 3000;
+            config.m_bottomTaxiLineRPM = 3150;
             config.m_topTaxiLineRPM = 7500;
 
             // Mid Shot (ty = -11.06)
@@ -243,7 +247,7 @@ public final class Constants {
             //config.m_bottomTaxiLineRPM = 4400;
             //config.m_topTaxiLineRPM = 11800;
 
-            config.m_targetRPMTriggerPercent = 0.03;
+            config.m_targetRPMTriggerPercent = 0.04;
             config.m_PIDSlot = 0;
 
             // Bottom
@@ -339,8 +343,8 @@ public final class Constants {
             config.m_climberAxisMaxSpeed = 1.0;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
-            config.m_climberMotorStallLimitAmps = 40;
-            config.m_climberMotorFreeLimitAmps = 50;
+            config.m_climberMotorStallLimitAmps = 30;
+            config.m_climberMotorFreeLimitAmps = 30;
             config.m_isRightSideInverted = false;
             config.m_climberGrippedAmps = 20;
 
