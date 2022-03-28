@@ -97,7 +97,7 @@ public final class Constants {
     // Encoder Constants
     public final static class DRIVE {
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
-        public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.1;
+        public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.25;
         public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
 
         public static final int ENCODER_PPR = 256;

@@ -13,12 +13,21 @@ import com.team2357.lib.subsystems.PDHSubsystem;
  * @category Intake
  */
 public class IntakeDeployCommand extends CommandLoggerBase {
+    private boolean m_fillRobot;
+    private boolean m_hasACargo;
+
     public IntakeDeployCommand() {
+        this(true);
+    }
+
+    public IntakeDeployCommand(boolean fillRobot) {
+        m_fillRobot = fillRobot;
+
         addRequirements(IntakeArmSubsystem.getInstance());
         addRequirements(IntakeRollerSubsystem.getInstance());
     }
 
-    @Override 
+    @Override
     public void initialize() {
         IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
         IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
@@ -27,17 +36,27 @@ public class IntakeDeployCommand extends CommandLoggerBase {
         intakeRoller.collect();
 
         PDHSubsystem.getInstance().setSwitchableChannel(true);
+        m_hasACargo = SensorSubsystem.getInstance().isCargoInFeeder();
     }
 
     @Override
     public boolean isFinished() {
         SensorSubsystem sensors = SensorSubsystem.getInstance();
-        return sensors.isCargoInFeeder() && sensors.isCargoInIndex();
-    } 
+
+        if (m_fillRobot) {
+            return sensors.isRobotFilled();
+        } else {
+            if (m_hasACargo) {
+                return sensors.isRobotFilled();
+            } else {
+                return SensorSubsystem.getInstance().isCargoInFeeder();
+            }
+        }
+    }
 
     @Override
     public void end(boolean interrupted) {
-        if (isFinished()) {
+        if (SensorSubsystem.getInstance().isRobotFilled()) {
             new FeederPackCommand().schedule();
         }
 
