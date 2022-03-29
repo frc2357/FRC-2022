@@ -94,7 +94,7 @@ public class RobotContainer {
     // Build trajectories
     AvailableTrajectories.generateTrajectories();
 
-    // SmartDashboard.putData("Record Path", new RecordPathCommand());
+     SmartDashboard.putData("Record Path", new RecordPathCommand());
     // SmartDashboard.putData("Record Keep Odometry Path", new RecordPathCommand(true));
   }
 
@@ -111,6 +111,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autoCommandChooser.generateCommand();
+    int auto = 2;
+
+    switch(auto){
+      case 1: 
+        return AvailableTrajectories.exampleTrajectory;
+      case 2:
+        return AvailableTrajectories.exampleRecordPathTrajectory;
+      default:
+      return m_autoCommandChooser.generateCommand();
+    }
   }
 }

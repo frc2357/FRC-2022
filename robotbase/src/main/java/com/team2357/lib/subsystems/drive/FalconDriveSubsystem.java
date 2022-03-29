@@ -124,6 +124,8 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
         m_gyro = gyro;
         m_gyro.configFactoryDefault();
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+        zeroHeading();
+        resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
     }
 
     @Override
@@ -131,12 +133,11 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(),
                 getRightDistance());
-                System.out.print("Left encoder clicks: " + m_leftFalconMaster.getSelectedSensorPosition());
-                System.out.println(" Right encoder clicks: " + m_rightFalconMaster.getSelectedSensorPosition());        
-        // System.out.print("Left encoder distance: " + getLeftDistance());
-        // System.out.println(" Right encoder distance: " +
-        // getRightDistance());
-        // //System.out.println(getHeading());
+                // System.out.print("Left encoder clicks: " + m_leftFalconMaster.getSelectedSensorPosition());
+                // System.out.println(" Right encoder clicks: " + m_rightFalconMaster.getSelectedSensorPosition());        
+        //System.out.print("Left encoder distance: " + getLeftDistance());
+        //System.out.println(" Right encoder distance: " + getRightDistance());
+        //System.out.println(getHeading());
         //System.out.println("Pose: " + getPose().toString());
         }
 
@@ -169,19 +170,25 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
     private void configureFalcons() {
         m_leftFalconMaster.configSupplyCurrentLimit(m_config.currentConfig);
+        m_leftFalconMaster.setInverted(m_config.m_isLeftInverted);
         m_rightFalconMaster.configSupplyCurrentLimit(m_config.currentConfig);
+        m_rightFalconMaster.setInverted(m_config.m_isRightInverted);
 
         for (WPI_TalonFX slave : m_leftFalconSlaves) {
             slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
+            slave.follow(m_leftFalconMaster, FollowerType.PercentOutput);
             slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
             slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
             slave.configSupplyCurrentLimit(m_config.currentConfig);
+            slave.setInverted(m_config.m_isLeftInverted);
         }
         for (WPI_TalonFX slave : m_rightFalconSlaves) {
             slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
+            slave.follow(m_rightFalconMaster, FollowerType.PercentOutput);
             slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
             slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
             slave.configSupplyCurrentLimit(m_config.currentConfig);
+            slave.setInverted(m_config.m_isRightInverted);
         }
     }
 
@@ -233,7 +240,7 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
     protected void setVelocity(double leftSensorUnitsPer100Ms, double rightSensorUnitsPer100Ms) {
         m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
-        m_rightFalconMaster.set(TalonFXControlMode.Velocity, -rightSensorUnitsPer100Ms);
+        m_rightFalconMaster.set(TalonFXControlMode.Velocity, rightSensorUnitsPer100Ms);
     }
 
     public final void driveProportional(double speedProportion, double turnProportion) {

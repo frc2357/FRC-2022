@@ -31,16 +31,60 @@ public class AvailableTrajectories {
     }
 
     private static SequentialCommandGroup createExampleRecordPathTrajectory() {
-        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), List.of(
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(),List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+        new Pose2d(0.012195453405645025, -1.8901838807378317E-6, Rotation2d.fromDegrees(0.0)),
+        new Pose2d(0.173697545532843, -2.0990006162902373E-5, Rotation2d.fromDegrees(0.0)),
+        new Pose2d(0.5976884276133373, -0.06595781469014239, Rotation2d.fromDegrees(-30.849609375)),
+        new Pose2d(0.9299569878347765, -0.3704943275575454, Rotation2d.fromDegrees(-44.208984375)),
+        new Pose2d(1.3588293482304472, -0.7731543346116618, Rotation2d.fromDegrees(-31.025390625)),
+        new Pose2d(1.7672559181468923, -0.5581337045202731, Rotation2d.fromDegrees(81.12304687500001)),
+        new Pose2d(1.8516981992006087, 0.04452195822728959, Rotation2d.fromDegrees(81.9580078125)),
+        new Pose2d(1.9765518341234347, 0.6303516511838099, Rotation2d.fromDegrees(62.8857421875)),
+        new Pose2d(2.4403234462286174, 0.8288020947695366, Rotation2d.fromDegrees(-27.158203125000004)),
+        new Pose2d(2.919374962567724, 0.4728429080958283, Rotation2d.fromDegrees(-36.1669921875)),
+        new Pose2d(3.431510890857734, 0.2802894687801234, Rotation2d.fromDegrees(-0.9667968750000001)),
+        new Pose2d(3.451430118783809, 0.2801714314001176, Rotation2d.fromDegrees(0.0))),
+                   false, true);
+    }
+/**
+ * List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+new Pose2d(0.012195453405645025, -1.8901838807378317E-6, Rotation2d.fromDegrees(0.0)),
+new Pose2d(0.173697545532843, -2.0990006162902373E-5, Rotation2d.fromDegrees(0.0)),
+new Pose2d(0.5976884276133373, -0.06595781469014239, Rotation2d.fromDegrees(-30.849609375)),
+new Pose2d(0.9299569878347765, -0.3704943275575454, Rotation2d.fromDegrees(-44.208984375)),
+new Pose2d(1.3588293482304472, -0.7731543346116618, Rotation2d.fromDegrees(-31.025390625)),
+new Pose2d(1.7672559181468923, -0.5581337045202731, Rotation2d.fromDegrees(81.12304687500001)),
+new Pose2d(1.8516981992006087, 0.04452195822728959, Rotation2d.fromDegrees(81.9580078125)),
+new Pose2d(1.9765518341234347, 0.6303516511838099, Rotation2d.fromDegrees(62.8857421875)),
+new Pose2d(2.4403234462286174, 0.8288020947695366, Rotation2d.fromDegrees(-27.158203125000004)),
+new Pose2d(2.919374962567724, 0.4728429080958283, Rotation2d.fromDegrees(-36.1669921875)),
+new Pose2d(3.431510890857734, 0.2802894687801234, Rotation2d.fromDegrees(-0.9667968750000001)),
+new Pose2d(3.451430118783809, 0.2801714314001176, Rotation2d.fromDegrees(0.0))),
+ */
+    /**
+     * List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+new Pose2d(0.004063463641163216, 0.024533975318402963, Rotation2d.fromDegrees(80.595703125)),
+new Pose2d(0.04287061095982764, 0.2590978690223007, Rotation2d.fromDegrees(80.15625000000001)),
+new Pose2d(0.20969684536835315, 0.515388460581951, Rotation2d.fromDegrees(27.55371093750001)),
+new Pose2d(0.5613972977805828, 0.6986943684283483, Rotation2d.fromDegrees(27.246093750000007)),
+new Pose2d(0.9919684974162437, 1.0059468966705691, Rotation2d.fromDegrees(62.8857421875)),
+new Pose2d(0.7274470585650253, 1.4033742063733234, Rotation2d.fromDegrees(145.6787109375)),
+new Pose2d(0.13358964613420066, 1.8047941077896044, Rotation2d.fromDegrees(144.4482421875)),
+new Pose2d(-0.23374483040675678, 2.3415553463235357, Rotation2d.fromDegrees(94.83398437500001)),
+new Pose2d(-0.10053744639511768, 2.916711682050459, Rotation2d.fromDegrees(75.0146484375)),
+     */
+
+
+     /**
+      * new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             new Pose2d(0.005138387418834883, 2.2083707112308348E-4, Rotation2d.fromDegrees(2.4609375000000004)),
             new Pose2d(0.15288722766480822, 0.0069894771330836535, Rotation2d.fromDegrees(2.7685546875000004)),
             new Pose2d(0.507776523613686, 0.027627015045378393, Rotation2d.fromDegrees(4.21875)),
             new Pose2d(0.8999156245081863, 0.0654740166046273, Rotation2d.fromDegrees(6.723632812500001)),
             new Pose2d(1.2990866064155986, 0.12095506925746803, Rotation2d.fromDegrees(9.052734375000002)),
             new Pose2d(1.5115189031964178, 0.15741951993424935, Rotation2d.fromDegrees(90.107421875))),
-            false, true);
-    }
+            
+      */
 
     /**
      * new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
