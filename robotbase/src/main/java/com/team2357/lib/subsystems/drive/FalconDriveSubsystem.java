@@ -92,7 +92,7 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
          * Current config to handle drive motors
          * Current values a good baseline to use for a six-falcon drivebase
          */
-        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration(true, 25, 30, 0);
+        public SupplyCurrentLimitConfiguration m_currentConfig = new SupplyCurrentLimitConfiguration(true, 0, 0, 0);
 
         public double m_openLoopRampRateSeconds = 0;
         public double m_closedLoopRampRateSeconds = 0;
@@ -158,8 +158,6 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
         configureFalcons();
 
-        setCoast();
-
         m_isGyroReversed = m_config.m_isGyroReversed;
         m_leftEncoder.setReverseDirection(m_config.m_isLeftInverted);
         m_rightEncoder.setReverseDirection(m_config.m_isRightInverted);
@@ -183,20 +181,20 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
     }
 
     private void configureFalcons() {
-        m_leftFalconMaster.configSupplyCurrentLimit(m_config.currentConfig);
-        m_rightFalconMaster.configSupplyCurrentLimit(m_config.currentConfig);
+        m_leftFalconMaster.configSupplyCurrentLimit(m_config.m_currentConfig);
+        m_rightFalconMaster.configSupplyCurrentLimit(m_config.m_currentConfig);
 
         for (WPI_TalonFX slave : m_leftFalconSlaves) {
             slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
             slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
             slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
-            slave.configSupplyCurrentLimit(m_config.currentConfig);
+            slave.configSupplyCurrentLimit(m_config.m_currentConfig);
         }
         for (WPI_TalonFX slave : m_rightFalconSlaves) {
             slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
             slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
             slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
-            slave.configSupplyCurrentLimit(m_config.currentConfig);
+            slave.configSupplyCurrentLimit(m_config.m_currentConfig);
         }
     }
 

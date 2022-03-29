@@ -9,6 +9,8 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
@@ -194,6 +196,8 @@ public final class Constants {
             config.m_peakOutput = 1;
 
             config.m_timeoutMs = 0;
+
+            config.m_currentConfig = new SupplyCurrentLimitConfiguration(true, 25, 30, 0);
 
             config.m_openLoopRampRateSeconds = 0.25;
             config.m_closedLoopRampRateSeconds = 0.1;    
