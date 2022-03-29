@@ -12,14 +12,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class AvailableTrajectories {
     public static SequentialCommandGroup exampleTrajectory = null;
     public static SequentialCommandGroup exampleRecordPathTrajectory = null;
-    public static SequentialCommandGroup leaveTarmacTrajectory = null;
-    public static SequentialCommandGroup travelToThirdCargoTrajectory = null;
 
     public static void generateTrajectories() {
         exampleTrajectory = createExampleTrajectory();
         exampleRecordPathTrajectory = createExampleRecordPathTrajectory();
-        leaveTarmacTrajectory = createLeaveTarmacTrajectory();
-        travelToThirdCargoTrajectory = createTravelToThirdCargoTrajectory();
     }
 
     private static SequentialCommandGroup createExampleTrajectory() {
@@ -47,15 +43,5 @@ public class AvailableTrajectories {
         new Pose2d(3.431510890857734, 0.2802894687801234, Rotation2d.fromDegrees(-0.9667968750000001)),
         new Pose2d(3.451430118783809, 0.2801714314001176, Rotation2d.fromDegrees(0.0))),
                    false, true);
-    }
-
-    private static SequentialCommandGroup createLeaveTarmacTrajectory() {
-        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), 
-        List.of(new Pose2d(0,0,Rotation2d.fromDegrees(0))), false, true);
-    }
-
-    private static SequentialCommandGroup createTravelToThirdCargoTrajectory() {
-        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), 
-        List.of(new Pose2d(0,0,Rotation2d.fromDegrees(0))), false, true);
     }
 }
