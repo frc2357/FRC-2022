@@ -19,7 +19,6 @@ public class RecordPathCommand extends CommandBase {
   private static final double TIME_STEP = 1.0;
 
   private final Boolean m_shouldResetOdometry;
-  private double m_startAngle;
   private double m_timestamp;
   private ArrayList<Pose2d> m_path;
 
