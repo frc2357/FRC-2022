@@ -1,23 +1,24 @@
 package com.team2357.lib.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsystem {
-    private static FalconTrajectoryDriveSubsystem instance = null;
+public class FalconDriveSubsystem extends ClosedLoopSubsystem {
+    private static FalconDriveSubsystem instance = null;
 
-    public static FalconTrajectoryDriveSubsystem getInstance() {
+    public static FalconDriveSubsystem getInstance() {
         return instance;
     }
 
@@ -30,6 +31,12 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     // Odometry class for tracking robot pose
     private final DifferentialDriveOdometry m_odometry;
 
+    private WPI_TalonFX m_leftFalconMaster;
+    private WPI_TalonFX m_rightFalconMaster;
+
+    private WPI_TalonFX[] m_rightFalconSlaves;
+    private WPI_TalonFX[] m_leftFalconSlaves;
+
     // The left-side drive encoder
     private final Encoder m_leftEncoder;
 
@@ -38,7 +45,18 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
 
     private Configuration m_config;
 
-    public static class Configuration extends SkidSteerDriveSubsystem.Configuration {
+    public static class Configuration {
+         /**
+         * Whether or not the left talon group needs to be inverted Value: boolean
+         */
+        public boolean m_isLeftInverted = false;
+
+        /**
+         * Whether or not the right talon group needs to be inverted Value: boolean
+         */
+        public boolean m_isRightInverted = false;
+
+
         /**
          * Whether or not the gyro is reversed Value: boolean
          */
@@ -69,6 +87,15 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         public double m_sensorUnitsMaxVelocity = 0;
 
         public int m_timeoutMs = 0;
+
+        /**
+         * Current config to handle drive motors
+         * Current values a good baseline to use for a six-falcon drivebase
+         */
+        public SupplyCurrentLimitConfiguration m_currentConfig = new SupplyCurrentLimitConfiguration(true, 0, 0, 0);
+
+        public double m_openLoopRampRateSeconds = 0;
+        public double m_closedLoopRampRateSeconds = 0;
     }
 
     /**
@@ -82,11 +109,16 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      * @param gyro
      * @param encoderDistancePerPulse
      */
-    public FalconTrajectoryDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
+    public FalconDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
             WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves, PigeonIMU gyro,
             double encoderDistancePerPulse, int leftEncoderChannelA,
             int leftEncoderChannelB, int rightEncoderChannelA, int rightEncoderChannelB) {
-        super(leftFalconMaster, leftFalconSlaves, rightFalconMaster, rightFalconSlaves);
+
+        m_leftFalconMaster = leftFalconMaster;
+        m_rightFalconMaster = rightFalconMaster;
+        m_leftFalconSlaves = leftFalconSlaves;
+        m_rightFalconSlaves = rightFalconSlaves;
+
         m_distancePerPulse = encoderDistancePerPulse;
 
         instance = this;
@@ -100,19 +132,6 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
         m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
 
-        SupplyCurrentLimitConfiguration currentConfig = new SupplyCurrentLimitConfiguration(true, 25, 30, 0);
-        super.m_leftFalconMaster.configSupplyCurrentLimit(currentConfig);
-        super.m_rightFalconMaster.configSupplyCurrentLimit(currentConfig);
-
-        for (WPI_TalonFX slave : leftFalconSlaves) {
-            slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
-            slave.configSupplyCurrentLimit(currentConfig);
-        }
-        for (WPI_TalonFX slave : rightFalconSlaves) {
-            slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
-            slave.configSupplyCurrentLimit(currentConfig);
-        }
-
         resetEncoders();
         m_gyro = gyro;
         m_gyro.configFactoryDefault();
@@ -124,41 +143,59 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         // Update the odometry in the periodic block
         m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
                 m_rightEncoder.getDistance());
-         //System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
-         //System.out.println(" Right encoder distance: " +
+        // System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
+        // System.out.println(" Right encoder distance: " +
         // m_rightEncoder.getDistance());
         // System.out.println(getHeading());
-        //System.out.println("Pose: " + getPose().toString());
+        // System.out.println("Pose: " + getPose().toString());
         // System.out.println(m_leftControllers.get());
         // System.out.println(m_rightControllers.get());
 
     }
 
     public void configure(Configuration config) {
-        super.configure(config);
-
         m_config = config;
 
+        configureFalcons();
+
         m_isGyroReversed = m_config.m_isGyroReversed;
-        m_leftEncoder.setReverseDirection(!m_config.m_isRightInverted);
+        m_leftEncoder.setReverseDirection(m_config.m_isLeftInverted);
         m_rightEncoder.setReverseDirection(m_config.m_isRightInverted);
 
         // Velocity PID setup
 
         /* Config neutral deadband to be the smallest possible */
-        super.m_leftFalconMaster.configNeutralDeadband(m_config.m_falconOutputDeadband);
+        m_leftFalconMaster.configNeutralDeadband(m_config.m_falconOutputDeadband);
 
-        super.m_rightFalconMaster.configNeutralDeadband(m_config.m_falconOutputDeadband);
+        m_rightFalconMaster.configNeutralDeadband(m_config.m_falconOutputDeadband);
 
         /* Config sensor used for Primary PID [Velocity] */
-        super.m_leftFalconMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+        m_leftFalconMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                 m_config.m_gainsSlot, m_config.m_timeoutMs);
 
-        super.m_rightFalconMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+        m_rightFalconMaster.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
                 m_config.m_gainsSlot, m_config.m_timeoutMs);
 
-        configFalconPID(super.m_leftFalconMaster);
-        configFalconPID(super.m_rightFalconMaster);
+        configFalconPID(m_leftFalconMaster);
+        configFalconPID(m_rightFalconMaster);
+    }
+
+    private void configureFalcons() {
+        m_leftFalconMaster.configSupplyCurrentLimit(m_config.m_currentConfig);
+        m_rightFalconMaster.configSupplyCurrentLimit(m_config.m_currentConfig);
+
+        for (WPI_TalonFX slave : m_leftFalconSlaves) {
+            slave.follow(m_leftFalconMaster, FollowerType.AuxOutput1);
+            slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
+            slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
+            slave.configSupplyCurrentLimit(m_config.m_currentConfig);
+        }
+        for (WPI_TalonFX slave : m_rightFalconSlaves) {
+            slave.follow(m_rightFalconMaster, FollowerType.AuxOutput1);
+            slave.configOpenloopRamp(m_config.m_openLoopRampRateSeconds);
+            slave.configClosedloopRamp(m_config.m_closedLoopRampRateSeconds);
+            slave.configSupplyCurrentLimit(m_config.m_currentConfig);
+        }
     }
 
     private void configFalconPID(WPI_TalonFX falcon) {
@@ -173,7 +210,32 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
         falcon.config_kD(m_config.m_gainsSlot, m_config.m_velD, m_config.m_timeoutMs);
     }
 
-    @Override
+    public void setBrake() {
+        m_leftFalconMaster.setNeutralMode(NeutralMode.Brake);
+        m_rightFalconMaster.setNeutralMode(NeutralMode.Brake);
+
+        for (WPI_TalonFX slave : m_leftFalconSlaves) {
+            slave.setNeutralMode(NeutralMode.Brake);
+        }
+
+        for (WPI_TalonFX slave : m_rightFalconSlaves) {
+            slave.setNeutralMode(NeutralMode.Brake);
+        }
+    }
+
+    public void setCoast() {
+        m_leftFalconMaster.setNeutralMode(NeutralMode.Coast);
+        m_rightFalconMaster.setNeutralMode(NeutralMode.Coast);
+
+        for (WPI_TalonFX slave : m_leftFalconSlaves) {
+            slave.setNeutralMode(NeutralMode.Coast);
+        }
+
+        for (WPI_TalonFX slave : m_rightFalconSlaves) {
+            slave.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
     public void driveVelocity(double speed, double turn) {
         double speedSensorUnits = speed * m_config.m_sensorUnitsMaxVelocity;
         double turnSensorUnits = turn * m_config.m_sensorUnitsMaxVelocity;
@@ -185,6 +247,29 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
     protected void setVelocity(double leftSensorUnitsPer100Ms, double rightSensorUnitsPer100Ms) {
         m_leftFalconMaster.set(TalonFXControlMode.Velocity, leftSensorUnitsPer100Ms);
         m_rightFalconMaster.set(TalonFXControlMode.Velocity, -rightSensorUnitsPer100Ms);
+    }
+
+    public final void driveProportional(double speedProportion, double turnProportion) {
+        double leftProportion = speedProportion - turnProportion;
+        double rightProportion = speedProportion + turnProportion;
+        setProportional(leftProportion, rightProportion);
+    }
+
+    /**
+     * Set the proportional speed of the drive base.
+     * 
+     * @param leftProportion  Speed of left drive (-1.0 to 1.0, negative =
+     *                        backwards)
+     * @param rightProportion Speed of right drive (-1.0 to 1.0, negative =
+     *                        backwards)
+     */
+    public void setProportional(double leftProportion, double rightProportion) {
+        m_leftFalconMaster.set(leftProportion);
+        m_rightFalconMaster.set(rightProportion);
+    }
+
+    public final void stop() {
+        setProportional(0, 0);
     }
 
     /**
@@ -223,8 +308,8 @@ public class FalconTrajectoryDriveSubsystem extends SingleSpeedFalconDriveSubsys
      */
     public void setTankDriveVolts(double leftVolts, double rightVolts) {
         // negative if motors are inverted.
-        super.m_leftControllers.setVoltage(leftVolts);
-        super.m_rightControllers.setVoltage(rightVolts);
+        m_leftFalconMaster.setVoltage(leftVolts);
+        m_rightFalconMaster.setVoltage(rightVolts);
     }
 
     /** Resets the drive encoders to currently read a position of 0. */

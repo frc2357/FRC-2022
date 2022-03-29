@@ -1,7 +1,7 @@
 package com.team2357.frc2022.commands.auto;
 
 import com.team2357.lib.commands.CommandLoggerBase;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 public class AutoDriveCommand extends CommandLoggerBase {
     double m_timeMillis;
@@ -11,7 +11,7 @@ public class AutoDriveCommand extends CommandLoggerBase {
 
     public AutoDriveCommand (double timeMillis, double speed, double turn) {
 
-        addRequirements(FalconTrajectoryDriveSubsystem.getInstance());
+        addRequirements(FalconDriveSubsystem.getInstance());
         m_timeMillis = timeMillis;
         m_turn = turn;
         m_speed = speed;
@@ -19,7 +19,7 @@ public class AutoDriveCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        FalconTrajectoryDriveSubsystem.getInstance().driveVelocity(m_speed, m_turn);
+        FalconDriveSubsystem.getInstance().driveVelocity(m_speed, m_turn);
         m_timeTotal = System.currentTimeMillis() + m_timeMillis;
     }
 
@@ -30,7 +30,7 @@ public class AutoDriveCommand extends CommandLoggerBase {
 
     @Override
     public void end(boolean interrupted) {
-        FalconTrajectoryDriveSubsystem.getInstance().driveVelocity(0.0, 0.0);
+        FalconDriveSubsystem.getInstance().driveVelocity(0.0, 0.0);
     }
 
 

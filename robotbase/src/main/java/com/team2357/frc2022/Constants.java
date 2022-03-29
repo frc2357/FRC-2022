@@ -9,6 +9,8 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
@@ -17,7 +19,7 @@ import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
@@ -99,9 +101,7 @@ public final class Constants {
         public static final double AUTO_SPEED = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
-        public static final double DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS = 0.25;
-        public static final double DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS = 0.1;
-
+     
         public static final int ENCODER_PPR = 256;
 
         public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
@@ -166,8 +166,8 @@ public final class Constants {
                 Constants.DRIVE.DRIVE_KINEMATICS,
                 Constants.DRIVE.MAX_VOLTAGE);
 
-        public static final FalconTrajectoryDriveSubsystem.Configuration GET_FALCON_DRIVE_CONFIG() {
-            FalconTrajectoryDriveSubsystem.Configuration config = new FalconTrajectoryDriveSubsystem.Configuration();
+        public static final FalconDriveSubsystem.Configuration GET_FALCON_DRIVE_CONFIG() {
+            FalconDriveSubsystem.Configuration config = new FalconDriveSubsystem.Configuration();
             config.m_isRightInverted = true;
             config.m_isGyroReversed = true;
 
@@ -196,6 +196,11 @@ public final class Constants {
             config.m_peakOutput = 1;
 
             config.m_timeoutMs = 0;
+
+            config.m_currentConfig = new SupplyCurrentLimitConfiguration(true, 25, 30, 0);
+
+            config.m_openLoopRampRateSeconds = 0.25;
+            config.m_closedLoopRampRateSeconds = 0.1;    
             return config;
         }
 

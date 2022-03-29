@@ -1,7 +1,5 @@
 package com.team2357.lib.util;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Utility {
@@ -41,28 +39,6 @@ public class Utility {
     talon.config_kF(slotIdx, pid.kf);
     talon.config_IntegralZone(slotIdx, pid.izone);
     talon.configClosedLoopPeakOutput(slotIdx, pid.peak);
-  }
-
-  /**
-   * 
-   * @param CANID                     The CAN ID of the motor
-   * @param openLoopRampRateSeconds   The number of seconds for the motors to
-   *                                  reach
-   *                                  100%. Used
-   *                                  for open-loop ramping
-   * 
-   * @param closedLooprampRateSeconds The number of seconds for the motors to
-   *                                  reach
-   *                                  100%. Used
-   *                                  for closed-loop ramping
-   */
-  public static WPI_TalonFX createDriveTalonFX(int CANID, double openLoopRampRateSeconds,
-      double closedLoopRampRateSeconds) {
-    WPI_TalonFX talon = new WPI_TalonFX(CANID);
-    talon.configOpenloopRamp(openLoopRampRateSeconds);
-    talon.configClosedloopRamp(closedLoopRampRateSeconds);
-    talon.setNeutralMode(NeutralMode.Brake);
-    return talon;
   }
 
   public static int getAverage(int[] samples) {

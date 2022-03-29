@@ -8,7 +8,7 @@ import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.ShooterSubsystem;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -45,7 +45,7 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoFeederStopCommand());
         addCommands(new AutoStopIntakeCommand());
 
-        addRequirements(ShooterSubsystem.getInstance(), FalconTrajectoryDriveSubsystem.getInstance(),
+        addRequirements(ShooterSubsystem.getInstance(), FalconDriveSubsystem.getInstance(),
                 IntakeRollerSubsystem.getInstance(), FeederSubsystem.getInstance(), IntakeArmSubsystem.getInstance());
     }
 
