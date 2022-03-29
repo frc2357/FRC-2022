@@ -118,9 +118,9 @@ public final class Constants {
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
-        public static final double KS_VOLTS = 0.65717;
-        public static final double KV_VOLTS_SECONDS_PER_METER = 3.5385;
-        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 1.1685;
+        public static final double KS_VOLTS = 0.67508;
+        public static final double KV_VOLTS_SECONDS_PER_METER = 2.6713;
+        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.3423;
 
         /**
          * Differential Drive Kinematics Zeroes as place holder values
@@ -140,13 +140,13 @@ public final class Constants {
          * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
          * of meters and seconds.
          */
-        public static final double RAMSETE_B = 1.5;
+        public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
 
         /**
          * Proportional velocity value for Ramsete PID
          */
-        public static final double P_DRIVE_VEL = 3.0953;
+        public static final double P_DRIVE_VEL = 3.5979;
 
         public static final SimpleMotorFeedforward TRAJECTORY_FEEDFORWARD = new SimpleMotorFeedforward(
                 Constants.DRIVE.KS_VOLTS,
@@ -201,6 +201,9 @@ public final class Constants {
 
             config.m_openLoopRampRateSeconds = 0.25;
             config.m_closedLoopRampRateSeconds = 0.1;    
+
+            config.m_isRightInverted = true;
+            config.m_isLeftInverted = false;
             return config;
         }
 
