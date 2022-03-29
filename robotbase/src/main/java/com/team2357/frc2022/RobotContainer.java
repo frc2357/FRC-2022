@@ -5,8 +5,8 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.commands.RecordPathCommand;
-import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
-import com.team2357.frc2022.commands.intake.IntakeAdvanceCommand;
+import com.team2357.frc2022.commands.feeder.FeederDefaultCommand;
+import com.team2357.frc2022.commands.intake.IntakeDefaultCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
 import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
@@ -42,6 +42,7 @@ public class RobotContainer {
   private AutoModeCommandChooser m_autoCommandChooser;
 
   private final DigitalInput m_intakeSensor;
+  private final DigitalInput m_indexSensor;
   private final DigitalInput m_feederSensor;
 
   /**
@@ -49,10 +50,14 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_intakeSensor = new DigitalInput(Constants.DIO_IDS.INTAKE_SENSOR_DIO_PORT);
+    m_indexSensor = new DigitalInput(Constants.DIO_IDS.INDEX_SENSOR_DIO_PORT);
     m_feederSensor = new DigitalInput(Constants.DIO_IDS.FEEDER_SENSOR_DIO_PORT);
 
     SensorBooleanState intakeIRSensor = () -> {
       return !m_intakeSensor.get();
+    };
+    SensorBooleanState indexIRSensor = () -> {
+      return !m_indexSensor.get();
     };
     SensorBooleanState feederIRSensor = () -> {
       return !m_feederSensor.get();
@@ -61,7 +66,7 @@ public class RobotContainer {
     // Create subsystems
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     FalconDriveSubsystem driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
-    subsystemFactory.CreateSensorSubsystem(intakeIRSensor, feederIRSensor);
+    subsystemFactory.CreateSensorSubsystem(intakeIRSensor, indexIRSensor, feederIRSensor);
     subsystemFactory.CreatePDHSubsystem();
     subsystemFactory.CreateShooterSubsystem();
     subsystemFactory.createIntakeArmSubsystem();
@@ -79,8 +84,8 @@ public class RobotContainer {
     m_gunnerControls = new GunnerControls(gunnerXboxController);
 
     driveSub.setDefaultCommand(new DriveVelocityCommand(driveSub, m_driverControls));
-    FeederSubsystem.getInstance().setDefaultCommand(new FeederAdvanceCommand());
-    IntakeRollerSubsystem.getInstance().setDefaultCommand(new IntakeAdvanceCommand());
+    FeederSubsystem.getInstance().setDefaultCommand(new FeederDefaultCommand());
+    IntakeRollerSubsystem.getInstance().setDefaultCommand(new IntakeDefaultCommand());
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);

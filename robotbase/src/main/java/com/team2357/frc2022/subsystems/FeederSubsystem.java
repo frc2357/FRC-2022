@@ -21,12 +21,10 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
 
     private Configuration m_config;
     private WPI_VictorSPX m_feederMotor;
-    private boolean m_isPacking;
 
     public FeederSubsystem(WPI_VictorSPX feederMotor) {
         instance = this;
         m_feederMotor = feederMotor;
-        m_isPacking = false;
 
         addChild("feederMotor", m_feederMotor);
     }
@@ -37,28 +35,20 @@ public class FeederSubsystem extends ClosedLoopSubsystem {
         m_feederMotor.setNeutralMode(NeutralMode.Brake);
     }
 
-    public boolean isPacking() {
-        return m_isPacking;
-    }
-
     public void advance() {
         m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorAdvanceSpeed);
-        m_isPacking = false;
     }
 
     public void shoot() {
         m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorShootSpeed);
-        m_isPacking = false;
     }
 
     public void pack() {
         m_feederMotor.set(ControlMode.PercentOutput, m_config.m_feederMotorPackSpeed);
-        m_isPacking = true;
     }
 
     public void stop() {
         m_feederMotor.set(ControlMode.PercentOutput, 0);
-        m_isPacking = false;
     }
 
     public void setAxisRollerSpeed(double axisSpeed) {

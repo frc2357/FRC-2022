@@ -30,8 +30,8 @@ public class SubsystemFactory {
         return new PDHSubsystem(Constants.CAN_ID.POWER_DISTRIBUTION_HUB_ID);
     }
 
-    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
-        return new SensorSubsystem(intakeSensor, feederSensor);
+    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState indexSensor, SensorBooleanState feederSensor) {
+        return new SensorSubsystem(intakeSensor, indexSensor, feederSensor);
     }
 
     public FalconDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
