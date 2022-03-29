@@ -1,68 +1,59 @@
 package com.team2357.frc2022.commands.intake;
 
-import com.team2357.frc2022.commands.feeder.FeederPackCommand;
-import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
+import com.team2357.frc2022.commands.CameraLightCommand;
+import com.team2357.frc2022.commands.CargoAdjustCommand;
+import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
+import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
-import com.team2357.lib.subsystems.PDHSubsystem;
 
-/**
- * Deploys the intake arm.
- * 
- * @category Intake
- */
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 public class IntakeDeployCommand extends CommandLoggerBase {
-    private boolean m_fillRobot;
-    private boolean m_hasACargo;
+    private Command m_cameraOn;
+    private Command m_deploy;
+    private Command m_stow;
+    private IntakeRollerCollectCommand m_collect;
+    private Command m_feederAdvance;
+    private Command m_cargoAdjust;
 
     public IntakeDeployCommand() {
-        this(true);
-    }
-
-    public IntakeDeployCommand(boolean fillRobot) {
-        m_fillRobot = fillRobot;
-
-        addRequirements(IntakeArmSubsystem.getInstance());
-        addRequirements(IntakeRollerSubsystem.getInstance());
+        m_cameraOn = new CameraLightCommand();
+        m_deploy = new IntakeArmDeployCommand();
+        m_stow = new IntakeArmStowCommand();
+        m_collect = new IntakeRollerCollectCommand();
+        m_feederAdvance = new SequentialCommandGroup(
+            new FeederAdvanceCommand(),
+            new FeederExtraAdvanceCommand()
+        );
+        m_cargoAdjust = new CargoAdjustCommand();
     }
 
     @Override
     public void initialize() {
-        IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-        IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
-
-        intakeArm.deploy();
-        intakeRoller.collect();
-
-        PDHSubsystem.getInstance().setSwitchableChannel(true);
-        m_hasACargo = SensorSubsystem.getInstance().isCargoInFeeder();
+        m_cameraOn.schedule();
+        m_deploy.schedule();
+        m_collect.schedule();
     }
 
     @Override
-    public boolean isFinished() {
-        SensorSubsystem sensors = SensorSubsystem.getInstance();
-
-        if (m_fillRobot) {
-            return sensors.isRobotFilled();
-        } else {
-            if (m_hasACargo) {
-                return sensors.isRobotFilled();
+    public void execute() {
+        if (SensorSubsystem.getInstance().isCargoInIntake()) {
+            if (SensorSubsystem.getInstance().isCargoInFeeder()) {
+                // We have two cargo now.
+                m_cargoAdjust.schedule();
+                cancel();
             } else {
-                return SensorSubsystem.getInstance().isCargoInFeeder();
+                m_feederAdvance.schedule();
             }
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (SensorSubsystem.getInstance().isRobotFilled()) {
-            new FeederPackCommand().schedule();
-        }
-
-        IntakeArmSubsystem.getInstance().stow();
-        IntakeRollerSubsystem.getInstance().stop();
-
-        PDHSubsystem.getInstance().setSwitchableChannel(false);
+        m_collect.cancel();
+        m_cameraOn.cancel();
+        m_stow.schedule();
     }
 }
