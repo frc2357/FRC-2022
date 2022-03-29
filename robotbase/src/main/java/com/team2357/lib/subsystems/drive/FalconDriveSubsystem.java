@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
 
 public class FalconDriveSubsystem extends ClosedLoopSubsystem {
     private static FalconDriveSubsystem instance = null;
@@ -21,8 +20,6 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
     public static FalconDriveSubsystem getInstance() {
         return instance;
     }
-
-    public double m_distancePerPulse;
 
     // The gyro sensor
     private PigeonIMU m_gyro;
@@ -36,12 +33,6 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
     private WPI_TalonFX[] m_rightFalconSlaves;
     private WPI_TalonFX[] m_leftFalconSlaves;
-
-    // The left-side drive encoder
-    private final Encoder m_leftEncoder;
-
-    // The right-side drive encoder
-    private final Encoder m_rightEncoder;
 
     private Configuration m_config;
 
@@ -64,6 +55,16 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
         // The deadband of output percentage on the motor controller
         public double m_falconOutputDeadband = 0.001;
+
+        /** 
+         *  Wheel circumference in meters
+        */
+        public double m_wheelCircumferenceMeters;
+
+        /**
+         * Encoder Clicks Per Rotation
+         */
+        public double m_encoderClicksPerRotation;
 
         // Turn sensitivity multiplier for velocity control
         public double m_turnSensitivity = 0.0;
@@ -110,27 +111,14 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
      * @param encoderDistancePerPulse
      */
     public FalconDriveSubsystem(WPI_TalonFX leftFalconMaster, WPI_TalonFX[] leftFalconSlaves,
-            WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves, PigeonIMU gyro,
-            double encoderDistancePerPulse, int leftEncoderChannelA,
-            int leftEncoderChannelB, int rightEncoderChannelA, int rightEncoderChannelB) {
-
+            WPI_TalonFX rightFalconMaster, WPI_TalonFX[] rightFalconSlaves, PigeonIMU gyro
+            ){
         m_leftFalconMaster = leftFalconMaster;
         m_rightFalconMaster = rightFalconMaster;
         m_leftFalconSlaves = leftFalconSlaves;
         m_rightFalconSlaves = rightFalconSlaves;
 
-        m_distancePerPulse = encoderDistancePerPulse;
-
         instance = this;
-
-        m_leftEncoder = new Encoder(
-                leftEncoderChannelA,
-                leftEncoderChannelB);
-        m_rightEncoder = new Encoder(
-                rightEncoderChannelA,
-                rightEncoderChannelB);
-        m_leftEncoder.setDistancePerPulse(encoderDistancePerPulse);
-        m_rightEncoder.setDistancePerPulse(encoderDistancePerPulse);
 
         resetEncoders();
         m_gyro = gyro;
@@ -141,17 +129,16 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
     @Override
     public void periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(Rotation2d.fromDegrees(getHeading()), m_leftEncoder.getDistance(),
-                m_rightEncoder.getDistance());
-        // System.out.print("Left encoder distance: " + m_leftEncoder.getDistance());
+        m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(),
+                getRightDistance());
+                System.out.print("Left encoder clicks: " + m_leftFalconMaster.getSelectedSensorPosition());
+                System.out.println(" Right encoder clicks: " + m_rightFalconMaster.getSelectedSensorPosition());        
+        // System.out.print("Left encoder distance: " + getLeftDistance());
         // System.out.println(" Right encoder distance: " +
-        // m_rightEncoder.getDistance());
-        // System.out.println(getHeading());
-        // System.out.println("Pose: " + getPose().toString());
-        // System.out.println(m_leftControllers.get());
-        // System.out.println(m_rightControllers.get());
-
-    }
+        // getRightDistance());
+        // //System.out.println(getHeading());
+        //System.out.println("Pose: " + getPose().toString());
+        }
 
     public void configure(Configuration config) {
         m_config = config;
@@ -161,9 +148,7 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
         setCoast();
 
         m_isGyroReversed = m_config.m_isGyroReversed;
-        m_leftEncoder.setReverseDirection(m_config.m_isLeftInverted);
-        m_rightEncoder.setReverseDirection(m_config.m_isRightInverted);
-
+       
         // Velocity PID setup
 
         /* Config neutral deadband to be the smallest possible */
@@ -274,6 +259,18 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
         setProportional(0, 0);
     }
 
+    public double getLeftDistance() {
+        return clicksToMeters(m_leftFalconMaster.getSelectedSensorPosition());
+    }
+
+    public double getRightDistance() {
+        return clicksToMeters(m_rightFalconMaster.getSelectedSensorPosition());
+    }
+
+    public double clicksToMeters(double clicks) {
+        return (clicks / m_config.m_encoderClicksPerRotation) * m_config.m_wheelCircumferenceMeters;
+    }
+
     /**
      * Returns the currently-estimated pose of the robot.
      *
@@ -316,8 +313,8 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
     /** Resets the drive encoders to currently read a position of 0. */
     public void resetEncoders() {
-        m_leftEncoder.reset();
-        m_rightEncoder.reset();
+        m_leftFalconMaster.setSelectedSensorPosition(0);
+        m_rightFalconMaster.setSelectedSensorPosition(0);
     }
 
     /**
@@ -326,33 +323,21 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
      * @return the average of the two encoder readings
      */
     public double getAverageEncoderDistance() {
-        return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
+        return (getLeftDistance() + getRightDistance()) / 2.0;
     }
 
     public double getVelocityLeftEncoder() {
-        return m_leftEncoder.getRate();
+        double nativeSpeed = m_leftFalconMaster.getSelectedSensorVelocity();
+        return clicksToMeters(nativeSpeed * 10);
     }
 
+    /**
+     * 
+     * @return The speed of the drive in meters per second
+     */
     public double getVelocityRightEncoder() {
-        return m_rightEncoder.getRate();
-    }
-
-    /**
-     * Gets the left drive encoder.
-     *
-     * @return the left drive encoder
-     */
-    public Encoder getLeftEncoder() {
-        return m_leftEncoder;
-    }
-
-    /**
-     * Gets the right drive encoder.
-     *
-     * @return the right drive encoder
-     */
-    public Encoder getRightEncoder() {
-        return m_rightEncoder;
+        double nativeSpeed = m_rightFalconMaster.getSelectedSensorVelocity();
+        return clicksToMeters(nativeSpeed * 10);
     }
 
     /**

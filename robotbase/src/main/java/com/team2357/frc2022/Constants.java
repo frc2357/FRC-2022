@@ -99,16 +99,13 @@ public final class Constants {
         public static final double AUTO_SPEED = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
+
+        public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_IN_METERS * Math.PI;
      
-        public static final int ENCODER_PPR = 256;
+        public static final double GEAR_RATIO = 8/1;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
-                / (double) ENCODER_PPR;
-
-        public static final int LEFT_ENCODER_CHANNEL_A = 6;
-        public static final int LEFT_ENCODER_CHANNEL_B = 7;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
+        public static final double ENCODER_CLICKS_PER_ROTATION = 
+        2048 * GEAR_RATIO;
 
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
@@ -173,6 +170,9 @@ public final class Constants {
             config.m_falconOutputDeadband = 0.001;
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
+
+            config.m_wheelCircumferenceMeters = WHEEL_CIRCUMFERENCE_METERS;
+            config.m_encoderClicksPerRotation = ENCODER_CLICKS_PER_ROTATION;
 
             config.m_turnSensitivity = 0.5;
 
