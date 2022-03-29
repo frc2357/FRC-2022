@@ -21,8 +21,6 @@ import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -333,7 +331,7 @@ public final class Constants {
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 
-            config.m_rollerAdvanceSpeed = 0.50;
+            config.m_rollerAdvanceSpeed = 0.30;
             config.m_rollerCollectSpeed = 0.85;
             config.m_rollerAxisMaxSpeed = 1.0;
 
@@ -425,6 +423,7 @@ public final class Constants {
     }
 
     public final class DIO_IDS {
+        public static final int INDEX_SENSOR_DIO_PORT = 2;
         public static final int FEEDER_SENSOR_DIO_PORT = 1;
         public static final int INTAKE_SENSOR_DIO_PORT = 0;
         public static final int LEFT_ENCODER_CHANNEL_A = 6;
@@ -445,7 +444,7 @@ public final class Constants {
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorAdvanceSpeed = 0.25;
+            config.m_feederMotorAdvanceSpeed = 0.35;
             config.m_feederMotorShootSpeed = 1.0;
             config.m_feederMotorPackSpeed = -0.5;
             return config;

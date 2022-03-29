@@ -1,22 +1,16 @@
 package com.team2357.frc2022.commands.intake;
 
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
-import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-public class IntakeAdvanceCommand extends CommandLoggerBase {
-    public IntakeAdvanceCommand() {
+public class IntakeRollerCollectCommand extends CommandLoggerBase {
+    public IntakeRollerCollectCommand() {
         addRequirements(IntakeRollerSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        IntakeRollerSubsystem.getInstance().advance();
-    }
-    
-    @Override
-    public boolean isFinished() {
-        return SensorSubsystem.getInstance().isCargoInIndex();
+        IntakeRollerSubsystem.getInstance().collect();
     }
 
     @Override

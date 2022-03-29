@@ -5,38 +5,18 @@ import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class FeederAdvanceCommand extends CommandLoggerBase {
-    private boolean m_lastInFeeder = false;
-
     public FeederAdvanceCommand() {
         addRequirements(FeederSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_lastInFeeder = SensorSubsystem.getInstance().isCargoInFeeder();
-    }
-
-    @Override
-    public void execute() {
-        SensorSubsystem sensors = SensorSubsystem.getInstance();
-        boolean inFeeder = sensors.isCargoInFeeder();
-        boolean inIndex = sensors.isCargoInIndex();
-
-        if (!inFeeder && inIndex) {
-            FeederSubsystem.getInstance().advance();
-        } else {
-            if (inFeeder && !m_lastInFeeder) {
-                new FeederExtraAdvanceCommand().schedule();
-            }
-            FeederSubsystem.getInstance().stop();
-        }
-        
-        m_lastInFeeder = inFeeder;
+        FeederSubsystem.getInstance().advance();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return SensorSubsystem.getInstance().isCargoInFeeder();
     }
 
     @Override
