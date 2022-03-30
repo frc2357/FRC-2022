@@ -14,12 +14,16 @@ public class AvailableTrajectories {
     public static SequentialCommandGroup exampleRecordPathTrajectory = null;
     public static SequentialCommandGroup leaveTarmacTrajectory = null;
     public static SequentialCommandGroup travelToThirdCargoTrajectory = null;
+    public static SequentialCommandGroup travelToTerminalTrajectory = null;
+    public static SequentialCommandGroup travelToShotPositionTrajectory = null;
 
     public static void generateTrajectories() {
         exampleTrajectory = createExampleTrajectory();
         exampleRecordPathTrajectory = createExampleRecordPathTrajectory();
         leaveTarmacTrajectory = createLeaveTarmacTrajectory();
         travelToThirdCargoTrajectory = createTravelToThirdCargoTrajectory();
+        travelToTerminalTrajectory = createTravelToTerminalTrajectory();
+        travelToShotPositionTrajectory = createTravelToShotPositionTrajectory();
     }
 
     private static SequentialCommandGroup createExampleTrajectory() {
@@ -63,35 +67,43 @@ public class AvailableTrajectories {
     }
 
     private static SequentialCommandGroup createTravelToThirdCargoTrajectory() {
-        return new SequentialCommandGroup(createThreeBallTravelBackTrajectory(), createThreeBallAutoTravelToThirdTrajectory());
+        return new SequentialCommandGroup(createThreeBallTravelBackTrajectory(),
+                createThreeBallAutoTravelToThirdTrajectory());
     }
 
     private static SequentialCommandGroup createThreeBallTravelBackTrajectory() {
-        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-        new Pose2d(-0.319070674890391, 0.01856578744447176, Rotation2d.fromDegrees(-8.0419921875)),
-        new Pose2d(-1.3102390255302991, 0.5075593681858235, Rotation2d.fromDegrees(-48.03222656249999))),
-        true, true);
+        return TrajectoryUtil.createTrajectoryPathCommand(
+                FalconDriveSubsystem.getInstance(), List.of(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(-0.319070674890391, 0.01856578744447176, Rotation2d.fromDegrees(-8.0419921875)),
+                        new Pose2d(-1.3102390255302991, 0.5075593681858235,
+                                Rotation2d.fromDegrees(-48.03222656249999))),
+                true, true);
     }
 
     private static SequentialCommandGroup createThreeBallAutoTravelToThirdTrajectory() {
-        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-        new Pose2d(0.2650097089203349, -0.029321698868923312, Rotation2d.fromDegrees(-12.12890625)),
-        new Pose2d(1.1462756519915793, -0.47026944957780487, Rotation2d.fromDegrees(-42.0556640625)),
-        new Pose2d(1.6972924521141421, -1.2178663849396316, Rotation2d.fromDegrees(-62.666015625000014)),
-        new Pose2d(1.8826092475307807, -1.6361663170719003, Rotation2d.fromDegrees(-67.63183593750001))),
-        false, true);
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(), List.of(
+                new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                new Pose2d(0.2650097089203349, -0.029321698868923312, Rotation2d.fromDegrees(-12.12890625)),
+                new Pose2d(1.1462756519915793, -0.47026944957780487, Rotation2d.fromDegrees(-42.0556640625)),
+                new Pose2d(1.6972924521141421, -1.2178663849396316, Rotation2d.fromDegrees(-62.666015625000014)),
+                new Pose2d(1.8826092475307807, -1.6361663170719003, Rotation2d.fromDegrees(-67.63183593750001))),
+                false, true);
     }
 
-    /**
-     * List.of( new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
-new Pose2d(0.018174461220810654, -2.516541904604855E-4, Rotation2d.fromDegrees(-1.0986328125)),
-new Pose2d(0.2650097089203349, -0.029321698868923312, Rotation2d.fromDegrees(-12.12890625)),
-new Pose2d(0.7012095292668968, -0.17672744876278051, Rotation2d.fromDegrees(-24.78515625)),
-new Pose2d(1.1462756519915793, -0.47026944957780487, Rotation2d.fromDegrees(-42.0556640625)),
-new Pose2d(1.4802802466173917, -0.8493253871728673, Rotation2d.fromDegrees(-55.107421875)),
-new Pose2d(1.6972924521141421, -1.2178663849396316, Rotation2d.fromDegrees(-62.666015625000014)),
-new Pose2d(1.8256797791665182, -1.499193799012016, Rotation2d.fromDegrees(-67.1923828125)),
-new Pose2d(1.8826092475307807, -1.6361663170719003, Rotation2d.fromDegrees(-67.63183593750001))),
-     */
-   
+    private static SequentialCommandGroup createTravelToTerminalTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(),
+                List.of(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(1.0, 0.0, Rotation2d.fromDegrees(0.0))),
+                false, true);
+
+    }
+
+    private static SequentialCommandGroup createTravelToShotPositionTrajectory() {
+        return TrajectoryUtil.createTrajectoryPathCommand(FalconDriveSubsystem.getInstance(),
+                List.of(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)),
+                        new Pose2d(1.0, 0.0, Rotation2d.fromDegrees(0.0))),
+                true, true);
+
+    }
+
 }
