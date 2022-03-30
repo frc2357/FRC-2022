@@ -28,7 +28,7 @@ public class ThreeBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoFeederStopCommand());
 
         // Move and collect cargo
-        
+
         // Collect second cargo
         addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(AvailableTrajectories.leaveTarmacTrajectory, new WaitCommand(0.25)),
         new AutoIntakeCargoCommand()));
@@ -37,10 +37,10 @@ public class ThreeBallAutoCommand extends SequentialCommandGroup {
         addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(AvailableTrajectories.travelToThirdCargoTrajectory, new WaitCommand(0.25)),
         new SequentialCommandGroup(new FeederAdvanceCommand(), new FeederExtraAdvanceCommand(), new AutoIntakeCargoCommand() )));
 
-        // Should now have two cargo, adjusting for a maximum of two seconds before shooting
-        new ParallelDeadlineGroup(new WaitCommand(30), new SequentialCommandGroup(new CargoAdjustCommand(),
-        new CargoAdjustCommand(),
-        new CargoAdjustCommand()));
+        // // Should now have two cargo, adjusting for a maximum of two seconds before shooting
+        // new ParallelDeadlineGroup(new WaitCommand(30), new SequentialCommandGroup(new CargoAdjustCommand(),
+        // new CargoAdjustCommand(),
+        // new CargoAdjustCommand()));
 
         // Shoot two cargo
         addCommands(new FireVisionCommand());
