@@ -1,49 +1,30 @@
 package com.team2357.frc2022.commands.human;
 
-import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.commands.LimelightWaitForTarget;
+import com.team2357.frc2022.commands.turret.TurretTrackCommand;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
-import com.team2357.lib.commands.CommandLoggerBase;
+import com.team2357.lib.commands.LimelightTargetingPipelineCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 
-public class TargetLockCommand extends CommandLoggerBase {
-    private long m_pipelineSwitchMillis = 0;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-    public boolean isWaitingOnPipeline() {
-        return m_pipelineSwitchMillis > 0;
-    }
+public class TargetLockCommand extends SequentialCommandGroup {
+    public TargetLockCommand() {
+        addRequirements(TurretSubsystem.getInstance());
 
-    public boolean hasTargetAcquired() {
-        return LimelightSubsystem.getInstance().validTargetExists();
-    }
+        // Set the limelight pipeline
+        addCommands(new LimelightTargetingPipelineCommand(true));
 
-    public boolean isTurretFlipping() {
-        return TurretSubsystem.getInstance().isRotatingToPosition();
-    }
+        // Wait for us to have a target
+        addCommands(new LimelightWaitForTarget());
 
-    @Override
-    public void initialize() {
-        LimelightSubsystem.getInstance().setTargetingPipelineActive();
-        m_pipelineSwitchMillis = System.currentTimeMillis() + Constants.LIMELIGHT.m_pipelineSwitchMillis;
-    }
-
-    @Override
-    public void execute() {
-        if (isWaitingOnPipeline()) {
-            long now = System.currentTimeMillis();
-            if (now > m_pipelineSwitchMillis) {
-                m_pipelineSwitchMillis = 0;
-                TurretSubsystem.getInstance().trackTarget();
-            }
-        }
-    }
-
-    @Override
-    public boolean isFinished() {
-        return !isWaitingOnPipeline() && !TurretSubsystem.getInstance().isTracking();
+        // Start turret tracking
+        addCommands(new TurretTrackCommand());
     }
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         TurretSubsystem.getInstance().stop();
         LimelightSubsystem.getInstance().setHumanPipelineActive();
     }
