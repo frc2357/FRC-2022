@@ -16,6 +16,7 @@ import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.commands.LimelightTargetingPipelineCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -33,49 +34,35 @@ public class FireVisionCommand extends SequentialCommandGroup {
         // Spin up and set the limelight pipeline
         addCommands(new ParallelDeadlineGroup(
             new LimelightTargetingPipelineCommand(true),
-            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH)
+            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH, false)
         ));
 
         // Wait for us to have a target
         addCommands(new ParallelDeadlineGroup(
             new LimelightWaitForTarget(),
-            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH)
+            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH, false)
         ));
 
         // Start turret tracking and shooter RPM tracking until we get to an accurate point
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForVisionShotReady(),
-            new TurretTrackCommand(),
-            new ShooterVisionShootCommand()
-        ));
+        addCommands(
+            // Keep running the shooter vision the whole time until we're done.
+            new ParallelCommandGroup(
+                new ShooterVisionShootCommand(),
+                new SequentialCommandGroup(
+                    // The sequence of other commands continues here.
+                    new ParallelDeadlineGroup(
+                        new WaitForVisionShotReady(),
+                        new TurretTrackCommand()
+                    ),
 
-        // Wait for a bit to let the shooter RPMs stabilize
-        addCommands(new ParallelDeadlineGroup(
-            new SequentialCommandGroup(new WaitCommand(1.0), new ShooterWaitForRPMsCommand()),
-            new ShooterVisionShootCommand()
-        ));
-
-        // Shoot the first ball until it's away
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForFeederSensorCommand(false),
-            new ShooterVisionShootCommand(),
-            new FeederShootCommand(),
-            new IntakeAdvanceCommand()
-        ));
-
-        // Keep the shooter at speed while we advance the intake to get the next ball up to it
-        addCommands(new ParallelDeadlineGroup(
-            new SequentialCommandGroup(new WaitCommand(1.0), new ShooterWaitForRPMsCommand()),
-            new ShooterVisionShootCommand(),
-            new IntakeAdvanceCommand()
-        ));
-
-        // Shoot the second ball until it's away
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForFeederSensorCommand(false),
-            new ShooterVisionShootCommand(),
-            new FeederShootCommand()
-        ));
+                    // Run the feeder to shoot until it's gone.
+                    new ParallelDeadlineGroup(
+                        new WaitForFeederSensorCommand(false),
+                        new FeederShootCommand()
+                    )
+                )
+            )
+        );
     }
 
     public void end(boolean interrupted) {

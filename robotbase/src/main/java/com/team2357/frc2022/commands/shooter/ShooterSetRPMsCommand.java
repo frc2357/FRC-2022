@@ -12,15 +12,16 @@ import com.team2357.lib.subsystems.LimelightSubsystem;
 public class ShooterSetRPMsCommand extends CommandLoggerBase {
     private double m_bottomRpms;
     private double m_topRpms;
+    private boolean m_stopOnEnd;
 
-    /**
-     * 
-     * @param bottomRpms Bottom motors RPM
-     * @param topRpms    Top Motor RPM
-     */
     public ShooterSetRPMsCommand(double bottomRpms, double topRpms) {
+        this(bottomRpms, topRpms, true);
+    }
+
+    public ShooterSetRPMsCommand(double bottomRpms, double topRpms, boolean stopOnEnd) {
         m_bottomRpms = bottomRpms;
         m_topRpms = topRpms;
+        m_stopOnEnd = stopOnEnd;
         addRequirements(ShooterSubsystem.getInstance());
     }
 
@@ -33,7 +34,9 @@ public class ShooterSetRPMsCommand extends CommandLoggerBase {
     
     @Override
     public void end(boolean isInterrupted) {
-        ShooterSubsystem.getInstance().setRPMTop(0);
-        ShooterSubsystem.getInstance().setRPMBottom(0);
+        if (m_stopOnEnd) {
+            ShooterSubsystem.getInstance().setRPMTop(0);
+            ShooterSubsystem.getInstance().setRPMBottom(0);
+        }
     }
 }
