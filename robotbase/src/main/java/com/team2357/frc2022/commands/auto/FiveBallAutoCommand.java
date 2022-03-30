@@ -6,6 +6,7 @@ import com.team2357.frc2022.commands.auto.shooter.AutoStopShootCommand;
 import com.team2357.frc2022.commands.auto.shooter.TaxiStartShotCommand;
 import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
+import com.team2357.frc2022.commands.human.FireVisionCommand;
 import com.team2357.frc2022.commands.intake.IntakeToFeederCommand;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.frc2022.util.TrajectoryUtil;
@@ -53,19 +54,9 @@ public class FiveBallAutoCommand extends SequentialCommandGroup {
         // new CargoAdjustCommand(),
         // new CargoAdjustCommand()));
 
-        // // Shoot second cargo
-        // addCommands(new TaxiStartShotCommand());
-        // addCommands(new WaitCommand(0.75));
-        // addCommands(new AutoFeederStartCommand());
-        // addCommands(new WaitCommand(0.5));
-        // addCommands(new AutoFeederStopCommand());
-
-        // // Shoot third third
-        // addCommands(new WaitCommand(0.5));
-        // new ParallelDeadlineGroup(new WaitCommand(1), new IntakeToFeederCommand());
-        // addCommands(new AutoFeederStartCommand());
-        // addCommands(new WaitCommand(0.5));
-
+        // // Shoot second and third cargo
+        // addCommands(new FireVisionCommand());
+      
         // Last two
 
     //     // Move to terminal and collect cargo
@@ -81,7 +72,8 @@ public class FiveBallAutoCommand extends SequentialCommandGroup {
     //     new CargoAdjustCommand()));
 
 
-        // Shoot last two
+        // Shoot fourth and fifth cargo
+        // addCommands(new FireVisionCommand());
 
         // Cleanup
         addCommands(new AutoStopShootCommand());
