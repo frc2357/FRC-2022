@@ -1,10 +1,17 @@
 package com.team2357.frc2022.commands.auto;
 
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.commands.CargoAdjustCommand;
 import com.team2357.frc2022.commands.auto.shooter.AutoStartPosShotCommand;
 import com.team2357.frc2022.commands.auto.shooter.AutoStopShootCommand;
 import com.team2357.frc2022.commands.auto.shooter.TaxiStartShotCommand;
+import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
+import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
+import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.intake.IntakeToFeederCommand;
+import com.team2357.frc2022.util.AvailableTrajectories;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -12,50 +19,63 @@ public class ThreeBallAutoCommand extends SequentialCommandGroup {
     public ThreeBallAutoCommand() {
 
         // First ball
-        addCommands(new AutoStartPosShotCommand());
-        addCommands(new WaitCommand(0.5));
-        addCommands(new AutoFeederStartCommand());
-        addCommands(new WaitCommand(1));
-        addCommands(new AutoStopShootCommand());
-        addCommands(new AutoFeederStopCommand());
+        // addCommands(new AutoStartPosShotCommand());
+        // addCommands(new WaitCommand(0.5));
+        // addCommands(new AutoFeederStartCommand());
+        // addCommands(new WaitCommand(1));
+        // addCommands(new AutoStopShootCommand());
+        // addCommands(new AutoFeederStopCommand());
 
-        // Start intake
-        addCommands(new AutoStartIntakeCommand());
+        // Move and collect cargo
+        //addCommands(collectCargo());
 
-        // Move
-        addCommands(new AutoDriveCommand(2500, Constants.DRIVE.AUTO_SPEED, 0.0));
-        addCommands(new AutoStopShootCommand());
-        addCommands(new WaitCommand(1));
+        // Collect second cargo
+        addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(AvailableTrajectories.leaveTarmacTrajectory, new WaitCommand(0.25)),
+        new AutoIntakeCargoCommand()));
 
-        // Second ball
-        addCommands(new TaxiStartShotCommand());
-        addCommands(new WaitCommand(0.75));
-        addCommands(new AutoFeederStartCommand());
-        addCommands(new WaitCommand(1));
-        addCommands(new AutoFeederStopCommand());
+        // Collect third cargo
+        addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(AvailableTrajectories.travelToThirdCargoTrajectory, new WaitCommand(0.25)),
+        new SequentialCommandGroup(new FeederAdvanceCommand(), new FeederExtraAdvanceCommand(), new AutoIntakeCargoCommand() )));
 
-        // Move back
-        addCommands(new AutoStartIntakeCommand());
-        addCommands(new AutoDriveCommand(250, -0.2, 0.0));
+        // Should now have two cargo, adjusting for a maximum of two seconds before shooting
+        new ParallelDeadlineGroup(new WaitCommand(30), new SequentialCommandGroup(new CargoAdjustCommand(),
+        new CargoAdjustCommand(),
+        new CargoAdjustCommand()));
 
-        // Turn 90 to second cargo
-        addCommands(new AutoDriveCommand(2100, Constants.DRIVE.AUTO_SPEED, -0.2));
+        // // Shoot second cargo
+        // addCommands(new TaxiStartShotCommand());
+        // addCommands(new WaitCommand(0.75));
+        // addCommands(new AutoFeederStartCommand());
+        // addCommands(new WaitCommand(0.5));
+        // addCommands(new AutoFeederStopCommand());
 
-        // Move to second cargo
-        addCommands(new AutoStartIntakeCommand());
-        addCommands(new AutoDriveCommand(2000, 0.2, 0.0));
-
-        // Rotate 90 to shoot
-       addCommands(new AutoDriveCommand(800, Constants.DRIVE.AUTO_SPEED, 0.2));
-
-        // Third Ball
-        addCommands(new TaxiStartShotCommand());
-        addCommands(new WaitCommand(0.75));
-        addCommands(new AutoFeederStartCommand());
-        addCommands(new WaitCommand(1));
+        // // Shoot third third
+        // addCommands(new WaitCommand(0.5));
+        // new ParallelDeadlineGroup(new WaitCommand(1), new IntakeToFeederCommand());
+        // addCommands(new AutoFeederStartCommand());
+        // addCommands(new WaitCommand(0.5));
 
         // Cleanup
-        addCommands(new AutoStopShootCommand());
-        addCommands(new AutoFeederStopCommand());
+       addCommands(new AutoStopShootCommand());
+       addCommands(new AutoFeederStopCommand());
+       addCommands(new AutoStopIntakeCommand());
     }
+
+    // Old movement to third cargo
+    
+    //     // Move back
+    //     addCommands(new AutoStartIntakeCommand());
+    //     addCommands(new AutoDriveCommand(250, -0.2, 0.0));
+
+    //     // Turn 90 to second cargo
+    //     addCommands(new AutoDriveCommand(2100, Constants.DRIVE.AUTO_SPEED, -0.2));
+
+    //     // Move to second cargo
+    //     addCommands(new AutoStartIntakeCommand());
+    //     addCommands(new AutoDriveCommand(2000, 0.2, 0.0));
+
+    //     // Rotate 90 to shoot
+    //    addCommands(new AutoDriveCommand(800, Constants.DRIVE.AUTO_SPEED, 0.2));
+
+
 }
