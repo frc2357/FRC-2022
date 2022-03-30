@@ -1,6 +1,7 @@
 package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.commands.LimelightWaitForTarget;
+import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.feeder.WaitForFeederSensorCommand;
 import com.team2357.frc2022.commands.intake.IntakeAdvanceCommand;
@@ -45,15 +46,35 @@ public class FireVisionCommand extends SequentialCommandGroup {
 
         // Start turret tracking and shooter RPM tracking until we get to an accurate point
         addCommands(
-            // Keep running the shooter vision the whole time until we're done.
             new ParallelCommandGroup(
+                // Keep running the shooter vision the whole time until we're done.
                 new ShooterVisionShootCommand(),
+
+                // The sequence of other commands continues here.
                 new SequentialCommandGroup(
-                    // The sequence of other commands continues here.
+                    // Track the target until we are ready to shoot
                     new ParallelDeadlineGroup(
                         new WaitForVisionShotReady(),
                         new TurretTrackCommand()
                     ),
+
+                    // Make sure the next ball is up and ready.
+                    new FeederAdvanceCommand(),
+
+                    // Run the feeder to shoot until it's gone.
+                    new ParallelDeadlineGroup(
+                        new WaitForFeederSensorCommand(false),
+                        new FeederShootCommand()
+                    ),
+
+                    // Advance the next ball
+                    new ParallelDeadlineGroup(
+                        new FeederAdvanceCommand(),
+                        new IntakeAdvanceCommand(false)
+                    ),
+
+                    // Wait until the shooter has gotten back up to speed
+                    new ShooterWaitForRPMsCommand(),
 
                     // Run the feeder to shoot until it's gone.
                     new ParallelDeadlineGroup(
