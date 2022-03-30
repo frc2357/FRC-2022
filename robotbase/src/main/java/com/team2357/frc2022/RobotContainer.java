@@ -19,6 +19,7 @@ import com.team2357.lib.commands.DriveVelocityCommand;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -94,7 +95,8 @@ public class RobotContainer {
     configureShuffleboard();
 
     // Start USB camera capture
-    CameraServer.startAutomaticCapture();
+    UsbCamera intakeCamera = CameraServer.startAutomaticCapture();
+    intakeCamera.setFPS(20);
 
     // Build trajectories
     AvailableTrajectories.generateTrajectories();

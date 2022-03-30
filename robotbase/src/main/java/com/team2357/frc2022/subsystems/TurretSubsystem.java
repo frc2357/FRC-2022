@@ -41,6 +41,7 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
         public double m_trackingD = 0;
         public double m_trackingSetpoint = 0; // The center of the camera view is zero.
         public double m_trackingToleranceDegrees = 0;
+        public double m_trackingAllowedError = 0;
         public double m_trackingMaxSpeed = 0;
         public double m_trackingMinSpeed = 0;
 
@@ -189,6 +190,11 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isAtTarget() {
+        if (isTracking()) {
+            double error = m_trackingPidController.getPositionError();
+            return error <= m_config.m_trackingAllowedError;
+        }
+
         double currentMotorRotations = m_turretMotor.getEncoder().getPosition();
         return Utility.isWithinTolerance(currentMotorRotations, m_targetMotorRotations, m_config.m_turretMotorAllowedError);
     }

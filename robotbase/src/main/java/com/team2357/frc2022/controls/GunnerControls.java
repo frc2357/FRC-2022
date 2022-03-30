@@ -46,8 +46,8 @@ public class GunnerControls {
 
     // Triggers
     public AxisThresholdTrigger m_leftTrigger;
-    public AxisThresholdTrigger m_primeRightTrigger;
-    public AxisThresholdTrigger m_feedShooterRightTrigger;
+    public AxisThresholdTrigger m_rightTriggerPrime;
+    public AxisThresholdTrigger m_rightTriggerShoot;
 
     // Buttons
     public JoystickButton m_leftStickButton;
@@ -78,8 +78,8 @@ public class GunnerControls {
         m_controller = controller;
 
         // Triggers
-        m_primeRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
-        m_feedShooterRightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .6);
+        m_rightTriggerPrime = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_rightTriggerShoot = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .6);
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
@@ -150,17 +150,10 @@ public class GunnerControls {
         m_leftStickButton.whenActive(new TurretResetCommand());
 
         aButton.whileActiveOnce(new IntakeDeployCommand());
-        //bButton.toggleWhenActive(new LockAndPrimeCommandGroup());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
-        m_primeRightTrigger.whileActiveOnce(new FireVisionCommand());
-
-        m_feedShooterRightTrigger.whileActiveOnce(
-            new SequentialCommandGroup(
-                new ShooterWaitForRPMsCommand(),
-                new FeederShootCommand()
-            )
-        );
+        //m_rightTriggerPrime.whileActiveOnce(new FireVisionCommand());
+        m_rightTriggerShoot.whileActiveOnce(new FireVisionCommand());
 
         xButton.whenActive(new CargoAdjustCommand());
         m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
