@@ -1,6 +1,7 @@
 package com.team2357.frc2022.commands.human;
 
 import com.team2357.frc2022.commands.LimelightWaitForTarget;
+import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederShootCommand;
 import com.team2357.frc2022.commands.feeder.WaitForFeederSensorCommand;
 import com.team2357.frc2022.commands.intake.IntakeAdvanceCommand;
@@ -16,6 +17,7 @@ import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.commands.LimelightTargetingPipelineCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -33,49 +35,55 @@ public class FireVisionCommand extends SequentialCommandGroup {
         // Spin up and set the limelight pipeline
         addCommands(new ParallelDeadlineGroup(
             new LimelightTargetingPipelineCommand(true),
-            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH)
+            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH, false)
         ));
 
         // Wait for us to have a target
         addCommands(new ParallelDeadlineGroup(
             new LimelightWaitForTarget(),
-            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH)
+            new ShooterSetRPMsCommand(PRIME_RPMS_LOW, PRIME_RPMS_HIGH, false)
         ));
 
         // Start turret tracking and shooter RPM tracking until we get to an accurate point
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForVisionShotReady(),
-            new TurretTrackCommand(),
-            new ShooterVisionShootCommand()
-        ));
+        addCommands(
+            new ParallelCommandGroup(
+                // Keep running the shooter vision the whole time until we're done.
+                new ShooterVisionShootCommand(),
 
-        // Wait for a bit to let the shooter RPMs stabilize
-        addCommands(new ParallelDeadlineGroup(
-            new SequentialCommandGroup(new WaitCommand(1.0), new ShooterWaitForRPMsCommand()),
-            new ShooterVisionShootCommand()
-        ));
+                // The sequence of other commands continues here.
+                new SequentialCommandGroup(
+                    // Track the target until we are ready to shoot
+                    new ParallelDeadlineGroup(
+                        new WaitForVisionShotReady(),
+                        new TurretTrackCommand()
+                    ),
 
-        // Shoot the first ball until it's away
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForFeederSensorCommand(false),
-            new ShooterVisionShootCommand(),
-            new FeederShootCommand(),
-            new IntakeAdvanceCommand()
-        ));
+                    // Make sure the next ball is up and ready.
+                    new FeederAdvanceCommand(),
 
-        // Keep the shooter at speed while we advance the intake to get the next ball up to it
-        addCommands(new ParallelDeadlineGroup(
-            new SequentialCommandGroup(new WaitCommand(1.0), new ShooterWaitForRPMsCommand()),
-            new ShooterVisionShootCommand(),
-            new IntakeAdvanceCommand()
-        ));
+                    // Run the feeder to shoot until it's gone.
+                    new ParallelDeadlineGroup(
+                        new WaitForFeederSensorCommand(false),
+                        new FeederShootCommand()
+                    ),
 
-        // Shoot the second ball until it's away
-        addCommands(new ParallelDeadlineGroup(
-            new WaitForFeederSensorCommand(false),
-            new ShooterVisionShootCommand(),
-            new FeederShootCommand()
-        ));
+                    // Advance the next ball
+                    new ParallelDeadlineGroup(
+                        new FeederAdvanceCommand(),
+                        new IntakeAdvanceCommand(false)
+                    ),
+
+                    // Wait until the shooter has gotten back up to speed
+                    new ShooterWaitForRPMsCommand(),
+
+                    // Run the feeder to shoot until it's gone.
+                    new ParallelDeadlineGroup(
+                        new WaitForFeederSensorCommand(false),
+                        new FeederShootCommand()
+                    )
+                )
+            )
+        );
     }
 
     public void end(boolean interrupted) {

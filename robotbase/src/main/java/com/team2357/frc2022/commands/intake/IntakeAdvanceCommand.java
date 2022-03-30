@@ -5,7 +5,14 @@ import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class IntakeAdvanceCommand extends CommandLoggerBase {
+    private boolean m_finishWhenCargoInIndex;
+
     public IntakeAdvanceCommand() {
+        this(true);
+    }
+
+    public IntakeAdvanceCommand(boolean finishWhenCargoInIndex) {
+        m_finishWhenCargoInIndex = finishWhenCargoInIndex;
         addRequirements(IntakeRollerSubsystem.getInstance());
     }
 
@@ -16,7 +23,10 @@ public class IntakeAdvanceCommand extends CommandLoggerBase {
     
     @Override
     public boolean isFinished() {
-        return SensorSubsystem.getInstance().isCargoInIndex();
+        if (m_finishWhenCargoInIndex) {
+            return SensorSubsystem.getInstance().isCargoInIndex();
+        }
+        return false;
     }
 
     @Override
