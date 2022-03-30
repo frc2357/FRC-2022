@@ -99,16 +99,13 @@ public final class Constants {
         public static final double AUTO_SPEED = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
+
+        public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_IN_METERS * Math.PI;
      
-        public static final int ENCODER_PPR = 256;
+        public static final double GEAR_RATIO = 8/1;
 
-        public static final double ENCODER_DISTANCE_PER_PULSE_METERS = (WHEEL_DIAMETER_IN_METERS * Math.PI)
-                / (double) ENCODER_PPR;
-
-        public static final int LEFT_ENCODER_CHANNEL_A = 6;
-        public static final int LEFT_ENCODER_CHANNEL_B = 7;
-        public static final int RIGHT_ENCODER_CHANNEL_A = 8;
-        public static final int RIGHT_ENCODER_CHANNEL_B = 9;
+        public static final double ENCODER_CLICKS_PER_ROTATION = 
+        2048 * GEAR_RATIO;
 
         public static final boolean INVERT_GYRO = true;
         public static final boolean INVERT_RIGHT_SIDE = true;
@@ -119,9 +116,9 @@ public final class Constants {
         /**
          * Characterization Constants Zeroes are currently placeholder values
          */
-        public static final double KS_VOLTS = 0.65717;
-        public static final double KV_VOLTS_SECONDS_PER_METER = 3.5385;
-        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 1.1685;
+        public static final double KS_VOLTS = 0.67508;
+        public static final double KV_VOLTS_SECONDS_PER_METER = 2.6713;
+        public static final double KA_VOLTS_SECONDS_SQUARED_PER_METER = 0.3423;
 
         /**
          * Differential Drive Kinematics Zeroes as place holder values
@@ -141,13 +138,13 @@ public final class Constants {
          * Ramsete Parameters Reasonable baseline values for a RAMSETE follower in units
          * of meters and seconds.
          */
-        public static final double RAMSETE_B = 1.5;
+        public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
 
         /**
          * Proportional velocity value for Ramsete PID
          */
-        public static final double P_DRIVE_VEL = 3.0953;
+        public static final double P_DRIVE_VEL = 3.5979;
 
         public static final SimpleMotorFeedforward TRAJECTORY_FEEDFORWARD = new SimpleMotorFeedforward(
                 Constants.DRIVE.KS_VOLTS,
@@ -174,6 +171,9 @@ public final class Constants {
 
             config.m_sensorUnitsMaxVelocity = 6000.0 * 2048.0 / 600.0;
 
+            config.m_wheelCircumferenceMeters = WHEEL_CIRCUMFERENCE_METERS;
+            config.m_encoderClicksPerRotation = ENCODER_CLICKS_PER_ROTATION;
+
             config.m_turnSensitivity = 0.5;
 
             // Velocity PID constants
@@ -199,6 +199,9 @@ public final class Constants {
 
             config.m_openLoopRampRateSeconds = 0.25;
             config.m_closedLoopRampRateSeconds = 0.1;    
+
+            config.m_isRightInverted = true;
+            config.m_isLeftInverted = false;
             return config;
         }
 

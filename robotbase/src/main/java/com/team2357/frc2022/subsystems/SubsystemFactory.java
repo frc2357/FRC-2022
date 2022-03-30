@@ -9,8 +9,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.PDHSubsystem;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
+import com.team2357.lib.subsystems.PDHSubsystem;
 import com.team2357.lib.util.Utility;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -51,10 +51,7 @@ public class SubsystemFactory {
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
 
         FalconDriveSubsystem subsystem = new FalconDriveSubsystem(leftFalconMaster,
-                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
-                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
-                Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_A, Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_B,
-                Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_A, Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_B);
+                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro);
 
         subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
