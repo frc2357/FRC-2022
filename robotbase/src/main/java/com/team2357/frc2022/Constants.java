@@ -280,11 +280,12 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.02;
-            config.m_trackingI = 0.01;
+            config.m_trackingP = 0.008;
+            config.m_trackingI = 0.015;
             config.m_trackingD = 0.0002;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
+            config.m_trackingAllowedError = 1.5; // The amount of tracking degrees to allow and still shoot.
             config.m_trackingMaxSpeed = 0.4;
             config.m_trackingMinSpeed = 0.04;
 
@@ -376,8 +377,6 @@ public final class Constants {
     }
 
     public static final class LIMELIGHT {
-        public static long m_pipelineSwitchMillis = 1000;
-
         public static final LimelightSubsystem.Configuration GET_LIMELIGHT_SUBSYSTEM_CONFIG() {
             LimelightSubsystem.Configuration config = new LimelightSubsystem.Configuration();
             config.m_humanPipelineIndex = 0;
