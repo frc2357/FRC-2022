@@ -96,7 +96,7 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
-        public static final double AUTO_SPEED = 0.1;
+        public static final double AUTO_SPEED = 0.4;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
 

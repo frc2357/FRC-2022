@@ -1,6 +1,6 @@
 package com.team2357.frc2022.shuffleboard;
 
-import com.team2357.frc2022.commands.auto.ThreeBallAutoCommand;
+import com.team2357.frc2022.commands.auto.AutoNoTrajectoryThreeBallCommand;
 import com.team2357.frc2022.commands.auto.FiveBallAutoCommand;
 import com.team2357.frc2022.commands.auto.OneBallAutoCommand;
 import com.team2357.frc2022.commands.auto.TwoBallAutoCommand;
@@ -54,7 +54,7 @@ public class AutoModeCommandChooser {
                     return new TwoBallAutoCommand();
                 case THREE_BALL:
                     System.out.println("THREE BALL");
-                    return new ThreeBallAutoCommand();
+                    return new AutoNoTrajectoryThreeBallCommand();
                 case FIVE_BALL:
                     System.out.println("FIVE BALL");
                     return new FiveBallAutoCommand();
