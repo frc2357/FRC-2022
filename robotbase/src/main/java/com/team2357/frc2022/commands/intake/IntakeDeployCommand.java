@@ -1,59 +1,59 @@
 package com.team2357.frc2022.commands.intake;
 
-import com.team2357.frc2022.subsystems.IntakeArmSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
+import com.team2357.frc2022.commands.CameraLightCommand;
+import com.team2357.frc2022.commands.CargoAdjustCommand;
+import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
+import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
-/**
- * Deploys the intake arm.
- * 
- * @category Intake
- */
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 public class IntakeDeployCommand extends CommandLoggerBase {
-    private int m_startingAcquireCount;
-    private int m_acquireCount;
+    private Command m_cameraOn;
+    private Command m_deploy;
+    private Command m_stow;
+    private IntakeRollerCollectCommand m_collect;
+    private Command m_feederAdvance;
+    private Command m_cargoAdjust;
 
-    /**
-     * Deploys and runs the intake
-     * 
-     * @param acquireCount The number of cargo to acquire before stowing again, or 0 to stay deployed.
-     */
-    public IntakeDeployCommand(int acquireCount) {
-        m_acquireCount = acquireCount;
-        addRequirements(IntakeArmSubsystem.getInstance());
-        addRequirements(IntakeRollerSubsystem.getInstance());
-    }
-
-    @Override 
-    public void initialize() {
-        IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-        IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
-        SensorSubsystem sensors = SensorSubsystem.getInstance();
-
-        intakeArm.deploy();
-        intakeRoller.start();
-        m_startingAcquireCount = sensors.getCargoAcquired();
+    public IntakeDeployCommand() {
+        m_cameraOn = new CameraLightCommand();
+        m_deploy = new IntakeArmDeployCommand();
+        m_stow = new IntakeArmStowCommand();
+        m_collect = new IntakeRollerCollectCommand();
+        m_feederAdvance = new SequentialCommandGroup(
+            new FeederAdvanceCommand(),
+            new FeederExtraAdvanceCommand()
+        );
+        m_cargoAdjust = new CargoAdjustCommand();
     }
 
     @Override
-    public boolean isFinished() {
-        if (m_acquireCount > 0) {
-            int acquired = SensorSubsystem.getInstance().getCargoAcquired() - m_startingAcquireCount;
-            if (acquired >= m_acquireCount) {
-                // We've acquired the right amount of cargo.
-                return true;
+    public void initialize() {
+        m_cameraOn.schedule();
+        m_deploy.schedule();
+        m_collect.schedule();
+    }
+
+    @Override
+    public void execute() {
+        if (SensorSubsystem.getInstance().isCargoInIntake()) {
+            if (SensorSubsystem.getInstance().isCargoInFeeder()) {
+                // We have two cargo now.
+                m_cargoAdjust.schedule();
+                cancel();
+            } else {
+                m_feederAdvance.schedule();
             }
         }
-        return false;
-    } 
+    }
 
     @Override
     public void end(boolean interrupted) {
-        IntakeArmSubsystem intakeArm = IntakeArmSubsystem.getInstance();
-        IntakeRollerSubsystem intakeRoller = IntakeRollerSubsystem.getInstance();
-
-        intakeArm.stow();
-        intakeRoller.stop();
+        m_collect.cancel();
+        m_cameraOn.cancel();
+        m_stow.schedule();
     }
 }

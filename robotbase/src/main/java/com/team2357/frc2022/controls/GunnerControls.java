@@ -2,8 +2,12 @@ package com.team2357.frc2022.controls;
 
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.commands.human.ClimbProgressionCommand;
-import com.team2357.frc2022.commands.human.FireCommand;
-import com.team2357.frc2022.commands.human.IntakeDeployToggleCommand;
+import com.team2357.frc2022.commands.human.FireVisionCommand;
+import com.team2357.frc2022.commands.human.LockAndPrimeCommandGroup;
+import com.team2357.frc2022.commands.CargoAdjustCommand;
+import com.team2357.frc2022.commands.feeder.FeederShootCommand;
+import com.team2357.frc2022.commands.human.FireLowHubCommandGroup;
+import com.team2357.frc2022.commands.human.FireTaxiLineCommandGroup;
 import com.team2357.frc2022.commands.human.TargetLockCommand;
 import com.team2357.frc2022.commands.human.TurretAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ClimberArmsCommand;
@@ -15,6 +19,10 @@ import com.team2357.frc2022.commands.human.panic.IntakeArmsCommand;
 import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
+import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.shooter.ShooterSetRPMsCommand;
+import com.team2357.frc2022.commands.shooter.ShooterWaitForRPMsCommand;
+import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.frc2022.subsystems.TurretSubsystem;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
 import com.team2357.lib.util.Utility;
@@ -22,6 +30,8 @@ import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,7 +46,8 @@ public class GunnerControls {
 
     // Triggers
     public AxisThresholdTrigger m_leftTrigger;
-    public AxisThresholdTrigger m_rightTrigger;
+    public AxisThresholdTrigger m_rightTriggerPrime;
+    public AxisThresholdTrigger m_rightTriggerShoot;
 
     // Buttons
     public JoystickButton m_leftStickButton;
@@ -67,7 +78,8 @@ public class GunnerControls {
         m_controller = controller;
 
         // Triggers
-        m_rightTrigger = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_rightTriggerPrime = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .1);
+        m_rightTriggerShoot = new AxisThresholdTrigger(controller, Axis.kRightTrigger, .6);
         m_leftTrigger = new AxisThresholdTrigger(controller, Axis.kLeftTrigger, .1);
 
         // Buttons
@@ -131,15 +143,21 @@ public class GunnerControls {
         Trigger aButton = m_aButton.and(noDPad);
         Trigger bButton = m_bButton.and(noDPad);
         Trigger yButton = m_yButton.and(noDPad);
+        Trigger xButton = m_xButton.and(noDPad);
 
         // Left stick is "always on" for turret movement.
         TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
         m_leftStickButton.whenActive(new TurretResetCommand());
 
-        aButton.toggleWhenActive(new IntakeDeployToggleCommand());
+        aButton.whileActiveOnce(new IntakeDeployCommand());
         bButton.toggleWhenActive(new TargetLockCommand());
         yButton.toggleWhenActive(new ClimbProgressionCommand());
-        m_rightTrigger.whenActive(new FireCommand());
+        //m_rightTriggerPrime.whileActiveOnce(new FireVisionCommand());
+        m_rightTriggerShoot.whileActiveOnce(new FireVisionCommand());
+
+        xButton.whenActive(new CargoAdjustCommand());
+        m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
+        m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

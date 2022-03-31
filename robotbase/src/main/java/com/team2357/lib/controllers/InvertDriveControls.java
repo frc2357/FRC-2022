@@ -10,7 +10,8 @@ import com.team2357.lib.util.XboxRaw;
 
 /**
  * These extend {@link DriverControls} so these are the Driver's controls,
- * adapted to support the {@link InvertDriveCommand}.
+ * adapted to support the
+ * {@link InvertDriveCommand}.
  * 
  * @category Drive
  */

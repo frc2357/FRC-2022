@@ -1,13 +1,13 @@
 package com.team2357.lib.commands;
 
 import com.team2357.lib.controllers.DriverControls;
-import com.team2357.lib.subsystems.drive.SkidSteerDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 public class DriveVelocityCommand extends CommandLoggerBase {
-    private SkidSteerDriveSubsystem m_driveSub;
+    private FalconDriveSubsystem m_driveSub;
     private DriverControls m_driverController;
 
-    public DriveVelocityCommand(SkidSteerDriveSubsystem driveSub, DriverControls driverController) {
+    public DriveVelocityCommand(FalconDriveSubsystem driveSub, DriverControls driverController) {
         m_driveSub = driveSub;
         m_driverController = driverController;
         addRequirements(driveSub);
