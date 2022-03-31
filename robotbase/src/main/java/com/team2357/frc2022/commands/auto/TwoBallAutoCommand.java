@@ -22,7 +22,7 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoStartPosShotCommand());
         addCommands(new WaitCommand(0.5));
         addCommands(new AutoFeederStartCommand());
-        addCommands(new WaitCommand(1));
+        addCommands(new WaitCommand(0.25));
         addCommands(new AutoStopShootCommand());
         addCommands(new AutoFeederStopCommand());
 
@@ -31,14 +31,13 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
 
         // Move
         addCommands(new AutoDriveCommand(2500, Constants.DRIVE.AUTO_SPEED, 0.0));
-        addCommands(new AutoStopShootCommand());
-        addCommands(new WaitCommand(1));
+        addCommands(new WaitCommand(0.25));
 
         // Second ball
         addCommands(new TaxiStartShotCommand());
         addCommands(new WaitCommand(0.75));
         addCommands(new AutoFeederStartCommand());
-        addCommands(new WaitCommand(1));
+        addCommands(new WaitCommand(0.5));
 
         // Cleanup
         addCommands(new AutoStopShootCommand());

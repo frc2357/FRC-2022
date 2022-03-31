@@ -15,6 +15,7 @@ import com.team2357.frc2022.util.AvailableTrajectories;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -36,19 +37,22 @@ public class ThreeBallAutoCommand extends SequentialCommandGroup {
                 new SequentialCommandGroup(AvailableTrajectories.leaveTarmacTrajectory, new WaitCommand(0.25)),
                 new AutoIntakeCargoCommand()));
 
+        addCommands(new TaxiStartShotCommand());
+        addCommands(new WaitCommand(0.75));
+        addCommands(new AutoFeederStartCommand());
+        addCommands(new WaitCommand(0.5));
+        addCommands(new AutoFeederStopCommand());
+        addCommands(new AutoStopShootCommand());
+
         // Collect third cargo
         addCommands(new ParallelDeadlineGroup(
-                new SequentialCommandGroup(AvailableTrajectories.travelToThirdCargoTrajectory, new WaitCommand(0.25)),
-                new SequentialCommandGroup(new FeederAdvanceCommand(), new FeederExtraAdvanceCommand(),
-                        new AutoIntakeCargoCommand(), new FeederPackCommand())));
+                new SequentialCommandGroup(AvailableTrajectories.travelToThirdCargoTrajectory, new WaitCommand(2.0)),
+                        new AutoIntakeCargoCommand()));
 
         // Shoot two cargo
-        addCommands(new ParallelCommandGroup(new AutoTurretRotateCommand(250, 0.4),
-                new SequentialCommandGroup(new FeederAdvanceCommand(), new FeederExtraAdvanceCommand(),
-                        new FeederExtraAdvanceCommand())));
+        addCommands(new ParallelCommandGroup(new AutoTurretRotateCommand(250, 0.4)));
 
-        addCommands(new CargoAdjustCommand());
-        addCommands(new ParallelDeadlineGroup(new WaitCommand(5), new FireVisionCommand()));
+        addCommands(new ParallelRaceGroup(new WaitCommand(2), new FireVisionCommand()));
 
         // Cleanup
         addCommands(new AutoStopShootCommand());
