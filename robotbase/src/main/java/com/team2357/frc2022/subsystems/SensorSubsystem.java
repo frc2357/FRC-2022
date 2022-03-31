@@ -12,24 +12,26 @@ public class SensorSubsystem extends SubsystemBase {
     }
 
     private SensorBooleanState m_intakeSensor;
+    private SensorBooleanState m_indexSensor;
     private SensorBooleanState m_feederSensor;
 
     private boolean m_lastIntakeState;
+    private boolean m_lastIndexState;
     private boolean m_lastFeederState;
-    private int m_currentCargoCount;
     private int m_cargoAcquired;
     private int m_cargoLaunched;
 
     /**
      * @param intakeVictor Victor SPX to use to control intake
      */
-    public SensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
+    public SensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState indexSensor, SensorBooleanState feederSensor) {
         instance = this;
         m_intakeSensor = intakeSensor;
+        m_indexSensor = indexSensor;
         m_feederSensor = feederSensor;
         m_lastIntakeState = false;
+        m_lastIndexState = false;
         m_lastFeederState = false;
-        m_currentCargoCount = 0;
         m_cargoAcquired = 0;
         m_cargoLaunched = 0;
     }
@@ -37,31 +39,38 @@ public class SensorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         boolean intakeState = m_intakeSensor.getState();
+        boolean indexState = m_indexSensor.getState();
         boolean feederState = m_feederSensor.getState();
 
         if (intakeState != m_lastIntakeState) {
             if (intakeState) {
-                m_currentCargoCount++;
                 m_cargoAcquired++;
             }
             m_lastIntakeState = intakeState;
         }
 
+        if (indexState != m_lastIndexState) {
+            m_lastIndexState = indexState;
+        }
+
         if (feederState != m_lastFeederState) {
             if (!feederState) {
-                m_currentCargoCount--;
                 m_cargoLaunched++;
             }
             m_lastFeederState = feederState;
         }
     }
 
-    public boolean isCargoInFeeder() {
+    public boolean isCargoInIntake() {
         return m_lastIntakeState;
     }
 
-    public int getCurrentCargoCount() {
-        return m_currentCargoCount;
+    public boolean isCargoInIndex() {
+        return m_lastIndexState;
+    }
+
+    public boolean isCargoInFeeder() {
+        return m_lastFeederState;
     }
 
     public int getCargoAcquired() {
@@ -70,5 +79,13 @@ public class SensorSubsystem extends SubsystemBase {
 
     public int getCargoLaunched() {
         return m_cargoLaunched;
+    }
+
+    public boolean isRobotFilled() {
+        return isCargoInFeeder() && isCargoInIndex();
+    }
+
+    public boolean isRobotEmpty() {
+        return !isCargoInFeeder() && !isCargoInIndex();
     }
 }

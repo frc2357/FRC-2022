@@ -1,7 +1,7 @@
 package com.team2357.frc2022.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkMax;
@@ -9,7 +9,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.drive.FalconTrajectoryDriveSubsystem;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
+import com.team2357.lib.subsystems.PDHSubsystem;
 import com.team2357.lib.util.Utility;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,43 +26,32 @@ public class SubsystemFactory {
     public SubsystemFactory() {
     }
 
-    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState feederSensor) {
-        return new SensorSubsystem(intakeSensor, feederSensor);
+    public PDHSubsystem CreatePDHSubsystem() {
+        return new PDHSubsystem(Constants.CAN_ID.POWER_DISTRIBUTION_HUB_ID);
     }
 
-    public FalconTrajectoryDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
+    public SensorSubsystem CreateSensorSubsystem(SensorBooleanState intakeSensor, SensorBooleanState indexSensor, SensorBooleanState feederSensor) {
+        return new SensorSubsystem(intakeSensor, indexSensor, feederSensor);
+    }
 
-        WPI_TalonFX leftFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1,
-                Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS);
+    public FalconDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
+
+        WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
 
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] {
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS),
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS) };
+            new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_2),
+            new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_3)};
 
-        WPI_TalonFX rightFalconMaster = Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1,
-                Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS);
+        WPI_TalonFX rightFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_1);
 
         WPI_TalonFX[] rightFalconSlaves = new WPI_TalonFX[] {
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2,
-                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS),
-                Utility.createDriveTalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3,
-                        Constants.DRIVE.DRIVE_MOTOR_OPEN_RAMP_RATE_SECONDS, 
-                        Constants.DRIVE.DRIVE_MOTOR_CLOSED_RAMP_RATE_SECONDS) };
+            new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_2),
+            new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_RIGHT_3)};
 
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
 
-        FalconTrajectoryDriveSubsystem subsystem = new FalconTrajectoryDriveSubsystem(leftFalconMaster,
-                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro,
-                Constants.DRIVE.ENCODER_DISTANCE_PER_PULSE_METERS,
-                Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_A, Constants.DIO_IDS.LEFT_ENCODER_CHANNEL_B,
-                Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_A, Constants.DIO_IDS.RIGHT_ENCODER_CHANNEL_B);
+        FalconDriveSubsystem subsystem = new FalconDriveSubsystem(leftFalconMaster,
+                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro);
 
         subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
@@ -77,8 +67,9 @@ public class SubsystemFactory {
     }
 
     public IntakeRollerSubsystem CreateIntakeRollerSubsystem() {
-        VictorSPX intakeVictor = new VictorSPX(Constants.CAN_ID.INTAKE_MOTOR_ID);
-        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(intakeVictor);
+        WPI_TalonSRX masterIntakeTalon = new WPI_TalonSRX(Constants.CAN_ID.MASTER_INTAKE_MOTOR_ID);
+        WPI_TalonSRX followerIntakeTalon = new WPI_TalonSRX(Constants.CAN_ID.FOLLOWER_INTAKE_MOTOR_ID);
+        IntakeRollerSubsystem subsystem = new IntakeRollerSubsystem(masterIntakeTalon, followerIntakeTalon);
         subsystem.configure(Constants.INTAKE_ROLLER.GET_INTAKE_ROLLER_CONFIG());
         return subsystem;
     }
