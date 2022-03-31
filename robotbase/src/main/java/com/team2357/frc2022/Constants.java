@@ -227,6 +227,8 @@ public final class Constants {
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_shooterReversePercent = 0.25;
+
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
