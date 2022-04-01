@@ -75,6 +75,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_topShooterI = 0;
         public double m_topShooterD = 0;
         public double m_topShooterF = 0;
+
+        public double m_shooterReversePercent = 0;
     }
 
     /**
@@ -119,7 +121,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_leftBottomMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_leftBottomMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_leftBottomMotor.config_kP(m_config.m_PIDSlot, m_config.m_bottomShooterP, m_config.m_timeoutMS);
         m_leftBottomMotor.config_kI(m_config.m_PIDSlot, m_config.m_bottomShooterI, m_config.m_timeoutMS);
@@ -141,7 +143,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_topMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_topMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_topMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_topMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_topMotor.config_kP(0, m_config.m_topShooterP, m_config.m_timeoutMS);
         m_topMotor.config_kI(0, m_config.m_topShooterI, m_config.m_timeoutMS);
@@ -187,6 +189,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void shootLowHub() {
         setRPMBottom(m_config.m_bottomLowHubRPM);
         setRPMTop(m_config.m_topLowHubRPM);
+    }
+
+    public void reverse() {
+        m_leftBottomMotor.set(ControlMode.PercentOutput, m_config.m_shooterReversePercent);
+        setClosedLoopEnabled(false);
     }
 
     public void stop() {

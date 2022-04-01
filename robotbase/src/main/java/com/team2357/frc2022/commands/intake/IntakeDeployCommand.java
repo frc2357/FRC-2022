@@ -4,6 +4,7 @@ import com.team2357.frc2022.commands.CameraLightCommand;
 import com.team2357.frc2022.commands.CargoAdjustCommand;
 import com.team2357.frc2022.commands.feeder.FeederAdvanceCommand;
 import com.team2357.frc2022.commands.feeder.FeederExtraAdvanceCommand;
+import com.team2357.frc2022.commands.shooter.ShooterReverseCommand;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
@@ -17,6 +18,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
     private IntakeRollerCollectCommand m_collect;
     private Command m_feederAdvance;
     private Command m_cargoAdjust;
+    private Command m_shooterReverse;
 
     public IntakeDeployCommand() {
         m_cameraOn = new CameraLightCommand();
@@ -28,6 +30,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
             new FeederExtraAdvanceCommand()
         );
         m_cargoAdjust = new CargoAdjustCommand();
+        m_shooterReverse = new ShooterReverseCommand();
     }
 
     @Override
@@ -35,6 +38,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
         m_cameraOn.schedule();
         m_deploy.schedule();
         m_collect.schedule();
+        m_shooterReverse.schedule();
     }
 
     @Override
@@ -53,6 +57,7 @@ public class IntakeDeployCommand extends CommandLoggerBase {
     @Override
     public void end(boolean interrupted) {
         m_collect.cancel();
+        m_shooterReverse.cancel();
         m_cameraOn.cancel();
         m_stow.schedule();
     }
