@@ -96,7 +96,7 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
-        public static final double AUTO_SPEED = 0.1;
+        public static final double AUTO_SPEED = 0.4;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
 
@@ -130,8 +130,8 @@ public final class Constants {
         /**
          * Max Trajectory acceleration and velocity Zeroes as place holder values
          */
-        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.5;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
 
         /**
          * Values from the ramsete example.

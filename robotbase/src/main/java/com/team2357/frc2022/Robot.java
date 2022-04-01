@@ -4,6 +4,7 @@
 
 package com.team2357.frc2022;
 
+import com.team2357.frc2022.commands.DriveEnableCoastCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    FalconDriveSubsystem.getInstance().setCoast();
+    new DriveEnableCoastCommand().schedule();
     LiveWindow.disableAllTelemetry();
   }
 
