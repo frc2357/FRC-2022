@@ -373,27 +373,53 @@ public final class Constants {
             config.m_climberMotorMinOutput = -1;
             config.m_climberMotorAllowedError = 0.2;
 
-            config.m_climberUnloadedMotorP = 0.0004;
-            config.m_climberUnloadedMotorI = 0.0;
-            config.m_climberUnloadedMotorD = 0.0;
-            config.m_climberUnloadedMotorIZone = 0.01;
-            config.m_climberUnloadedMotorFF = 0.0;
-            config.m_climberUnloadedMotorMaxRPM = 1000;
+            // Unloaded
+            config.m_leftClimberUnloadedMotorP = 0.0004;
+            config.m_leftClimberUnloadedMotorI = 0.0;
+            config.m_leftClimberUnloadedMotorD = 0.0;
+            config.m_leftClimberUnloadedMotorIZone = 0.01;
+            config.m_leftClimberUnloadedMotorFF = 0.0;
+            config.m_leftClimberUnloadedMotorMaxRPM = 1000;
 
-            config.m_climberUnloadedMotorMaxVel = 5700;
-            config.m_climberUnloadedMotorMinVel = 0;
-            config.m_climberUnloadedMotorMaxAcc = 20000;
+            config.m_leftClimberUnloadedMotorMaxVel = 5700;
+            config.m_leftClimberUnloadedMotorMinVel = 0;
+            config.m_leftClimberUnloadedMotorMaxAcc = 20000;
 
-            config.m_climberLoadedMotorP = 0.0004;
-            config.m_climberLoadedMotorI = 0.0;
-            config.m_climberLoadedMotorD = 0.0;
-            config.m_climberLoadedMotorIZone = 0.0156;
-            config.m_climberLoadedMotorFF = 0.0;
-            config.m_climberLoadedMotorMaxRPM = 1000;
+            config.m_rightClimberUnloadedMotorP = 0.0004;
+            config.m_rightClimberUnloadedMotorI = 0.0;
+            config.m_rightClimberUnloadedMotorD = 0.0;
+            config.m_rightClimberUnloadedMotorIZone = 0.01;
+            config.m_rightClimberUnloadedMotorFF = 0.0;
+            config.m_rightClimberUnloadedMotorMaxRPM = 1000;
 
-            config.m_climberLoadedMotorMaxVel = 5000;
-            config.m_climberLoadedMotorMinVel = 0;
-            config.m_climberLoadedMotorMaxAcc = 3000;
+            config.m_rightClimberUnloadedMotorMaxVel = 5700;
+            config.m_rightClimberUnloadedMotorMinVel = 0;
+            config.m_rightClimberUnloadedMotorMaxAcc = 20000;
+
+
+            // Loaded
+            config.m_leftClimberLoadedMotorP = 0.0004;
+            config.m_leftClimberLoadedMotorI = 0.0;
+            config.m_leftClimberLoadedMotorD = 0.0;
+            config.m_leftClimberLoadedMotorIZone = 0.0156;
+            config.m_leftClimberLoadedMotorFF = 0.0;
+            config.m_leftClimberLoadedMotorMaxRPM = 1000;
+
+            config.m_leftClimberLoadedMotorMaxVel = 5000;
+            config.m_leftClimberLoadedMotorMinVel = 0;
+            config.m_leftClimberLoadedMotorMaxAcc = 3000;
+
+            config.m_rightClimberLoadedMotorP = 0.0004;
+            config.m_rightClimberLoadedMotorI = 0.0;
+            config.m_rightClimberLoadedMotorD = 0.0;
+            config.m_rightClimberLoadedMotorIZone = 0.0156;
+            config.m_rightClimberLoadedMotorFF = 0.0;
+            config.m_rightClimberLoadedMotorMaxRPM = 1000;
+
+            config.m_rightClimberLoadedMotorMaxVel = 5000;
+            config.m_rightClimberLoadedMotorMinVel = 0;
+            config.m_rightClimberLoadedMotorMaxAcc = 3000;
+
 
 
             return config;

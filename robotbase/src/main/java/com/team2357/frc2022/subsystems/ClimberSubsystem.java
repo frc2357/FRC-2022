@@ -46,26 +46,48 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public double m_climberMotorAllowedError = 0;
 
         // Unloaded
-        public double m_climberUnloadedMotorP = 0;
-        public double m_climberUnloadedMotorI = 0;
-        public double m_climberUnloadedMotorD = 0;
-        public double m_climberUnloadedMotorIZone = 0;
-        public double m_climberUnloadedMotorFF = 0;
-        public double m_climberUnloadedMotorMaxRPM = 0;
-        public double m_climberUnloadedMotorMaxVel = 0;
-        public double m_climberUnloadedMotorMinVel = 0;
-        public double m_climberUnloadedMotorMaxAcc = 0;
+        public double m_leftClimberUnloadedMotorP = 0;
+        public double m_leftClimberUnloadedMotorI = 0;
+        public double m_leftClimberUnloadedMotorD = 0;
+        public double m_leftClimberUnloadedMotorIZone = 0;
+        public double m_leftClimberUnloadedMotorFF = 0;
+        public double m_leftClimberUnloadedMotorMaxRPM = 0;
+        public double m_leftClimberUnloadedMotorMaxVel = 0;
+        public double m_leftClimberUnloadedMotorMinVel = 0;
+        public double m_leftClimberUnloadedMotorMaxAcc = 0;
+
+        public double m_rightClimberUnloadedMotorP = 0;
+        public double m_rightClimberUnloadedMotorI = 0;
+        public double m_rightClimberUnloadedMotorD = 0;
+        public double m_rightClimberUnloadedMotorIZone = 0;
+        public double m_rightClimberUnloadedMotorFF = 0;
+        public double m_rightClimberUnloadedMotorMaxRPM = 0;
+        public double m_rightClimberUnloadedMotorMaxVel = 0;
+        public double m_rightClimberUnloadedMotorMinVel = 0;
+        public double m_rightClimberUnloadedMotorMaxAcc = 0;
+
 
         // Loaded
-        public double m_climberLoadedMotorP = 0;
-        public double m_climberLoadedMotorI = 0;
-        public double m_climberLoadedMotorD = 0;
-        public double m_climberLoadedMotorIZone = 0;
-        public double m_climberLoadedMotorFF = 0;
-        public double m_climberLoadedMotorMaxRPM = 0;
-        public double m_climberLoadedMotorMaxVel = 0;
-        public double m_climberLoadedMotorMinVel = 0;
-        public double m_climberLoadedMotorMaxAcc = 0;
+        public double m_leftClimberLoadedMotorP = 0;
+        public double m_leftClimberLoadedMotorI = 0;
+        public double m_leftClimberLoadedMotorD = 0;
+        public double m_leftClimberLoadedMotorIZone = 0;
+        public double m_leftClimberLoadedMotorFF = 0;
+        public double m_leftClimberLoadedMotorMaxRPM = 0;
+        public double m_leftClimberLoadedMotorMaxVel = 0;
+        public double m_leftClimberLoadedMotorMinVel = 0;
+        public double m_leftClimberLoadedMotorMaxAcc = 0;
+
+        public double m_rightClimberLoadedMotorP = 0;
+        public double m_rightClimberLoadedMotorI = 0;
+        public double m_rightClimberLoadedMotorD = 0;
+        public double m_rightClimberLoadedMotorIZone = 0;
+        public double m_rightClimberLoadedMotorFF = 0;
+        public double m_rightClimberLoadedMotorMaxRPM = 0;
+        public double m_rightClimberLoadedMotorMaxVel = 0;
+        public double m_rightClimberLoadedMotorMinVel = 0;
+        public double m_rightClimberLoadedMotorMaxAcc = 0;
+
 
 
     }
@@ -119,48 +141,83 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public void switchToUnloadedClimberPID() {
-        configureUnloadedClimberPID(m_leftPidController);
-        configureUnloadedClimberPID(m_rightPidController);
+        configureLeftUnloadedClimberPID(m_leftPidController);
+        configureRightUnloadedClimberPID(m_rightPidController);
     }
 
     public void switchToLoadedClimberPID() {
-        configureLoadedClimberPID(m_leftPidController);
-        configureLoadedClimberPID(m_rightPidController);
+        configureLeftLoadedClimberPID(m_leftPidController);
+        configureRightLoadedClimberPID(m_rightPidController);
     }
 
 
-    private void configureUnloadedClimberPID(SparkMaxPIDController pidController) {
+    private void configureLeftUnloadedClimberPID(SparkMaxPIDController pidController) {
         // set PID coefficients
-        pidController.setP(m_config.m_climberUnloadedMotorP);
-        pidController.setI(m_config.m_climberUnloadedMotorI);
-        pidController.setD(m_config.m_climberUnloadedMotorD);
-        pidController.setIZone(m_config.m_climberUnloadedMotorIZone);
-        pidController.setFF(m_config.m_climberUnloadedMotorFF);
+        pidController.setP(m_config.m_leftClimberUnloadedMotorP);
+        pidController.setI(m_config.m_leftClimberUnloadedMotorI);
+        pidController.setD(m_config.m_leftClimberUnloadedMotorD);
+        pidController.setIZone(m_config.m_leftClimberUnloadedMotorIZone);
+        pidController.setFF(m_config.m_leftClimberUnloadedMotorFF);
         pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
 
         // Configure smart motion
         int smartMotionSlot = 0;
-        pidController.setSmartMotionMaxVelocity(m_config.m_climberUnloadedMotorMaxVel, smartMotionSlot);
-        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberUnloadedMotorMinVel, smartMotionSlot);
-        pidController.setSmartMotionMaxAccel(m_config.m_climberUnloadedMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionMaxVelocity(m_config.m_leftClimberUnloadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_leftClimberUnloadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_leftClimberUnloadedMotorMaxAcc, smartMotionSlot);
         pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
     }
 
-    private void configureLoadedClimberPID(SparkMaxPIDController pidController) {
-        pidController.setP(m_config.m_climberLoadedMotorP);
-        pidController.setI(m_config.m_climberLoadedMotorI);
-        pidController.setD(m_config.m_climberLoadedMotorD);
-        pidController.setIZone(m_config.m_climberLoadedMotorIZone);
-        pidController.setFF(m_config.m_climberLoadedMotorFF);
+    private void configureRightUnloadedClimberPID(SparkMaxPIDController pidController) {
+        // set PID coefficients
+        pidController.setP(m_config.m_rightClimberUnloadedMotorP);
+        pidController.setI(m_config.m_rightClimberUnloadedMotorI);
+        pidController.setD(m_config.m_rightClimberUnloadedMotorD);
+        pidController.setIZone(m_config.m_rightClimberUnloadedMotorIZone);
+        pidController.setFF(m_config.m_rightClimberUnloadedMotorFF);
         pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
 
         // Configure smart motion
         int smartMotionSlot = 0;
-        pidController.setSmartMotionMaxVelocity(m_config.m_climberLoadedMotorMaxVel, smartMotionSlot);
-        pidController.setSmartMotionMinOutputVelocity(m_config.m_climberLoadedMotorMinVel, smartMotionSlot);
-        pidController.setSmartMotionMaxAccel(m_config.m_climberLoadedMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionMaxVelocity(m_config.m_rightClimberUnloadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_rightClimberUnloadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_rightClimberUnloadedMotorMaxAcc, smartMotionSlot);
         pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
     }
+
+
+    private void configureLeftLoadedClimberPID(SparkMaxPIDController pidController) {
+        pidController.setP(m_config.m_leftClimberLoadedMotorP);
+        pidController.setI(m_config.m_leftClimberLoadedMotorI);
+        pidController.setD(m_config.m_leftClimberLoadedMotorD);
+        pidController.setIZone(m_config.m_leftClimberLoadedMotorIZone);
+        pidController.setFF(m_config.m_leftClimberLoadedMotorFF);
+        pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
+
+        // Configure smart motion
+        int smartMotionSlot = 0;
+        pidController.setSmartMotionMaxVelocity(m_config.m_leftClimberLoadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_leftClimberLoadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_leftClimberLoadedMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
+    }
+
+    private void configureRightLoadedClimberPID(SparkMaxPIDController pidController) {
+        pidController.setP(m_config.m_rightClimberLoadedMotorP);
+        pidController.setI(m_config.m_rightClimberLoadedMotorI);
+        pidController.setD(m_config.m_rightClimberLoadedMotorD);
+        pidController.setIZone(m_config.m_rightClimberLoadedMotorIZone);
+        pidController.setFF(m_config.m_rightClimberLoadedMotorFF);
+        pidController.setOutputRange(m_config.m_climberMotorMinOutput, m_config.m_climberMotorMaxOutput);
+
+        // Configure smart motion
+        int smartMotionSlot = 0;
+        pidController.setSmartMotionMaxVelocity(m_config.m_rightClimberLoadedMotorMaxVel, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(m_config.m_rightClimberLoadedMotorMinVel, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(m_config.m_rightClimberLoadedMotorMaxAcc, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
+    }
+
 
     /**
      * 
