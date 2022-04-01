@@ -6,6 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.team2357.frc2022.util.Utility;
 import com.team2357.lib.subsystems.ClosedLoopSubsystem;
+import com.team2357.lib.subsystems.PDHSubsystem;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -37,7 +38,10 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
         public boolean m_isRightSideInverted = false;
 
-        public int m_climberGrippedAmps = 0;
+        public int m_climberGrippedWatts = 0;
+        public int m_climberPulledUpWatts = 0;
+
+        public int m_climberAmpEqualizeMillis = 0;
 
         // smart motion config
 
@@ -67,7 +71,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public double m_rightClimberUnloadedMotorMinVel = 0;
         public double m_rightClimberUnloadedMotorMaxAcc = 0;
 
-
         // Loaded
         public double m_leftClimberLoadedMotorP = 0;
         public double m_leftClimberLoadedMotorI = 0;
@@ -89,8 +92,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         public double m_rightClimberLoadedMotorMinVel = 0;
         public double m_rightClimberLoadedMotorMaxAcc = 0;
 
-
-
     }
 
     private Configuration m_config;
@@ -103,11 +104,16 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     private double m_targetRotations;
 
-    public boolean m_isLeftAtTarget;
-    public boolean m_isRightAtTarget;
+    private long m_ampEqualizeMillis;
 
-    public boolean m_isLeftGripped;
-    public boolean m_isRightGripped;
+    private boolean m_isLeftAtTarget;
+    private boolean m_isRightAtTarget;
+
+    private boolean m_isLeftGripped;
+    private boolean m_isRightGripped;
+
+    private boolean m_isLeftPulledUp;
+    private boolean m_isRightPulledUp;
 
     private int m_commandIndex;
 
@@ -157,7 +163,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         configureRightLoadedClimberPID(m_rightPidController);
     }
 
-
     private void configureLeftUnloadedClimberPID(SparkMaxPIDController pidController) {
         // set PID coefficients
         pidController.setP(m_config.m_leftClimberUnloadedMotorP);
@@ -192,7 +197,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
     }
 
-
     private void configureLeftLoadedClimberPID(SparkMaxPIDController pidController) {
         pidController.setP(m_config.m_leftClimberLoadedMotorP);
         pidController.setI(m_config.m_leftClimberLoadedMotorI);
@@ -225,7 +229,6 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         pidController.setSmartMotionAllowedClosedLoopError(m_config.m_climberMotorAllowedError, smartMotionSlot);
     }
 
-
     /**
      * 
      * @param rotations Setpoint in rotations for the climber motor to go to
@@ -234,10 +237,11 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public void setClimberRotations(double rotations) {
         setClosedLoopEnabled(true);
         m_targetRotations = rotations;
-         m_leftPidController.setReference(m_targetRotations,
-         CANSparkMax.ControlType.kSmartMotion);
+        m_leftPidController.setReference(m_targetRotations,
+                CANSparkMax.ControlType.kSmartMotion);
         m_rightPidController.setReference(m_targetRotations, CANSparkMax.ControlType.kSmartMotion);
 
+        m_ampEqualizeMillis = m_config.m_climberAmpEqualizeMillis + System.currentTimeMillis();
         m_isLeftAtTarget = false;
         m_isRightAtTarget = false;
     }
@@ -255,12 +259,12 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
      * @return If both motors are stopped at setpoint
      */
     public boolean handleClimberRotations() {
-        if(isLeftClimberAtRotations()) {
+        if (isLeftClimberAtRotations()) {
             m_leftClimberMotor.set(0);
             m_isLeftAtTarget = true;
         }
 
-        if(isRightClimberAtRotations()) {
+        if (isRightClimberAtRotations()) {
             m_rightClimberMotor.set(0);
             m_isRightAtTarget = true;
         }
@@ -297,16 +301,43 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     }
 
     public boolean isClimberGripped() {
-        if(m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) {
+        if (getLeftWatts() > m_config.m_climberGrippedWatts) {
             m_leftClimberMotor.stopMotor();
             m_isLeftGripped = true;
-        } 
-        if (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) {
+        }
+        if (getRightWatts() > m_config.m_climberGrippedWatts) {
             m_rightClimberMotor.stopMotor();
             m_isRightGripped = true;
         }
         return m_isLeftGripped && m_isRightGripped;
-     }
+    }
+
+    public void resetClimberPulledUpStates() {
+        m_isLeftPulledUp = false;
+        m_isRightPulledUp = false;
+    }
+
+    public boolean isClimberPulledUp() {
+        if (m_ampEqualizeMillis < System.currentTimeMillis()) {
+            if (getLeftWatts() > m_config.m_climberGrippedWatts) {
+                m_leftClimberMotor.stopMotor();
+                m_isLeftPulledUp = true;
+            }
+            if (getRightWatts() > m_config.m_climberGrippedWatts) {
+                m_rightClimberMotor.stopMotor();
+                m_isRightPulledUp = true;
+            }
+        }
+        return m_isLeftPulledUp && m_isRightPulledUp;
+    }
+
+    public double getLeftWatts() {
+        return m_leftClimberMotor.getOutputCurrent() * PDHSubsystem.getInstance().getVoltage();
+    }
+
+    public double getRightWatts() {
+        return m_rightClimberMotor.getOutputCurrent() * PDHSubsystem.getInstance().getVoltage();
+    }
 
     // Method to set climber speed from a joystick
     public void setClimberAxisSpeed(double axisSpeed) {
@@ -363,15 +394,22 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     @Override
     public void periodic() {
-        if (isClosedLoopEnabled() ) {
-            if(isClimberAtRotations()) {
-            setClosedLoopEnabled(false);
+        if (isClosedLoopEnabled()) {
+            if (isClimberAtRotations()) {
+                setClosedLoopEnabled(false);
             }
         }
 
-        SmartDashboard.putNumber("left rotations", m_leftClimberMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("right rotations", m_rightClimberMotor.getEncoder().getPosition());
-        //System.out.println("Speed: " + m_rightClimberMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("left rotations",
+        // m_leftClimberMotor.getEncoder().getPosition());
+        // SmartDashboard.putNumber("right rotations",
+        // m_rightClimberMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Left watts",
+                m_leftClimberMotor.getOutputCurrent() * PDHSubsystem.getInstance().getVoltage());
+        SmartDashboard.putNumber("Right watts",
+                m_rightClimberMotor.getOutputCurrent() * PDHSubsystem.getInstance().getVoltage());
+        // System.out.println("Speed: " +
+        // m_rightClimberMotor.getEncoder().getVelocity());
     }
 
     public int getCommandIndex() {

@@ -5,14 +5,18 @@ import com.team2357.frc2022.commands.human.panic.ClimberWinchResetCommand;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class ClimberPullToRungCommandGroup extends SequentialCommandGroup {
     public ClimberPullToRungCommandGroup() {
-        
-        addCommands(new ParallelCommandGroup(new ClimberGoToRotationsCommand(Constants.CLIMBER.PULL_ONTO_RUNG_ROTATIONS),
-                                             new ClimberSetLatchCommand(true)));
-                                             
+        addCommands(new ClimberSetLatchCommand(true));
+
+        addCommands(new ParallelDeadlineGroup(new ClimberPulledUpCommand(),
+                new SequentialCommandGroup(
+                        new ClimberGoToRotationsCommand(Constants.CLIMBER.PULL_ONTO_RUNG_ROTATIONS),
+                        new ClimberProportionalCommand(Constants.CLIMBER.SNUG_TO_BAR_SPEED))));
+
         addCommands(new ClimberSetLatchCommand(false));
 
         addCommands(new ClimberWinchResetCommand());
