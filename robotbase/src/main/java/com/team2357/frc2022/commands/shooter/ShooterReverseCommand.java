@@ -18,6 +18,3 @@ public class ShooterReverseCommand extends CommandLoggerBase {
         ShooterSubsystem.getInstance().stop();
     }
 }
-
-    
-}
