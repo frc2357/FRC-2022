@@ -18,7 +18,7 @@ public class ClimberSetUprightCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        ClimberSubsystem.getInstance().setClimberUpright(m_setUpright);
+        ClimberSubsystem.getInstance().setClimberUpright(!m_setUpright);
     }
 
     @Override

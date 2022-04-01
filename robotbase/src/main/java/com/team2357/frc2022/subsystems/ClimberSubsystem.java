@@ -319,11 +319,11 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public boolean isClimberPulledUp() {
         if (m_ampEqualizeMillis < System.currentTimeMillis()) {
-            if (getLeftWatts() > m_config.m_climberGrippedWatts) {
+            if (getLeftWatts() > m_config.m_climberPulledUpWatts) {
                 m_leftClimberMotor.stopMotor();
                 m_isLeftPulledUp = true;
             }
-            if (getRightWatts() > m_config.m_climberGrippedWatts) {
+            if (getRightWatts() > m_config.m_climberPulledUpWatts) {
                 m_rightClimberMotor.stopMotor();
                 m_isRightPulledUp = true;
             }

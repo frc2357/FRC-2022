@@ -4,6 +4,8 @@ import com.team2357.frc2022.commands.climb.ClimberClimbToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberExtendToReachableCommandGroup;
 import com.team2357.frc2022.commands.climb.ClimberPrepareToTraverseCommand;
 import com.team2357.frc2022.commands.climb.ClimberPullToRungCommandGroup;
+import com.team2357.frc2022.commands.climb.ClimberSetLatchCommand;
+import com.team2357.frc2022.commands.human.panic.ClimberLatchCommand;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
@@ -19,7 +21,6 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
             new ClimberPullToRungCommandGroup()
     };
 
-
     public ClimbProgressionCommand() {
         ClimberSubsystem.getInstance().setCommandIndex(0);
         ClimberSubsystem.getInstance().resetEncoders();
@@ -29,6 +30,14 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
     public void initialize() {
         int commandIndex = ClimberSubsystem.getInstance().getCommandIndex();
 
+        if (commandIndex-1 >= 0) {
+            if (climbCommands[commandIndex - 1].isScheduled()) {
+
+                climbCommands[commandIndex - 1].cancel();
+                new ClimberSetLatchCommand(false).schedule();
+                return;
+            }
+        }
         if (commandIndex < climbCommands.length) {
             climbCommands[commandIndex].schedule();
             ClimberSubsystem.getInstance().setCommandIndex(++commandIndex);
@@ -40,7 +49,7 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
 
     @Override
     public void end(boolean interrupted) {
-        if(ClimberSubsystem.getInstance().getCommandIndex() == climbCommands.length + 1) {
+        if (ClimberSubsystem.getInstance().getCommandIndex() == climbCommands.length + 1) {
             ClimberSubsystem.getInstance().setCommandIndex(0);
         }
     }

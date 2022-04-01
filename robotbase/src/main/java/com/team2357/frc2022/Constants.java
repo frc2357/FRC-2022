@@ -364,15 +364,14 @@ public final class Constants {
         public static final double SETTLE_TO_RUNG_ROTATIONS = 225;
         public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 2.0;
         public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
-        public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 500;
         public static final double RETRACT_SLOW = -0.1;
-        public static final double SNUG_TO_BAR_SPEED = -0.2;
+        public static final double SNUG_TO_BAR_SPEED = -0.3;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 //Max watts 300
             config.m_climberAxisMaxSpeed = 1.0;
-            config.m_climbSettleToBarSpeed = -0.1;
+            config.m_climbSettleToBarSpeed = -0.2;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 30;
@@ -380,7 +379,7 @@ public final class Constants {
             config.m_isRightSideInverted = false;
             config.m_climberGrippedWatts = 150;
             config.m_climberPulledUpWatts = 300;
-            config.m_climberAmpEqualizeMillis = 500;
+            config.m_climberAmpEqualizeMillis = 4000;
 
             // TODO: Tune climber smart motion constants, currently values from rev's
             // example
