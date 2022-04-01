@@ -31,7 +31,7 @@ public class ClimbProgressionCommand extends CommandLoggerBase {
 
         if (commandIndex < climbCommands.length) {
             climbCommands[commandIndex].schedule();
-            ClimberSubsystem.getInstance().setCommandIndex(commandIndex++);
+            ClimberSubsystem.getInstance().setCommandIndex(++commandIndex);
             System.out.println("Scheduling command");
         }
 

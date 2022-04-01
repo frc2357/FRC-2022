@@ -96,6 +96,7 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
+
         public static final double AUTO_SPEED = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
@@ -350,18 +351,25 @@ public final class Constants {
     public static final class CLIMBER {
 
         //TODO: Tune timings and rotations
+        // Left needs t0 go 20 more than right
+      //  public static final double LEFT_OFFSET_FURTHER = -20;
+      // What to do:
+      /**
+       * Use proportional to lower arms onto rung, stopping each at their own amperage limits
+       */
         public static final double PULL_ONTO_RUNG_ROTATIONS = 1;
-        public static final double EXTEND_TO_RUNG_ROTATIONS = 120;//125
-        public static final double SETTLE_TO_RUNG_ROTATIONS = 100;
+        public static final double EXTEND_TO_RUNG_ROTATIONS = 300;//125
+        public static final double SETTLE_TO_RUNG_ROTATIONS = 225;
         public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 2.0;
         public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
         public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 500;
-        public static final double RETRACT_SLOW = 0.1;
+        public static final double RETRACT_SLOW = -0.1;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
 
             config.m_climberAxisMaxSpeed = 1.0;
+            config.m_climbSettleToBarSpeed = -0.1;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 30;

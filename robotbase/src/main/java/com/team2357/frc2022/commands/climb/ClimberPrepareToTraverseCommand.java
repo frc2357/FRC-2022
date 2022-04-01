@@ -1,6 +1,7 @@
 package com.team2357.frc2022.commands.climb;
 
 import com.team2357.frc2022.Constants;
+import com.team2357.frc2022.commands.human.panic.ClimberWinchResetCommand;
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -13,7 +14,7 @@ public class ClimberPrepareToTraverseCommand extends SequentialCommandGroup{
 
         addCommands(new WaitCommand(Constants.CLIMBER.CLIMBER_TIME_TO_UPRIGHT_SECONDS));
 
-        addCommands(new ClimberSettleToRungCommand());
+        addCommands(new ClimberPullToAmpCommand());
 
         addRequirements(ClimberSubsystem.getInstance());
     }   

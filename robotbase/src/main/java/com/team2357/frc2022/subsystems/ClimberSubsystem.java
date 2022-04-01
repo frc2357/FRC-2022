@@ -28,6 +28,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public static class Configuration {
         public double m_climberAxisMaxSpeed = 0;
+        public double m_climbSettleToBarSpeed = 0;
 
         public IdleMode m_climberMotorIdleMode = IdleMode.kBrake;
 
@@ -104,6 +105,9 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
 
     public boolean m_isLeftAtTarget;
     public boolean m_isRightAtTarget;
+
+    public boolean m_isLeftGripped;
+    public boolean m_isRightGripped;
 
     private int m_commandIndex;
 
@@ -284,10 +288,25 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
                 m_config.m_climberMotorAllowedError);
     }
 
-    public boolean isClimberGripped() {
-        return (m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps)
-                && (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps);
+    public void retractToAmpLimit() {
+        m_leftClimberMotor.set(m_config.m_climbSettleToBarSpeed);
+        m_rightClimberMotor.set(m_config.m_climbSettleToBarSpeed);
+
+        m_isLeftGripped = false;
+        m_isRightGripped = false;
     }
+
+    public boolean isClimberGripped() {
+        if(m_leftClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) {
+            m_leftClimberMotor.stopMotor();
+            m_isLeftGripped = true;
+        } 
+        if (m_rightClimberMotor.getOutputCurrent() > m_config.m_climberGrippedAmps) {
+            m_rightClimberMotor.stopMotor();
+            m_isRightGripped = true;
+        }
+        return m_isLeftGripped && m_isRightGripped;
+     }
 
     // Method to set climber speed from a joystick
     public void setClimberAxisSpeed(double axisSpeed) {
