@@ -131,8 +131,8 @@ public final class Constants {
         /**
          * Max Trajectory acceleration and velocity Zeroes as place holder values
          */
-        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.5;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
 
         /**
          * Values from the ramsete example.
@@ -228,6 +228,8 @@ public final class Constants {
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_shooterReversePercent = -0.25;
+
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
@@ -284,7 +286,7 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.01;
+            config.m_trackingP = 0.015;
             config.m_trackingI = 0.01;
             config.m_trackingD = 0.0002;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
@@ -497,7 +499,7 @@ public final class Constants {
     }
 
     public static final class FEEDER {
-        public static final long EXTRA_ADVANCE_MILLIS = 120;
+        public static final long EXTRA_ADVANCE_MILLIS = 60;
         public static final long PACK_MILLIS = 160;
 
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {

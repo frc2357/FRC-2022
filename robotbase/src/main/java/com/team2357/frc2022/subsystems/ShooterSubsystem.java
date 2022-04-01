@@ -21,11 +21,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
-            { 22.2,   2500, 3000  },    // Close shot (iffy)
-            { 15.5,   2250, 3500  },    // Not as close shot
-            { 3.69,   2700, 7500  },    // Taxi line shot
+            { 20,   3100, 2900  },    // Close shot (iffy)
+            { 15.5,   3100, 3500  },    // Not as close shot
+            { 3.69,   3000, 7000  },
+            {-8.0, 3650, 8300 },    // Taxi line shot
             { -11.06, 3650, 8300  },    // Mid shot
-            { -17.31, 4400, 11800 },    // Farthest (touching ceiling in shop)
+            { -15, 4800, 11800 },    // Farthest (touching ceiling in shop)
     };
 
     private WPI_TalonFX m_leftBottomMotor;
@@ -75,6 +76,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_topShooterI = 0;
         public double m_topShooterD = 0;
         public double m_topShooterF = 0;
+
+        public double m_shooterReversePercent = 0;
     }
 
     /**
@@ -119,7 +122,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_leftBottomMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_leftBottomMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_leftBottomMotor.config_kP(m_config.m_PIDSlot, m_config.m_bottomShooterP, m_config.m_timeoutMS);
         m_leftBottomMotor.config_kI(m_config.m_PIDSlot, m_config.m_bottomShooterI, m_config.m_timeoutMS);
@@ -141,7 +144,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_topMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_topMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_topMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_topMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_topMotor.config_kP(0, m_config.m_topShooterP, m_config.m_timeoutMS);
         m_topMotor.config_kI(0, m_config.m_topShooterI, m_config.m_timeoutMS);
@@ -187,6 +190,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void shootLowHub() {
         setRPMBottom(m_config.m_bottomLowHubRPM);
         setRPMTop(m_config.m_topLowHubRPM);
+    }
+
+    public void reverse() {
+        m_leftBottomMotor.set(ControlMode.PercentOutput, m_config.m_shooterReversePercent);
+        setClosedLoopEnabled(false);
     }
 
     public void stop() {
