@@ -105,6 +105,8 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
     public boolean m_isLeftAtTarget;
     public boolean m_isRightAtTarget;
 
+    private int m_commandIndex;
+
     ClimberSubsystem(CANSparkMax leftClimberMotor, CANSparkMax rightClimberMotor, DoubleSolenoid climberSolenoid,
             Solenoid hookSolenoid) {
         instance = this;
@@ -113,6 +115,7 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_climberSolenoid = climberSolenoid;
         m_hookSolenoid = hookSolenoid;
         m_climberSolenoid.set(DoubleSolenoid.Value.kOff);
+        m_commandIndex = 0;
     }
 
     public void configure(Configuration config) {
@@ -343,5 +346,13 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         SmartDashboard.putNumber("left rotations", m_leftClimberMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("right rotations", m_rightClimberMotor.getEncoder().getPosition());
         //System.out.println("Speed: " + m_rightClimberMotor.getEncoder().getVelocity());
+    }
+
+    public int getCommandIndex() {
+        return m_commandIndex;
+    }
+
+    public void setCommandIndex(int index) {
+        m_commandIndex = index;
     }
 }

@@ -352,7 +352,8 @@ public final class Constants {
         //TODO: Tune timings and rotations
         public static final double PULL_ONTO_RUNG_ROTATIONS = 1;
         public static final double EXTEND_TO_RUNG_ROTATIONS = 120;//125
-        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0.25;
+        public static final double SETTLE_TO_RUNG_ROTATIONS = 100;
+        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 2.0;
         public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
         public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 500;
 
