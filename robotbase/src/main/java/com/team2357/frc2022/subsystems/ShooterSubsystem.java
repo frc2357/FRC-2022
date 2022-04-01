@@ -21,11 +21,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
-            { 22.2,   2500, 3000  },    // Close shot (iffy)
-            { 15.5,   2250, 3500  },    // Not as close shot
-            { 3.69,   2700, 7500  },    // Taxi line shot
+            { 20,   3100, 2900  },    // Close shot (iffy)
+            { 15.5,   3100, 3500  },    // Not as close shot
+            { 3.69,   3000, 7000  },
+            {-8.0, 3650, 8300 },    // Taxi line shot
             { -11.06, 3650, 8300  },    // Mid shot
-            { -17.31, 4400, 11800 },    // Farthest (touching ceiling in shop)
+            { -15, 4800, 11800 },    // Farthest (touching ceiling in shop)
     };
 
     private WPI_TalonFX m_leftBottomMotor;

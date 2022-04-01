@@ -30,7 +30,7 @@ public class TwoBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoStartIntakeCommand());
 
         // Move
-        addCommands(new AutoDriveCommand(2500, Constants.DRIVE.AUTO_SPEED, 0.0));
+        addCommands(new AutoDriveCommand(2500, 0.1, 0.0));
         addCommands(new WaitCommand(0.25));
 
         // Second ball
