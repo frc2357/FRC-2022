@@ -299,6 +299,13 @@ public class ClimberSubsystem extends ClosedLoopSubsystem {
         m_rightClimberMotor.set(motorSpeed);
     }
 
+    public void setClimberSpeed(double speed) {
+        setClosedLoopEnabled(false);
+
+        m_leftClimberMotor.set(speed);
+        m_rightClimberMotor.set(speed);
+    }
+
     // Method to stop the motors
     public void stopClimberMotors() {
         setClosedLoopEnabled(false);

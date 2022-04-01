@@ -356,6 +356,7 @@ public final class Constants {
         public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 2.0;
         public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
         public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 500;
+        public static final double RETRACT_SLOW = 0.1;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();

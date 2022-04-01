@@ -11,6 +11,7 @@ public class ClimberExtendToReachableCommandGroup extends SequentialCommandGroup
 
     public ClimberExtendToReachableCommandGroup() {
 
+        addCommands(new ClimberResetCommand());
         addCommands(new ParallelCommandGroup(
                 new ClimberSetLatchCommand(true),
                 new ClimberGoToRotationsCommand(Constants.CLIMBER.EXTEND_TO_RUNG_ROTATIONS)));
