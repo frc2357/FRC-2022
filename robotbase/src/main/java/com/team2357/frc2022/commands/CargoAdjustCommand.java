@@ -24,6 +24,8 @@ public class CargoAdjustCommand extends SequentialCommandGroup {
             new FeederPackCommand()
         ));
 
+        addCommands(new FeederExtraAdvanceCommand());
+
         // Now advance just the feeder
         addCommands(new ParallelDeadlineGroup(
             new WaitCommand(0.25),
