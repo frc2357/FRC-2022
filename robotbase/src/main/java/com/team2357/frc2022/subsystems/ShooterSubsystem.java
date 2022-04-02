@@ -22,11 +22,12 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
             { 20,   3100, 2900  },    // Close shot (iffy)
-            { 15.5,   3100, 3500  },    // Not as close shot
+            { 15.5,   3200, 2800  },    // Not as close shot
             { 3.69,   3000, 7000  },
-            {-8.0, 3650, 8300 },    // Taxi line shot
-            { -11.06, 3650, 8300  },    // Mid shot
-            { -15, 4800, 11800 },    // Farthest (touching ceiling in shop)
+            {-8.0, 3500, 9800 },    // Taxi line shot
+            { -11.06, 4300, 9500  },    // Mid shot
+            { -15, 4800, 11700 },    // Farthest (touching ceiling in shop)
+            {-45, 4800, 11700}
     };
 
     private WPI_TalonFX m_leftBottomMotor;
@@ -171,9 +172,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      */
     public void setRPMTop(double rpm) {
         m_topTargetRPMs = rpm;
+        SmartDashboard.putNumber("target RPM", m_topTargetRPMs);
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
-        //SmartDashboard.putNumber("target native speed", nativeSpeed);
+        SmartDashboard.putNumber("target native speed", nativeSpeed);
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -240,8 +242,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
             shootVisionPeriodic();
         }
 
-        //SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
-        //SmartDashboard.putNumber("top", getTopShooterRPMs());
+        SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
+        SmartDashboard.putNumber("top", getTopShooterRPMs());
         //SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
         //SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
         //SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
@@ -277,10 +279,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         double highAngle = pointA[0];
         double lowAngle = pointB[0];
-        double highBottomRPMs = pointB[1];
+        double highBottomRPMs = pointA[1];
         double lowBottomRPMs = pointB[1];
-        double highTopRPMs = pointA[1];
-        double lowTopRPMs = pointB[1];
+        double highTopRPMs = pointA[2];
+        double lowTopRPMs = pointB[2];
 
         double bottomRpms = RobotMath.lineralyInterpolate(highBottomRPMs, lowBottomRPMs, highAngle, lowAngle, yAngle);
 

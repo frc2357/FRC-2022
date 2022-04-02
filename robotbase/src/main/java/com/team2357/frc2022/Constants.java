@@ -286,8 +286,8 @@ public final class Constants {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
             config.m_trackingP = 0.015;
-            config.m_trackingI = 0.01;
-            config.m_trackingD = 0.0002;
+            config.m_trackingI = 0.03;
+            config.m_trackingD = 0.0004;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingAllowedError = 1.5; // The amount of tracking degrees to allow and still shoot.
@@ -448,7 +448,7 @@ public final class Constants {
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorAdvanceSpeed = 0.35;
+            config.m_feederMotorAdvanceSpeed = 0.43;
             config.m_feederMotorShootSpeed = 1.0;
             config.m_feederMotorPackSpeed = -0.5;
             return config;
