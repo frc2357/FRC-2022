@@ -380,6 +380,9 @@ public final class Constants {
             config.m_climberGrippedWatts = 150;
             config.m_climberPulledUpWatts = 300;
             config.m_climberAmpEqualizeMillis = 4000;
+            config.m_climberGrippedWatts = 170;
+            config.m_climberPulledUpWatts = 320;
+            config.m_climberAmpEqualizeMillis = 4000;
 
             // TODO: Tune climber smart motion constants, currently values from rev's
             // example
