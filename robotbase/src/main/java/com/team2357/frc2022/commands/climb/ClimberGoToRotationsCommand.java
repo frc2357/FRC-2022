@@ -14,15 +14,24 @@ public class ClimberGoToRotationsCommand extends CommandLoggerBase {
     @Override
     public void initialize() {
         ClimberSubsystem.getInstance().setClimberRotations(m_rotations);
+        //System.out.println("Starting go to rotations");
+        System.out.println("Start time: " + (System.currentTimeMillis() * 1000));
+    }
+
+    @Override
+    public void execute() {
+        //System.out.println("Running go to rotations");
     }
 
     @Override
     public void end(boolean interrupted) {
         ClimberSubsystem.getInstance().stopClimberMotors();
+        //System.out.println("Ening go to rotations");
+        System.out.println("End time: " + (System.currentTimeMillis() * 1000));
     }
 
     @Override
     public boolean isFinished() {
-        return ClimberSubsystem.getInstance().isClimberAtRotations();
+        return ClimberSubsystem.getInstance().handleClimberRotations();
     }
 }

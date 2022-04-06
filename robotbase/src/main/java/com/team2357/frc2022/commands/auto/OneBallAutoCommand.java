@@ -17,7 +17,7 @@ public class OneBallAutoCommand extends SequentialCommandGroup {
         addCommands(new AutoFeederStopCommand());
 
         // Move
-        addCommands(new AutoDriveCommand(2000, Constants.DRIVE.AUTO_SPEED, 0.0));
+        addCommands(new AutoDriveCommand(2000, 0.1, 0.0));
         addCommands(new AutoStopShootCommand());
         addCommands(new WaitCommand(1));
     }

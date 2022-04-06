@@ -96,6 +96,7 @@ public final class Constants {
 
     // Encoder Constants
     public final static class DRIVE {
+
         public static final double AUTO_SPEED = 0.1;
 
         public static final double WHEEL_DIAMETER_IN_METERS = 0.1016;
@@ -130,8 +131,8 @@ public final class Constants {
         /**
          * Max Trajectory acceleration and velocity Zeroes as place holder values
          */
-        public static final double MAX_SPEED_METERS_PER_SECOND = 1;
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 0.5;
+        public static final double MAX_SPEED_METERS_PER_SECOND = 3;
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
 
         /**
          * Values from the ramsete example.
@@ -227,6 +228,8 @@ public final class Constants {
             config.m_timeoutMS = TIMEOUT_MS;
             config.m_shooterMotorPeakOutput = 1.0;
 
+            config.m_shooterReversePercent = -0.25;
+
             config.m_bottomLowHubRPM = 1500;
             config.m_topLowHubRPM = 3000;
 
@@ -283,9 +286,9 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.01;
-            config.m_trackingI = 0.01;
-            config.m_trackingD = 0.0002;
+            config.m_trackingP = 0.015;
+            config.m_trackingI = 0.03;
+            config.m_trackingD = 0.0004;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingAllowedError = 1.5; // The amount of tracking degrees to allow and still shoot.
@@ -350,38 +353,91 @@ public final class Constants {
     public static final class CLIMBER {
 
         //TODO: Tune timings and rotations
-        public static final double PULL_ONTO_RUNG_ROTATIONS = 0;
-        public static final double EXTEND_TO_RUNG_ROTATIONS = 0;
-        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 0;
-        public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0;
-        public static final int MOTOR_TIME_TO_EQUALIZE_AMPS_MILLIS = 0;
+        // Left needs t0 go 20 more than right
+      //  public static final double LEFT_OFFSET_FURTHER = -20;
+      // What to do:
+      /**
+       * Use proportional to lower arms onto rung, stopping each at their own amperage limits
+       */
+        public static final double PULL_ONTO_RUNG_ROTATIONS = 1;
+        public static final double EXTEND_TO_RUNG_ROTATIONS = 300;//125
+        public static final double SETTLE_TO_RUNG_ROTATIONS = 225;
+        public static final double CLIMBER_TIME_TO_UPRIGHT_SECONDS = 2.0;
+        public static final double CLIMBER_DELAY_BETWEEN_RUNGS_SECONDS = 0.25;
+        public static final double RETRACT_SLOW = -0.1;
+        public static final double SNUG_TO_BAR_SPEED = -0.3;
 
         public static final ClimberSubsystem.Configuration GET_CLIMBER_CONFIG() {
             ClimberSubsystem.Configuration config = new ClimberSubsystem.Configuration();
-
+//Max watts 300
             config.m_climberAxisMaxSpeed = 1.0;
+            config.m_climbSettleToBarSpeed = -0.2;
 
             config.m_climberMotorIdleMode = IdleMode.kBrake;
             config.m_climberMotorStallLimitAmps = 30;
             config.m_climberMotorFreeLimitAmps = 30;
             config.m_isRightSideInverted = false;
-            config.m_climberGrippedAmps = 20;
+            config.m_climberGrippedWatts = 150;
+            config.m_climberPulledUpWatts = 300;
+            config.m_climberAmpEqualizeMillis = 4000;
+            config.m_climberGrippedWatts = 170;
+            config.m_climberPulledUpWatts = 320;
+            config.m_climberAmpEqualizeMillis = 4000;
 
             // TODO: Tune climber smart motion constants, currently values from rev's
             // example
-            config.m_climberMotorP = 0.00005;
-            config.m_climberMotorI = 0.0;
-            config.m_climberMotorD = 0.0;
-            config.m_climberMotorIZone = 0.0;
-            config.m_climberMotorFF = 0.000156;
-            config.m_climberMotorMaxOutput = 0.4;
-            config.m_climberMotorMinOutput = -0.2;
-            config.m_climberMotorMaxRPM = 1000;
+            config.m_climberMotorMaxOutput = 1;
+            config.m_climberMotorMinOutput = -1;
+            config.m_climberMotorAllowedError = 0.2;
 
-            config.m_climberMotorMaxVel = 500;
-            config.m_climberMotorMinVel = 0;
-            config.m_climberMotorMaxAcc = 5;
-            config.m_climberMotorAllowedError = 5;
+            // Unloaded
+            config.m_leftClimberUnloadedMotorP = 0.0004;
+            config.m_leftClimberUnloadedMotorI = 0.0;
+            config.m_leftClimberUnloadedMotorD = 0.0;
+            config.m_leftClimberUnloadedMotorIZone = 0.01;
+            config.m_leftClimberUnloadedMotorFF = 0.0;
+            config.m_leftClimberUnloadedMotorMaxRPM = 1000;
+
+            config.m_leftClimberUnloadedMotorMaxVel = 5700;
+            config.m_leftClimberUnloadedMotorMinVel = 0;
+            config.m_leftClimberUnloadedMotorMaxAcc = 20000;
+
+            config.m_rightClimberUnloadedMotorP = 0.0004;
+            config.m_rightClimberUnloadedMotorI = 0.0;
+            config.m_rightClimberUnloadedMotorD = 0.0;
+            config.m_rightClimberUnloadedMotorIZone = 0.01;
+            config.m_rightClimberUnloadedMotorFF = 0.0;
+            config.m_rightClimberUnloadedMotorMaxRPM = 1000;
+
+            config.m_rightClimberUnloadedMotorMaxVel = 5700;
+            config.m_rightClimberUnloadedMotorMinVel = 0;
+            config.m_rightClimberUnloadedMotorMaxAcc = 20000;
+
+
+            // Loaded
+            config.m_leftClimberLoadedMotorP = 0.0004;
+            config.m_leftClimberLoadedMotorI = 0.0;
+            config.m_leftClimberLoadedMotorD = 0.0;
+            config.m_leftClimberLoadedMotorIZone = 0.0156;
+            config.m_leftClimberLoadedMotorFF = 0.0;
+            config.m_leftClimberLoadedMotorMaxRPM = 1000;
+
+            config.m_leftClimberLoadedMotorMaxVel = 5000;
+            config.m_leftClimberLoadedMotorMinVel = 0;
+            config.m_leftClimberLoadedMotorMaxAcc = 3000;
+
+            config.m_rightClimberLoadedMotorP = 0.0004;
+            config.m_rightClimberLoadedMotorI = 0.0;
+            config.m_rightClimberLoadedMotorD = 0.0;
+            config.m_rightClimberLoadedMotorIZone = 0.0156;
+            config.m_rightClimberLoadedMotorFF = 0.0;
+            config.m_rightClimberLoadedMotorMaxRPM = 1000;
+
+            config.m_rightClimberLoadedMotorMaxVel = 5000;
+            config.m_rightClimberLoadedMotorMinVel = 0;
+            config.m_rightClimberLoadedMotorMaxAcc = 3000;
+
+
 
             return config;
         }
@@ -448,13 +504,13 @@ public final class Constants {
     }
 
     public static final class FEEDER {
-        public static final long EXTRA_ADVANCE_MILLIS = 120;
+        public static final long EXTRA_ADVANCE_MILLIS = 60;
         public static final long PACK_MILLIS = 160;
 
         public static FeederSubsystem.Configuration GET_FEEDER_SUBSYSTEM_CONFIG() {
             FeederSubsystem.Configuration config = new FeederSubsystem.Configuration();
             config.m_feederMotorAxisMaxSpeed = 1.0;
-            config.m_feederMotorAdvanceSpeed = 0.35;
+            config.m_feederMotorAdvanceSpeed = 0.43;
             config.m_feederMotorShootSpeed = 1.0;
             config.m_feederMotorPackSpeed = -0.5;
             return config;

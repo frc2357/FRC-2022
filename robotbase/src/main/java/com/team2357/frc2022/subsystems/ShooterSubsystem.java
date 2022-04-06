@@ -21,11 +21,13 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
-            { 22.2,   2500, 3000  },    // Close shot (iffy)
-            { 15.5,   2250, 3500  },    // Not as close shot
-            { 3.69,   2700, 7500  },    // Taxi line shot
-            { -11.06, 3650, 8300  },    // Mid shot
-            { -17.31, 4400, 11800 },    // Farthest (touching ceiling in shop)
+            { 20,   3100, 2900  },    // Close shot (iffy)
+            { 15.5,   3200, 2800  },    // Not as close shot
+            { 3.69,   3000, 7000  },
+            {-8.0, 3500, 9800 },    // Taxi line shot
+            { -11.06, 4300, 9500  },    // Mid shot
+            { -15, 4800, 11700 },    // Farthest (touching ceiling in shop)
+            {-45, 4800, 11700}
     };
 
     private WPI_TalonFX m_leftBottomMotor;
@@ -75,6 +77,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         public double m_topShooterI = 0;
         public double m_topShooterD = 0;
         public double m_topShooterF = 0;
+
+        public double m_shooterReversePercent = 0;
     }
 
     /**
@@ -119,7 +123,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_leftBottomMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_leftBottomMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_leftBottomMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_leftBottomMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_leftBottomMotor.config_kP(m_config.m_PIDSlot, m_config.m_bottomShooterP, m_config.m_timeoutMS);
         m_leftBottomMotor.config_kI(m_config.m_PIDSlot, m_config.m_bottomShooterI, m_config.m_timeoutMS);
@@ -141,7 +145,7 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
         m_topMotor.configNominalOutputForward(0, m_config.m_timeoutMS);
         m_topMotor.configNominalOutputReverse(0, m_config.m_timeoutMS);
         m_topMotor.configPeakOutputForward(m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
-        m_topMotor.configPeakOutputReverse(0, m_config.m_timeoutMS); // don't run the motors in reverse
+        m_topMotor.configPeakOutputReverse(-m_config.m_shooterMotorPeakOutput, m_config.m_timeoutMS);
 
         m_topMotor.config_kP(0, m_config.m_topShooterP, m_config.m_timeoutMS);
         m_topMotor.config_kI(0, m_config.m_topShooterI, m_config.m_timeoutMS);
@@ -168,9 +172,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
      */
     public void setRPMTop(double rpm) {
         m_topTargetRPMs = rpm;
+        SmartDashboard.putNumber("target RPM", m_topTargetRPMs);
         rpm /= m_config.m_topShooterGearingRatio;
         double nativeSpeed = rpm * m_config.m_encoder_cpr / m_minutesTo100MS;
-        //SmartDashboard.putNumber("target native speed", nativeSpeed);
+        SmartDashboard.putNumber("target native speed", nativeSpeed);
         m_topMotor.set(ControlMode.Velocity, nativeSpeed);
     }
 
@@ -187,6 +192,11 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void shootLowHub() {
         setRPMBottom(m_config.m_bottomLowHubRPM);
         setRPMTop(m_config.m_topLowHubRPM);
+    }
+
+    public void reverse() {
+        m_leftBottomMotor.set(ControlMode.PercentOutput, m_config.m_shooterReversePercent);
+        setClosedLoopEnabled(false);
     }
 
     public void stop() {
@@ -232,8 +242,8 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
             shootVisionPeriodic();
         }
 
-        //SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
-        //SmartDashboard.putNumber("top", getTopShooterRPMs());
+        SmartDashboard.putNumber("bottom", getBottomShooterRPMs());
+        SmartDashboard.putNumber("top", getTopShooterRPMs());
         //SmartDashboard.putNumber("bottom percent", m_leftBottomMotor.getMotorOutputPercent());
         //SmartDashboard.putNumber("top percent", m_topMotor.getMotorOutputPercent());
         //SmartDashboard.putNumber("bottom rpm", getBottomMotorSpeedRPMs());
@@ -269,10 +279,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
 
         double highAngle = pointA[0];
         double lowAngle = pointB[0];
-        double highBottomRPMs = pointB[1];
+        double highBottomRPMs = pointA[1];
         double lowBottomRPMs = pointB[1];
-        double highTopRPMs = pointA[1];
-        double lowTopRPMs = pointB[1];
+        double highTopRPMs = pointA[2];
+        double lowTopRPMs = pointB[2];
 
         double bottomRpms = RobotMath.lineralyInterpolate(highBottomRPMs, lowBottomRPMs, highAngle, lowAngle, yAngle);
 
