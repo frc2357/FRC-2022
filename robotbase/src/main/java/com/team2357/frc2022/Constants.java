@@ -174,7 +174,7 @@ public final class Constants {
             config.m_wheelCircumferenceMeters = WHEEL_CIRCUMFERENCE_METERS;
             config.m_encoderClicksPerRotation = ENCODER_CLICKS_PER_ROTATION;
 
-            config.m_turnSensitivity = 0.5;
+            config.m_turnSensitivity = 0.65;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
@@ -229,8 +229,8 @@ public final class Constants {
 
             config.m_shooterReversePercent = -0.25;
 
-            config.m_bottomLowHubRPM = 1500;
-            config.m_topLowHubRPM = 3000;
+            config.m_bottomLowHubRPM = 1000;
+            config.m_topLowHubRPM = 500;
 
             config.m_bottomAutoStartRPM = 3000;
             config.m_topAutoStartRPM = 3000;
@@ -285,9 +285,9 @@ public final class Constants {
         public static final TurretSubsystem.Configuration GET_TURRET_CONFIG() {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
-            config.m_trackingP = 0.015;
+            config.m_trackingP = 0.019;
             config.m_trackingI = 0.03;
-            config.m_trackingD = 0.0004;
+            config.m_trackingD = 0.0008;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
             config.m_trackingAllowedError = 1.5; // The amount of tracking degrees to allow and still shoot.
@@ -297,7 +297,7 @@ public final class Constants {
             config.m_turretAxisMaxSpeed = 0.4;
 
             config.m_turretMotorStallLimitAmps = 30;
-            config.m_turretMotorFreeLimitAmps = 3;
+            config.m_turretMotorFreeLimitAmps = 10;
 
             config.m_turretMotorP = 0.00005;
             config.m_turretMotorI = 0.0;
