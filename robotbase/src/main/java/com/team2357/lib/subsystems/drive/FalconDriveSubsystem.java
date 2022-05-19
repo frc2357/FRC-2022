@@ -68,6 +68,7 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
         // Turn sensitivity multiplier for velocity control
         public double m_turnSensitivity = 0.0;
+        public double m_maxSpeed = 0.0;
 
         // Velocity PID constants
         public int m_gainsSlot = 0;

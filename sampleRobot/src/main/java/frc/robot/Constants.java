@@ -32,7 +32,7 @@ public final class Constants {
 
     public static final DriveSubsystem.Configuration GET_DRIVE_CONFIG() {
         DriveSubsystem.Configuration config = new DriveSubsystem.Configuration();
-        config.m_speedSensitivity = .5;
+        config.m_speedSensitivity = .6;
         config.m_turnSensitivity = .5;
         return config;
     } 

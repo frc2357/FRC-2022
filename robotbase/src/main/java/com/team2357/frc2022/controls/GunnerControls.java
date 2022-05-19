@@ -146,29 +146,29 @@ public class GunnerControls {
         Trigger xButton = m_xButton.and(noDPad);
 
         // Left stick is "always on" for turret movement.
-        TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
-        m_leftStickButton.whenActive(new TurretResetCommand());
+        // TurretSubsystem.getInstance().setDefaultCommand(new TurretAxisCommand(axisLeftStickX));
+        // m_leftStickButton.whenActive(new TurretResetCommand());
 
-        aButton.whileActiveOnce(new IntakeDeployCommand());
-        bButton.toggleWhenActive(new TargetLockCommand());
-        yButton.toggleWhenActive(new ClimbProgressionCommand());
-        //m_rightTriggerPrime.whileActiveOnce(new FireVisionCommand());
-        m_rightTriggerShoot.whileActiveOnce(new FireVisionCommand());
+        // aButton.whileActiveOnce(new IntakeDeployCommand());
+        // bButton.toggleWhenActive(new TargetLockCommand());
+        // yButton.toggleWhenActive(new ClimbProgressionCommand());
+        // //m_rightTriggerPrime.whileActiveOnce(new FireVisionCommand());
+        // m_rightTriggerShoot.whileActiveOnce(new FireVisionCommand());
 
-        xButton.whenActive(new CargoAdjustCommand());
-        m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
+        // xButton.whenActive(new CargoAdjustCommand());
+        // m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
         m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
 
-        downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
-        downDPadAndA.whenActive(new IntakeArmsCommand());
+        // downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
+        // downDPadAndA.whenActive(new IntakeArmsCommand());
 
-        rightDPadOnly.whileActiveOnce(new ShooterRollerAxisCommand(axisRightStickY));
+        // rightDPadOnly.whileActiveOnce(new ShooterRollerAxisCommand(axisRightStickY));
 
-        leftDPadOnly.whileActiveOnce(new FeederRollerAxisCommand(axisRightStickY));
+        // leftDPadOnly.whileActiveOnce(new FeederRollerAxisCommand(axisRightStickY));
 
-        upDPadOnly.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
-        upDPadAndX.whenActive(new ClimberLatchCommand());
-        upDPadAndY.whenActive(new ClimberArmsCommand());
-        upDPadAndB.whenActive(new ClimberWinchResetCommand());
+        // upDPadOnly.whileActiveOnce(new ClimberWinchAxisCommand(axisRightStickY));
+        // upDPadAndX.whenActive(new ClimberLatchCommand());
+        // upDPadAndY.whenActive(new ClimberArmsCommand());
+        // upDPadAndB.whenActive(new ClimberWinchResetCommand());
     }
 }

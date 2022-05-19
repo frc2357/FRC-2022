@@ -14,6 +14,6 @@ public class DriveCommand extends CommandBase{
 
     @Override
     public void execute() {
-        DriveSubsystem.getInstance().setDrive(m_controller.getLeftY(), m_controller.getRightX());
+        DriveSubsystem.getInstance().setDrive(-m_controller.getLeftY(), m_controller.getRightX());
     }
 }

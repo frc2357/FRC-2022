@@ -175,6 +175,7 @@ public final class Constants {
             config.m_encoderClicksPerRotation = ENCODER_CLICKS_PER_ROTATION;
 
             config.m_turnSensitivity = 0.5;
+            config.m_maxSpeed = 0.5;
 
             // Velocity PID constants
             config.m_gainsSlot = 0;
