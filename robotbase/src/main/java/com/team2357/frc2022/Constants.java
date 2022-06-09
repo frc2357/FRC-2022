@@ -204,7 +204,6 @@ public final class Constants {
             config.m_isLeftInverted = false;
             return config;
         }
-
     }
 
     public static final class SHOOTER {
@@ -333,7 +332,6 @@ public final class Constants {
     }
 
     public static final class INTAKE_ROLLER {
-
         public static final IntakeRollerSubsystem.Configuration GET_INTAKE_ROLLER_CONFIG() {
             IntakeRollerSubsystem.Configuration config = new IntakeRollerSubsystem.Configuration();
 

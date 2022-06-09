@@ -9,16 +9,14 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * @category Climber
  */
 public class ClimberToggleLatchCommand extends CommandLoggerBase {
-    private ClimberSubsystem m_climbSub;
 
-    public ClimberToggleLatchCommand(ClimberSubsystem climbSub) {
-        m_climbSub = climbSub;
+    public ClimberToggleLatchCommand() {
     }
 
     @Override
     public void initialize() {
-        m_climbSub
-                .setLatch(m_climbSub.isHookOpen() ? false
+        ClimberSubsystem.getInstance()
+                .setLatch(ClimberSubsystem.getInstance().isHookOpen() ? false
                         : true);
     }
 

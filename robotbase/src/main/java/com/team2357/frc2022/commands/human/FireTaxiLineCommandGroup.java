@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class FireTaxiLineCommandGroup extends ParallelCommandGroup{
     public FireTaxiLineCommandGroup () {
-
         addCommands(new ShootTaxiLineCommand());
         addCommands(new SequentialCommandGroup(new ShooterWaitForRPMsCommand(), new FeederShootCommand()));
         addRequirements(ShooterSubsystem.getInstance(), FeederSubsystem.getInstance());

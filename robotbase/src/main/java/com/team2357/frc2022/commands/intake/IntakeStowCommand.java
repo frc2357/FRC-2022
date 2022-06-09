@@ -12,7 +12,6 @@ import com.team2357.lib.commands.CommandLoggerBase;
 public class IntakeStowCommand extends CommandLoggerBase {
     /**
      * Stows and stops the intake
-     * 
      */
     public IntakeStowCommand() {
         addRequirements(IntakeArmSubsystem.getInstance());

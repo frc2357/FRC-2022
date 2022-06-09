@@ -10,7 +10,6 @@ public class AutoDriveCommand extends CommandLoggerBase {
     double m_speed;
 
     public AutoDriveCommand (double timeMillis, double speed, double turn) {
-
         addRequirements(FalconDriveSubsystem.getInstance());
         m_timeMillis = timeMillis;
         m_turn = turn;
@@ -32,6 +31,4 @@ public class AutoDriveCommand extends CommandLoggerBase {
     public void end(boolean interrupted) {
         FalconDriveSubsystem.getInstance().driveVelocity(0.0, 0.0);
     }
-
-
 }

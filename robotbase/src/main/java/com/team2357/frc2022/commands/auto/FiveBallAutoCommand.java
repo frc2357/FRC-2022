@@ -46,7 +46,6 @@ public class FiveBallAutoCommand extends SequentialCommandGroup {
         // addCommands(new CargoAdjustCommand());
         // addCommands(new ParallelDeadlineGroup(new WaitCommand(5), new FireVisionCommand()));
 
-
         // // Last two
 
         // addCommands(new AutoDriveCommand(600, 0.0, 0.2));
@@ -60,7 +59,6 @@ public class FiveBallAutoCommand extends SequentialCommandGroup {
         // Move back to shot position
     //    addCommands(new ParallelCommandGroup(new AutoDriveCommand(1500, -0.4, 0.0),
     //     new SequentialCommandGroup(new FeederAdvanceCommand(), new FeederExtraAdvanceCommand(), new FeederExtraAdvanceCommand())));
-
 
     //     // Shoot fourth and fifth cargo
     //     addCommands(new AutoTurretRotateCommand(250, 0.4));

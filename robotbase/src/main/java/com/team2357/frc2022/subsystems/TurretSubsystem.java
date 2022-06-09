@@ -28,7 +28,6 @@ public class TurretSubsystem extends ClosedLoopSubsystem {
 
     private double m_targetMotorRotations = Double.NaN;
 
-
     public static class Configuration {
         public double m_turretAxisMaxSpeed = 0;
 

@@ -80,7 +80,6 @@ public class IntakeRollerSubsystem extends ClosedLoopSubsystem {
         double motorSpeed = (-axisSpeed) * m_config.m_rollerAxisMaxSpeed;
         m_masterIntakeTalon.set(ControlMode.PercentOutput, motorSpeed);
         m_startupTime = System.currentTimeMillis() + m_config.m_rollerSpeedUpMillis;
-
     }
 
     @Override
