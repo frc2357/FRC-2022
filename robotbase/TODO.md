@@ -3,8 +3,7 @@
 - IR Sensors need debouncing
 - Need to install feeder sensor and check code
 
-- Climber: Set up pneumatics control in subsystem like Intake is, with delay and such
-- Climber: Use setClosedLoopEnabled() when seeking to a specific position
+- Add `setRollerAxisSpeed` to subsystems for gunner panic controls
 
 - Add "Target Lock" mode to main Robot class
 - Set up Limelight pipelines

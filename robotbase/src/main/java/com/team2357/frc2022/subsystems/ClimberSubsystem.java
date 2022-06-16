@@ -9,7 +9,9 @@ import com.team2357.lib.subsystems.ClosedLoopSubsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 
-/** 
+/* * 
+ * 
+ * @Category climber
  * Climber Subsystem
  * Dynamic arms
  * Static hook latches

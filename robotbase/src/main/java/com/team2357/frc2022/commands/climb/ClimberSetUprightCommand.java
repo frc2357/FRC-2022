@@ -1,4 +1,4 @@
-package com.team2357.frc2022.commands;
+package com.team2357.frc2022.commands.climb;
 
 import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
@@ -8,19 +8,17 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * 
  * @category Climber
  */
-public class ClimberSetPivotCommand extends CommandLoggerBase {
-    private ClimberSubsystem m_climbSub;
+public class ClimberSetUprightCommand extends CommandLoggerBase {
     private boolean m_setUpright;
 
-    ClimberSetPivotCommand(ClimberSubsystem climbSub, boolean setUpright) {
+    ClimberSetUprightCommand(boolean setUpright) {
         m_setUpright = setUpright;
-        m_climbSub = climbSub;
-        addRequirements(m_climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_climbSub.setClimberUpright(m_setUpright);
+        ClimberSubsystem.getInstance().setClimberUpright(m_setUpright);
     }
 
     @Override
