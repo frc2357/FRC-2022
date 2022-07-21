@@ -18,7 +18,6 @@ public class Utility {
   }
 
   /**
-   *
    * @param talon The talon SRX to config
    * @param pid   PID values to set
    */
@@ -27,7 +26,6 @@ public class Utility {
   }
 
   /**
-   *
    * @param talon   The talon SRX to config
    * @param slotIdx Index of the profile slot to configure
    * @param pid     PID values to set

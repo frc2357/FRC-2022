@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class TwoBallAutoCommand extends SequentialCommandGroup {
 
     public TwoBallAutoCommand() {
-
-
+        
         //First ball
         addCommands(new AutoStartPosShotCommand());
         addCommands(new WaitCommand(0.5));

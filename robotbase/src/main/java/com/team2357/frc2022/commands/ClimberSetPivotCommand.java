@@ -9,18 +9,16 @@ import com.team2357.lib.commands.CommandLoggerBase;
  * @category Climber
  */
 public class ClimberSetPivotCommand extends CommandLoggerBase {
-    private ClimberSubsystem m_climbSub;
     private boolean m_setUpright;
 
-    ClimberSetPivotCommand(ClimberSubsystem climbSub, boolean setUpright) {
+    ClimberSetPivotCommand(boolean setUpright) {
         m_setUpright = setUpright;
-        m_climbSub = climbSub;
-        addRequirements(m_climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
     public void initialize() {
-        m_climbSub.setClimberUpright(m_setUpright);
+        ClimberSubsystem.getInstance().setClimberUpright(m_setUpright);
     }
 
     @Override

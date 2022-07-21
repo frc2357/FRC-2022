@@ -4,19 +4,17 @@ import com.team2357.frc2022.subsystems.ClimberSubsystem;
 import com.team2357.lib.commands.CommandLoggerBase;
 
 public class ClimberReleaseLatchOnStrainCommand extends CommandLoggerBase{
-    private ClimberSubsystem m_climbSub;
     private boolean m_isFinished;
 
-    public ClimberReleaseLatchOnStrainCommand(ClimberSubsystem climbSub) {
-        m_climbSub = climbSub;
+    public ClimberReleaseLatchOnStrainCommand() {
         m_isFinished = false;
-        addRequirements(m_climbSub);
+        addRequirements(ClimberSubsystem.getInstance());
     }
 
     @Override
     public void execute() {
-        if(m_climbSub.isClimberGripped()) {
-            m_climbSub.setLatch(false);
+        if(ClimberSubsystem.getInstance().isClimberGripped()) {
+            ClimberSubsystem.getInstance().setLatch(false);
             m_isFinished = true;
         }
     }

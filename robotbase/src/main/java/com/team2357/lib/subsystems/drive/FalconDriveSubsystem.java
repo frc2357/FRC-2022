@@ -47,7 +47,6 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
          */
         public boolean m_isRightInverted = false;
 
-
         /**
          * Whether or not the gyro is reversed Value: boolean
          */

@@ -7,7 +7,6 @@ import com.team2357.lib.commands.CommandLoggerBase;
 public class AutoStartIntakeCommand extends CommandLoggerBase {
 
     public AutoStartIntakeCommand() {
-
         addRequirements(IntakeArmSubsystem.getInstance());
         addRequirements(IntakeRollerSubsystem.getInstance());
     }
@@ -19,7 +18,6 @@ public class AutoStartIntakeCommand extends CommandLoggerBase {
 
         intakeArm.deploy();
         intakeRoller.collect();
-
     }
 
     @Override

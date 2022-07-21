@@ -82,7 +82,6 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     /**
-     * 
      * @param leftBottomShooter  The motor on the bottom left
      * @param rightBottomShooter The motor on the bottom right
      * @param topMotor           The motor on the top
@@ -97,7 +96,6 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     }
 
     public void configure(Configuration config) {
-
         m_config = config;
 
         // reset motor configs to known state

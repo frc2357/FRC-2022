@@ -7,7 +7,6 @@ import com.team2357.lib.commands.CommandLoggerBase;
 
 public class AutoIntakeCargoCommand extends CommandLoggerBase{
 
-
     public AutoIntakeCargoCommand() {
         addRequirements(IntakeRollerSubsystem.getInstance(), IntakeArmSubsystem.getInstance());
     }

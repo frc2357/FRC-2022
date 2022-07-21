@@ -35,7 +35,6 @@ public class SubsystemFactory {
     }
 
     public FalconDriveSubsystem CreateFalconTrajectoryDriveSubsystem() {
-
         WPI_TalonFX leftFalconMaster = new WPI_TalonFX(Constants.CAN_ID.DRIVE_MOTOR_LEFT_1);
 
         WPI_TalonFX[] leftFalconSlaves = new WPI_TalonFX[] {

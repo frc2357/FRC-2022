@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class AutoModeCommandChooser {
+
+    private AutoActionChooser[] choosers;
+
     public enum AutomodeActions {
         NONE,
         ONE_BALL,
@@ -37,7 +40,6 @@ public class AutoModeCommandChooser {
 
             SmartDashboard.putNumber((m_waitCommandKey), 0.0);
             SmartDashboard.putData("Auto chooser " + index, m_chooser);
-
         }
 
         public Command getWaitCommand() {
@@ -67,10 +69,7 @@ public class AutoModeCommandChooser {
         }
     }
 
-    private AutoActionChooser[] choosers;
-
     public AutoModeCommandChooser() {
-
         choosers = new AutoActionChooser[3];
         choosers[0] = new AutoActionChooser(0);
     }

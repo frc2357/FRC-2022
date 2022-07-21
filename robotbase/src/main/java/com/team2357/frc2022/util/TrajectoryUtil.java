@@ -34,7 +34,6 @@ public class TrajectoryUtil {
         return createDrivePathCommand(driveSub, trajectory, resetOdometry);
     }
 
-
     public static SequentialCommandGroup createTrajectoryPathCommand(FalconDriveSubsystem driveSub,
             Pose2d start, List<Translation2d> middle, Pose2d end, boolean reversed, boolean resetOdometry) {
 
