@@ -27,7 +27,6 @@ public class ShooterSetRPMsCommand extends CommandLoggerBase {
 
     @Override
     public void initialize() {
-        LimelightSubsystem.getInstance().setTargetingPipelineActive();
         ShooterSubsystem.getInstance().setRPMTop(m_topRpms);
         ShooterSubsystem.getInstance().setRPMBottom(m_bottomRpms);
     }

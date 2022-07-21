@@ -20,6 +20,7 @@ import com.team2357.frc2022.commands.human.panic.IntakeRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.ShooterRollerAxisCommand;
 import com.team2357.frc2022.commands.human.panic.TurretResetCommand;
 import com.team2357.frc2022.commands.intake.IntakeDeployCommand;
+import com.team2357.frc2022.commands.shooter.ShootOverBotCommandGroup;
 import com.team2357.frc2022.commands.shooter.ShooterSetRPMsCommand;
 import com.team2357.frc2022.commands.shooter.ShooterWaitForRPMsCommand;
 import com.team2357.frc2022.subsystems.SensorSubsystem;
@@ -157,7 +158,8 @@ public class GunnerControls {
 
         xButton.whenActive(new CargoAdjustCommand());
         m_leftTrigger.whileActiveOnce(new FireLowHubCommandGroup());
-        m_leftBumper.whileActiveContinuous(new FireTaxiLineCommandGroup());
+        m_rightBumper.whileActiveOnce(new FireTaxiLineCommandGroup());
+        m_leftBumper.whileActiveOnce(new ShootOverBotCommandGroup());
 
         downDPadOnly.whileActiveOnce(new IntakeRollerAxisCommand(axisRightStickY));
         downDPadAndA.whenActive(new IntakeArmsCommand());

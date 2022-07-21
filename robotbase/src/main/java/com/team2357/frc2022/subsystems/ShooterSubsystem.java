@@ -21,9 +21,9 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     // {degrees, bottom shooter rpm, top shooter rpm}
     private static final double[][] degreesToRPMsCurve = {
             { 45,     2500, 3000  },    // End (same as close shot)
-            { 20,   3100, 2900  },    // Close shot (iffy)
-            { 15.5,   3200, 2800  },    // Not as close shot
-            { 3.69,   3000, 7000  },
+            { 20,   2500, 2900  },    // Close shot (iffy)
+            { 15.5,   2800, 2800  },    // Not as close shot
+            { 3.69,   2800, 6800  },
             {-8.0, 3500, 9800 },    // Taxi line shot
             { -11.06, 4300, 9500  },    // Mid shot
             { -15, 4800, 11700 },    // Farthest (touching ceiling in shop)
@@ -180,6 +180,10 @@ public class ShooterSubsystem extends ClosedLoopSubsystem {
     public void shootTaxiLine() {
         setRPMBottom(m_config.m_bottomTaxiLineRPM);
         setRPMTop(m_config.m_topTaxiLineRPM);
+    }
+
+    public void shootOverBot() {
+
     }
 
     public void shootAutoStartPos() {
