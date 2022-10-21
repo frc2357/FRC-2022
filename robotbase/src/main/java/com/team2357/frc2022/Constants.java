@@ -285,7 +285,7 @@ public final class Constants {
             TurretSubsystem.Configuration config = new TurretSubsystem.Configuration();
 
             config.m_trackingP = 0.0185;
-            config.m_trackingI = 0.004;
+            config.m_trackingI = 0.0004;
             config.m_trackingD = 0.00005;
             config.m_trackingSetpoint = 0; // The center of the camera view is zero.
             config.m_trackingToleranceDegrees = 1.0;
