@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fazecast.jSerialComm.SerialPort;
+// import com.fazecast.jSerialComm.SerialPort;
 
 /**
  * Controls an Arduino over USB via state.
@@ -29,7 +29,7 @@ public class ArduinoUSBController implements Runnable {
 
 	private Thread m_thread;
 	private JsonNode m_state;
-	private SerialPort m_serialPort;
+	// private SerialPort m_serialPort;
 	private byte[] m_byteBuffer = new byte[1024];
 	private StringBuffer m_stringBuffer = new StringBuffer();
 	private ObjectMapper m_objectMapper = new ObjectMapper();
@@ -41,11 +41,11 @@ public class ArduinoUSBController implements Runnable {
 	 */
 	public ArduinoUSBController(String ttyDevice) {
 		try {
-			m_serialPort = SerialPort.getCommPort(ttyDevice);
-			m_serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-			m_serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT, 0);
+			// m_serialPort = SerialPort.getCommPort(ttyDevice);
+			// m_serialPort.setComPortParameters(115200, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+			// m_serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT, 0);
 		} catch (Exception e) {
-			m_serialPort = null;
+			// m_serialPort = null;
 			System.err.println(e.getMessage());
 		}
 	}
@@ -255,18 +255,18 @@ public class ArduinoUSBController implements Runnable {
 		}
 
 		// TODO: Use logging for this.
-		System.out.println("Opening serial port '" + m_serialPort.getSystemPortName() + "'");
-		boolean success = m_serialPort.openPort();
+		// System.out.println("Opening serial port '" + m_serialPort.getSystemPortName() + "'");
+		// boolean success = m_serialPort.openPort();
 
-		if (!success) {
-			// TODO: Use logging for this.
-			System.err.println("Error opening serial port '" + m_serialPort.getSystemPortName() + "'");
-			return;
-		}
+		// if (!success) {
+		// 	// TODO: Use logging for this.
+		// 	// System.err.println("Error opening serial port '" + m_serialPort.getSystemPortName() + "'");
+		// 	return;
+		// }
 
 		// It all checks out, start the thread for blocking reads.
-		String threadName = "ArduinoUSB[" + m_serialPort.getSystemPortName() + "]";
-		m_thread = new Thread(this, threadName);
+		// String threadName = "ArduinoUSB[" + m_serialPort.getSystemPortName() + "]";
+		// m_thread = new Thread(this, threadName);
 		m_thread.start();
 	}
 
@@ -299,58 +299,58 @@ public class ArduinoUSBController implements Runnable {
 	}
 
 	protected void read() throws IOException {
-		int byteCount = m_serialPort.readBytes(m_byteBuffer, 1024);
-		if (byteCount == 0) {
-			return;
-		}
+		// int byteCount = m_serialPort.readBytes(m_byteBuffer, 1024);
+		// if (byteCount == 0) {
+		// 	return;
+		// }
 
-		String newChars = new String(m_byteBuffer, 0, byteCount);
-		if (newChars != null) {
-			m_stringBuffer.append(newChars);
-			int lineBreakIndex = m_stringBuffer.indexOf("\n");
-			if (lineBreakIndex >= 0) {
-				String line = m_stringBuffer.substring(0, lineBreakIndex);
-				// TODO: Use logging for this.
-				System.out.println("line: '" + line + "'");
-				m_stringBuffer.delete(0, lineBreakIndex + 1);
-				try {
-					m_state = m_objectMapper.readTree(line);
-				} catch (JsonParseException jpe) {
-					// TODO: Use logging for this.
-					System.out.println("JSON Parse Exception: " + jpe.getMessage());
-					m_state = null;
-				}
-			}
-		}
+		// String newChars = new String(m_byteBuffer, 0, byteCount);
+		// if (newChars != null) {
+		// 	m_stringBuffer.append(newChars);
+		// 	int lineBreakIndex = m_stringBuffer.indexOf("\n");
+		// 	if (lineBreakIndex >= 0) {
+		// 		String line = m_stringBuffer.substring(0, lineBreakIndex);
+		// 		// TODO: Use logging for this.
+		// 		System.out.println("line: '" + line + "'");
+		// 		m_stringBuffer.delete(0, lineBreakIndex + 1);
+		// 		try {
+		// 			m_state = m_objectMapper.readTree(line);
+		// 		} catch (JsonParseException jpe) {
+		// 			// TODO: Use logging for this.
+		// 			System.out.println("JSON Parse Exception: " + jpe.getMessage());
+		// 			m_state = null;
+		// 		}
+		// 	}
+		// }
 	}
 
 	public void write(String message) {
 		// TODO: Use logging for this.
-		System.out.println("write: '" + message + "'");
-		byte[] bytes = message.getBytes();
-		int bytesWritten = m_serialPort.writeBytes(bytes, bytes.length);
-		if (bytesWritten == -1) {
+		// System.out.println("write: '" + message + "'");
+		// byte[] bytes = message.getBytes();
+		// int bytesWritten = m_serialPort.writeBytes(bytes, bytes.length);
+		// if (bytesWritten == -1) {
 			// TODO: Use logging for this.
-			System.err.println("Failed to write bytes");
-		} else if (bytesWritten != bytes.length) {
+			// System.err.println("Failed to write bytes");
+		// } else if (bytesWritten != bytes.length) {
 			// TODO: Use logging for this.
-			System.err.println("Incomplete write (" + bytesWritten + " of " + bytes.length + " total bytes)");
-		}
+			// System.err.println("Incomplete write (" + bytesWritten + " of " + bytes.length + " total bytes)");
+		// }
 	}
 
 	protected JsonNode getDeviceField(String deviceName, String fieldName) {
 		JsonNode device = getDevice(deviceName);
 		if (device == null) {
 			// TODO: Use logging for this.
-			System.err.println("device '" + deviceName + "' not found for Arduino " + getName() + " on "
-					+ m_serialPort.getSystemPortName());
+			// System.err.println("device '" + deviceName + "' not found for Arduino " + getName() + " on "
+					// + m_serialPort.getSystemPortName());
 			return null;
 		}
 		JsonNode field = device.get(fieldName);
 		if (field == null) {
 			// TODO: Use logging for this.
-			System.err.println("devices '" + deviceName + "' field '" + fieldName + "' not found for Arduino "
-					+ getName() + " on " + m_serialPort.getSystemPortName());
+			// System.err.println("devices '" + deviceName + "' field '" + fieldName + "' not found for Arduino "
+					// + getName() + " on " + m_serialPort.getSystemPortName());
 			return null;
 		}
 		return field;
@@ -359,14 +359,14 @@ public class ArduinoUSBController implements Runnable {
 	protected JsonNode getDevice(String deviceName) {
 		if (m_state == null) {
 			// TODO: Use logging for this.
-			System.err.println("state not yet available for Arduino on " + m_serialPort.getSystemPortName());
+			// System.err.println("state not yet available for Arduino on " + m_serialPort.getSystemPortName());
 			return null;
 		}
 		JsonNode devices = m_state.get("devices");
 		if (devices == null) {
 			// TODO: Use logging for this.
-			System.err
-					.println("devices not found for Arduino " + getName() + " on " + m_serialPort.getSystemPortName());
+			// System.err
+					// .println("devices not found for Arduino " + getName() + " on " + m_serialPort.getSystemPortName());
 			return null;
 		}
 		return devices.get(deviceName);
