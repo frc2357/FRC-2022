@@ -29,7 +29,7 @@ public class FireVisionCommand extends SequentialCommandGroup {
     public FireVisionCommand() {
         addRequirements(ShooterSubsystem.getInstance());
         addRequirements(TurretSubsystem.getInstance());
-        addRequirements(FeederSubsystem.getInstance());
+        // addRequirements(FeederSubsystem.getInstance());
         addRequirements(IntakeRollerSubsystem.getInstance());
 
         // Spin up and set the limelight pipeline
