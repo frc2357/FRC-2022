@@ -8,7 +8,14 @@ import com.team2357.frc2022.commands.DriveEnableCoastCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.io.ByteLogReceiver;
+import org.littletonrobotics.junction.io.ByteLogReplay;
+
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,10 +26,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private PowerDistribution powerDistribution;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -32,6 +41,19 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    Logger.getInstance().recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+
+if (isReal()) {
+    Logger.getInstance().addDataReceiver(new ByteLogReceiver("/media/sda1")); // Log to a USB stick
+    new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
+} else {
+    setUseTiming(false); // Run as fast as possible
+    String logPath = "C:\\Users\\crazy\\Documents"; // Pull the replay log from AdvantageScope (or prompt the user)
+    Logger.getInstance().setReplaySource(new ByteLogReplay(logPath)); // Read replay log
+    Logger.getInstance().addDataReceiver(new ByteLogReceiver("C:\\Users\\crazy\\Documents")); // Save outputs to a new log
+}
+
+Logger.getInstance().start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
     m_robotContainer = new RobotContainer();
     new DriveEnableCoastCommand().schedule();
     LiveWindow.disableAllTelemetry();
