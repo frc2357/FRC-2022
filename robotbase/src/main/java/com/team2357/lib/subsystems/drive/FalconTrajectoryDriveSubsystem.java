@@ -1,24 +1,18 @@
 package com.team2357.lib.subsystems.drive;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
-public class TalonTrajectoryDriveSubsystem
-  extends SingleSpeedTalonDriveSubsystem {
-
-  private static TalonTrajectoryDriveSubsystem instance = null;
-
-  public static TalonTrajectoryDriveSubsystem getInstance() {
-    return instance;
-  }
+public class FalconTrajectoryDriveSubsystem
+  extends SingleSpeedFalconDriveSubsystem {
 
   private double m_leftLastValue;
   private double m_rightLastValue;
-  private double m_distancePerPulse;
+  public double m_distancePerPulse;
 
   // The gyro sensor
   private PigeonIMU m_gyro;
@@ -38,20 +32,29 @@ public class TalonTrajectoryDriveSubsystem
 
   /**
    *
+   * @param leftTalonMaster
    * @param leftTalonSlaves
+   * @param rightTalonMaster
    * @param rightTalonSlaves
+   * @param leftEncoder
+   * @param rightEncoder
    * @param gyro
    * @param encoderDistancePerPulse
    */
-  public TalonTrajectoryDriveSubsystem(
-    WPI_TalonSRX[] leftTalons,
-    WPI_TalonSRX[] rightTalons,
+  public FalconTrajectoryDriveSubsystem(
+    WPI_TalonFX leftFalconMaster,
+    WPI_TalonFX[] leftFalconSlaves,
+    WPI_TalonFX rightFalconMaster,
+    WPI_TalonFX[] rightFalconSlaves,
     PigeonIMU gyro,
     double encoderDistancePerPulse
   ) {
-    super(leftTalons, rightTalons);
-    instance = this;
-
+    super(
+      leftFalconMaster,
+      leftFalconSlaves,
+      rightFalconMaster,
+      rightFalconSlaves
+    );
     m_distancePerPulse = encoderDistancePerPulse;
 
     resetEncoders();
@@ -110,8 +113,8 @@ public class TalonTrajectoryDriveSubsystem
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-      super.m_leftTalonMaster.getSelectedSensorVelocity(),
-      super.m_rightTalonMaster.getSelectedSensorVelocity()
+      super.m_leftFalconMaster.getSelectedSensorVelocity(),
+      super.m_rightFalconMaster.getSelectedSensorVelocity()
     );
   }
 
@@ -149,14 +152,14 @@ public class TalonTrajectoryDriveSubsystem
   }
 
   public double getLeftDistance() {
-    double encoderPositon = super.m_leftTalonMaster.getSelectedSensorPosition();
+    double encoderPositon = super.m_leftFalconMaster.getSelectedSensorPosition();
     double difOfPostion = encoderPositon - m_leftLastValue;
     m_leftLastValue = encoderPositon;
     return difOfPostion * m_distancePerPulse;
   }
 
   public double getRightDistance() {
-    double encoderPositon = super.m_rightTalonMaster.getSelectedSensorPosition();
+    double encoderPositon = super.m_rightFalconMaster.getSelectedSensorPosition();
     double difOfPostion = encoderPositon - m_rightLastValue;
     m_rightLastValue = encoderPositon;
     return difOfPostion * m_distancePerPulse;

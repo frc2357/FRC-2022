@@ -1,5 +1,6 @@
 package com.team2357.lib.triggers;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -10,14 +11,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * events that should trigger on an edge.
  */
 public class ToggleTrigger extends Trigger {
-  private NetworkTableEntry entry;
 
-  public ToggleTrigger(NetworkTableEntry entry) {
+  private GenericEntry entry;
+
+  public ToggleTrigger(GenericEntry entry) {
     this.entry = entry;
   }
 
   @Override
-  public boolean get() {
+  public boolean getAsBoolean() {
     return this.entry.getBoolean(false);
   }
 }

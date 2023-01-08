@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ButtonChordTrigger extends Trigger {
+
   private JoystickButton[] buttons;
 
   public ButtonChordTrigger(JoystickButton[] buttons) {
@@ -11,9 +12,9 @@ public class ButtonChordTrigger extends Trigger {
   }
 
   @Override
-  public boolean get() {
+  public boolean getAsBoolean() {
     for (JoystickButton b : buttons) {
-      if (! b.get()) {
+      if (!b.getAsBoolean()) {
         return false;
       }
     }

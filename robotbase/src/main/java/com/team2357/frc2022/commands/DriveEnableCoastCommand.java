@@ -9,9 +9,4 @@ public class DriveEnableCoastCommand extends SequentialCommandGroup{
     public DriveEnableCoastCommand() {
         addCommands(new WaitCommand(1));
     }
-
-    @Override
-    public void end(boolean interrupted) {
-        FalconDriveSubsystem.getInstance().setCoast();
-    }
 }
