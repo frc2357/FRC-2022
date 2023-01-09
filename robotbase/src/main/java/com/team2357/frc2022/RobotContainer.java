@@ -9,7 +9,6 @@ import com.team2357.frc2022.sensors.SensorBooleanState;
 import com.team2357.frc2022.subsystems.FeederSubsystem;
 import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
-import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveVelocityCommand;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
@@ -61,9 +60,7 @@ public class RobotContainer {
     SubsystemFactory subsystemFactory = new SubsystemFactory();
     FalconDriveSubsystem driveSub = subsystemFactory.CreateFalconTrajectoryDriveSubsystem();
     subsystemFactory.CreatePDHSubsystem();
-    subsystemFactory.CreateShooterSubsystem();
-    subsystemFactory.createIntakeArmSubsystem();
-    subsystemFactory.CreateIntakeRollerSubsystem();
+//    subsystemFactory.CreateIntakeRollerSubsystem();
     // Configure the controllers
     XboxController driverXboxController = new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT);
 
@@ -76,8 +73,6 @@ public class RobotContainer {
     m_compressor.enableAnalog(Constants.COMPRESSOR.MIN_PRESSURE_PSI, Constants.COMPRESSOR.MAX_PRESSURE_PSI);
 
     // Start USB camera capture
-    UsbCamera intakeCamera = CameraServer.startAutomaticCapture();
-    intakeCamera.setFPS(20);
 
     // Build trajectories
 

@@ -57,7 +57,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     FalconDriveSubsystem.getInstance().setCoast();
-    LimelightSubsystem.getInstance().setHumanPipelineActive();
   }
 
   @Override
@@ -67,7 +66,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     FalconDriveSubsystem.getInstance().setBrake();
-    LimelightSubsystem.getInstance().setTargetingPipelineActive();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -91,7 +89,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    LimelightSubsystem.getInstance().setHumanPipelineActive();
   }
 
   /** This function is called periodically during operator control. */

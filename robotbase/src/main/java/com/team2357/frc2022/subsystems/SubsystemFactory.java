@@ -48,10 +48,9 @@ public class SubsystemFactory {
         PigeonIMU gyro = new PigeonIMU(Constants.CAN_ID.GYRO_ID);
 
         FalconDriveSubsystem subsystem = new FalconDriveSubsystem(leftFalconMaster,
-                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro);
+                leftFalconSlaves, rightFalconMaster, rightFalconSlaves, gyro, Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
 
-        subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
-        return subsystem;
+                return subsystem;
     }
 
     public IntakeArmSubsystem createIntakeArmSubsystem() {

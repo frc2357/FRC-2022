@@ -120,8 +120,10 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
     WPI_TalonFX[] leftFalconSlaves,
     WPI_TalonFX rightFalconMaster,
     WPI_TalonFX[] rightFalconSlaves,
-    PigeonIMU gyro
+    PigeonIMU gyro, Configuration config
   ) {
+
+    m_config = config;
     m_leftFalconMaster = leftFalconMaster;
     m_rightFalconMaster = rightFalconMaster;
     m_leftFalconSlaves = leftFalconSlaves;
@@ -129,6 +131,7 @@ public class FalconDriveSubsystem extends ClosedLoopSubsystem {
 
     instance = this;
 
+    configure(m_config);
     resetEncoders();
     m_gyro = gyro;
     m_gyro.configFactoryDefault();
