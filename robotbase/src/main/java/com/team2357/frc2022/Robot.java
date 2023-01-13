@@ -4,6 +4,9 @@
 
 package com.team2357.frc2022;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.commands.DriveEnableCoastCommand;
 import com.team2357.lib.subsystems.LimelightSubsystem;
 import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
@@ -23,6 +26,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private CANSparkMax m_leftintake;
+  private CANSparkMax m_rightintake;
 
   /**
    * This function is run when the robot is first started up and should be used for any

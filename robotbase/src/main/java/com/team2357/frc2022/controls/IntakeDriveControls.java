@@ -1,5 +1,7 @@
 package com.team2357.frc2022.controls;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.lib.commands.InvertDriveCommand;
 import com.team2357.lib.controllers.InvertDriveControls;
 import com.team2357.lib.triggers.AxisThresholdTrigger;
@@ -7,6 +9,7 @@ import com.team2357.lib.util.XboxRaw;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class IntakeDriveControls extends InvertDriveControls {
     public AxisThresholdTrigger m_leftTrigger;
     public JoystickButton m_aButton;
+    public JoystickButton m_leftbumper;
 
     /**
      * @param builder The IntakeDriverControlsBuilder object
@@ -26,11 +30,22 @@ public class IntakeDriveControls extends InvertDriveControls {
 
         m_leftTrigger = new AxisThresholdTrigger(super.m_controller, Axis.kLeftTrigger, .1);
         m_aButton = new JoystickButton(controller, XboxRaw.A.value);
+        m_leftbumper = new JoystickButton(controller, XboxRaw.BumperLeft.value);
 
         mapControls();
     }
 
     private void mapControls() {
-        m_aButton.whenPressed(new InvertDriveCommand(this));
+        CANSparkMax rightintake = new CANSparkMax(24,MotorType.kBrushless);
+        CANSparkMax leftintake = new CANSparkMax(22,MotorType.kBrushless);
+        double runspeed = 1;
+        m_leftbumper.onTrue(new InstantCommand(()->{
+            rightintake.set(runspeed);
+            leftintake.set(runspeed);
+        }));
+        m_leftbumper.onFalse(new InstantCommand(()->{
+            rightintake.set(0);
+            leftintake.set(0);
+        }));
     }
 }
