@@ -1,6 +1,8 @@
 package com.team2357.frc2022.controls;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.lib.commands.InvertDriveCommand;
 import com.team2357.lib.controllers.InvertDriveControls;
@@ -36,14 +38,23 @@ public class IntakeDriveControls extends InvertDriveControls {
     }
 
     private void mapControls() {
-        CANSparkMax rightintake = new CANSparkMax(24,MotorType.kBrushless);
-        CANSparkMax leftintake = new CANSparkMax(22,MotorType.kBrushless);
-        double runspeed = 1;
-        m_leftbumper.onTrue(new InstantCommand(()->{
-            rightintake.set(runspeed);
-            leftintake.set(runspeed);
+        CANSparkMax rightintake = new CANSparkMax(24, MotorType.kBrushless);
+        CANSparkMax leftintake = new CANSparkMax(22, MotorType.kBrushless);
+        double rightIntakeSpeed, leftIntakeSpeed;
+
+        rightintake.setIdleMode(IdleMode.kCoast);
+        leftintake.setIdleMode(IdleMode.kCoast);
+
+        rightintake.setOpenLoopRampRate(2);
+        leftintake.setOpenLoopRampRate(2);
+
+        rightIntakeSpeed = 1.0;
+        leftIntakeSpeed = .5;
+        m_leftbumper.onTrue(new InstantCommand(() -> {
+            rightintake.set(rightIntakeSpeed);
+            leftintake.set(leftIntakeSpeed);
         }));
-        m_leftbumper.onFalse(new InstantCommand(()->{
+        m_leftbumper.onFalse(new InstantCommand(() -> {
             rightintake.set(0);
             leftintake.set(0);
         }));
