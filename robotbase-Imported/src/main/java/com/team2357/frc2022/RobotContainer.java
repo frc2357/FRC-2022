@@ -5,14 +5,9 @@
 package com.team2357.frc2022;
 
 import com.team2357.frc2022.commands.RecordPathCommand;
-import com.team2357.frc2022.commands.feeder.FeederDefaultCommand;
-import com.team2357.frc2022.commands.intake.IntakeDefaultCommand;
 import com.team2357.frc2022.controls.GunnerControls;
 import com.team2357.frc2022.controls.IntakeDriveControls;
-import com.team2357.frc2022.shuffleboard.AutoModeCommandChooser;
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.frc2022.subsystems.FeederSubsystem;
-import com.team2357.frc2022.subsystems.IntakeRollerSubsystem;
 import com.team2357.frc2022.subsystems.SubsystemFactory;
 import com.team2357.frc2022.util.AvailableTrajectories;
 import com.team2357.lib.commands.DriveVelocityCommand;
@@ -40,7 +35,6 @@ public class RobotContainer {
   private final GunnerControls m_gunnerControls;
   private final Compressor m_compressor;
 
-  private AutoModeCommandChooser m_autoCommandChooser;
 
   private final DigitalInput m_intakeSensor;
   private final DigitalInput m_indexSensor;
@@ -78,8 +72,7 @@ public class RobotContainer {
     m_gunnerControls = new GunnerControls(gunnerXboxController);
 
     driveSub.setDefaultCommand(new DriveVelocityCommand(driveSub, m_driverControls));
-    FeederSubsystem.getInstance().setDefaultCommand(new FeederDefaultCommand());
-    IntakeRollerSubsystem.getInstance().setDefaultCommand(new IntakeDefaultCommand());
+    
 
     // Setup compressor
     m_compressor = new Compressor(Constants.CAN_ID.PNEUMATICS_HUB_ID, PneumaticsModuleType.REVPH);
@@ -102,7 +95,6 @@ public class RobotContainer {
    * This method should set up the shuffleboard
    */
   public void configureShuffleboard() {
-    m_autoCommandChooser = new AutoModeCommandChooser();
   }
 
   /**
@@ -110,16 +102,12 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public int getAutonomousCommand() {
     int auto = -1;
 
     switch(auto){
-      case 1: 
-        return AvailableTrajectories.exampleTrajectory;
-      case 2:
-        return AvailableTrajectories.exampleRecordPathTrajectory;
       default:
-      return m_autoCommandChooser.generateCommand();
+      return 0;
     }
   }
 }

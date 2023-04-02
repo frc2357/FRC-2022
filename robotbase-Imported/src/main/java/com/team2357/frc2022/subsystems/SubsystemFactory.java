@@ -55,10 +55,4 @@ public class SubsystemFactory {
         subsystem.configure(Constants.DRIVE.GET_FALCON_DRIVE_CONFIG());
         return subsystem;
     }
-
-    public LimelightSubsystem CreateVisionSubsystem() {
-        LimelightSubsystem subsystem = new LimelightSubsystem();
-        subsystem.setConfiguration(Constants.LIMELIGHT.GET_LIMELIGHT_SUBSYSTEM_CONFIG());
-        return subsystem;
-    }
 }
