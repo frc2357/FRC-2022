@@ -1,21 +1,11 @@
 package com.team2357.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2357.frc2022.Constants;
 import com.team2357.frc2022.sensors.SensorBooleanState;
-import com.team2357.lib.subsystems.LimelightSubsystem;
-import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 import com.team2357.lib.subsystems.PDHSubsystem;
-import com.team2357.lib.util.Utility;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.team2357.lib.subsystems.drive.FalconDriveSubsystem;
 
 /**
  * This class is a factory that creates subsystems.
